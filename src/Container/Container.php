@@ -189,6 +189,8 @@ final class Container
                 continue;
             }
 
+            dump($classReflection->getInterfaceNames());
+
             // no parent class/interface, nothing to register
             if ($classReflection->getParentClass() === false && $classReflection->getInterfaceNames() === []) {
                 continue;
