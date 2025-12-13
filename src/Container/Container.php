@@ -194,7 +194,6 @@ final class Container
                 continue;
             }
 
-
             // has all parameter with typed class dependencies
             if (! $this->hasAllParametersWithTypedClasses($classReflection)) {
                 continue;
@@ -213,7 +212,7 @@ final class Container
             $parameters = $constructor->getParameters();
             foreach ($parameters as $parameter) {
                 $parameterType = $parameter->getType();
-                if (!($parameterType instanceof \ReflectionNamedType) || $parameterType->isBuiltin()) {
+                if (! ($parameterType instanceof \ReflectionNamedType) || $parameterType->isBuiltin()) {
                     return false;
                 }
             }
