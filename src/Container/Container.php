@@ -164,7 +164,7 @@ final class Container
     private function autodiscoverClasses(): array
     {
         // find alfindByContractl *.php files in given directory using recursive iterator
-        $phpFiles = FileFinder::findPhpFiles($this->projectDirectory);
+        $phpFiles = FileFinder::findSourcePhpFiles($this->projectDirectory);
 
         $classNames = [];
 

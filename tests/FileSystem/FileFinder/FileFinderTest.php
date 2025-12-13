@@ -9,6 +9,12 @@ use PHPUnit\Framework\TestCase;
 
 final class FileFinderTest extends TestCase
 {
+    public function testFindSourceFiles(): void
+    {
+        $sourcePhpFiles = FileFinder::findSourcePhpFiles(__DIR__ . '/Fixture/some-dir');
+        $this->assertCount(1, $sourcePhpFiles);
+    }
+
     public function test(): void
     {
         $phpFiles = FileFinder::findPhpFiles(__DIR__ . '/Fixture/some-dir');

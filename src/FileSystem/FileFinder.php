@@ -10,6 +10,51 @@ use Entropy\Attributes\RelatedTest;
 final class FileFinder
 {
     /**
+     * @var string[]
+     */
+    private const SOURCE_DIRECTORIES = ['app', 'src'];
+
+    public static function findSourcePhpFiles(string $directory): array
+    {
+        $sourceDirectories = self::findSourceDirectories($directory);
+
+        $phpFiles = [];
+        foreach ($sourceDirectories as $sourceDirectory) {
+            $phpFiles = array_merge($phpFiles, self::findPhpFiles($sourceDirectory));
+        }
+
+        return $phpFiles;
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function findSourceDirectories(string $directory): array
+    {
+        $sourceDirectories = [];
+
+        foreach (new \DirectoryIterator($directory) as $fileInfo) {
+            /** @var \SplFileInfo $fileInfo */
+            if ($fileInfo->isDot()) {
+                continue;
+            }
+
+            if (! $fileInfo->isDir()) {
+                continue;
+            }
+
+            if (!in_array($fileInfo->getBasename(), self::SOURCE_DIRECTORIES, true)) {
+                continue;
+            }
+
+
+            $sourceDirectories[] = $fileInfo->getPathname();
+        }
+
+        return $sourceDirectories;
+    }
+
+    /**
      * @return string[]
      */
     public static function findPhpFiles(string $directory): array
