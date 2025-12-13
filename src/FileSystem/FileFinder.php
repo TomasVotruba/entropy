@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Entropy\FileSystem;
 
+use Entropy\Attributes\RelatedTest;
+
+#[RelatedTest(\Entropy\Tests\FileSystem\FileFinder\FileFinderTest::class)]
 final class FileFinder
 {
     /**
