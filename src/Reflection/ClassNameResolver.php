@@ -18,7 +18,7 @@ final class ClassNameResolver
         for ($i = 0; $i < $count; $i++) {
             $token = $tokens[$i];
 
-            if (!is_array($token)) {
+            if (! is_array($token)) {
                 continue;
             }
 
@@ -37,7 +37,6 @@ final class ClassNameResolver
                 }
             }
 
-            // class SomeClass
             if ($token[0] === T_CLASS) {
                 // skip anonymous classes
                 if ($tokens[$i - 1][0] === T_NEW) {
