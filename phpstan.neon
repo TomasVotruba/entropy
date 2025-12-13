@@ -1,0 +1,10 @@
+parameters:
+    errorFormat: symplify
+
+    level: 8
+
+    paths:
+        - src
+        - tests
+
+    treatPhpDocTypesAsCertain: false

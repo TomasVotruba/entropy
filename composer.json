@@ -8,7 +8,10 @@
         "phpunit/phpunit": "^12.5",
         "phpecs/phpecs": "^2.2",
         "tracy/tracy": "^2.11",
-        "phpstan/phpstan": "^2.1"
+        "phpstan/phpstan": "^2.1",
+        "symplify/phpstan-rules": "^14.9",
+        "symplify/phpstan-extensions": "^12.0",
+        "phpstan/extension-installer": "^1.4"
     },
     "autoload": {
         "psr-4": {
@@ -19,6 +22,11 @@
         "psr-4": {
             "Entropy\\Tests\\": "tests",
             "App\\Project\\": "tests/Container/Fixture/project-directory/src"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
         }
     }
 }

@@ -65,6 +65,8 @@ final class ContainerTest extends TestCase
         $container = new Container(__DIR__ . '/Fixture/project-directory');
 
         $commands = $container->findByContract(CommandInterface::class);
+        $this->assertCount(1, $commands);
+
         $this->assertContainsOnlyInstancesOf(CommandInterface::class, $commands);
     }
 }

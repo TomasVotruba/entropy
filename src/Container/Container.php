@@ -15,7 +15,7 @@ use ReflectionClass;
 final class Container
 {
     /**
-     * @var array<class-string, callable()>
+     * @var array<class-string, callable(): object>
      */
     private array $services = [];
 
@@ -28,15 +28,11 @@ final class Container
 
     private bool $isAutodisovered = false;
 
-    /**
-     * @var array<class-string>
-     */
-    private array $autodiscoveredClasses = [];
-
     public function __construct(?string $projectDirectory = null)
     {
         if ($projectDirectory === null) {
-            $this->projectDirectory = getcwd();
+            $currentDirectory = getcwd();
+            $this->projectDirectory = $currentDirectory;
         } else {
             $this->projectDirectory = $projectDirectory;
         }
@@ -55,6 +51,7 @@ final class Container
 
     /**
      * @template TType as object
+     *
      * @param class-string<TType> $class
      * @return TType
      */
@@ -144,6 +141,7 @@ final class Container
         foreach ($reflectionParameters as $parameter) {
             $parameterType = $parameter->getType();
             if ($parameterType instanceof \ReflectionNamedType && ! $parameterType->isBuiltin()) {
+                /** @var class-string $dependencyClass */
                 $dependencyClass = $parameterType->getName();
                 $dependencies[] = $this->make($dependencyClass);
             } else {

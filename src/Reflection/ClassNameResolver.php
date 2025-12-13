@@ -12,7 +12,7 @@ final class ClassNameResolver
      * Return all class-like FQNs (class, interface, trait, enum) declared in a PHP file,
      * without autoloading or PHP-Parser. Uses token_get_all().
      *
-     * @return string[] list of FQNs in declaration order (may be empty)
+     * @return class-string|null
      */
     public static function resolveFromFilePath(string $filePath): ?string
     {
@@ -100,9 +100,10 @@ final class ClassNameResolver
         }
 
         // De-duplicate while preserving order (in case of weird tokenization)
-        $fqn = array_unique($fqns);
-        if (count($fqn) === 1) {
-            return $fqn[0];
+        /** @var class-string[] $uniqueFqns */
+        $uniqueFqns = array_unique($fqns);
+        if (count($uniqueFqns) === 1) {
+            return $uniqueFqns[0];
         }
 
         return null;
