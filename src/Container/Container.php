@@ -181,6 +181,10 @@ final class Container
                 continue;
             }
 
+            if ($classReflection->isSubclassOf(\Throwable::class)) {
+                continue;
+            }
+
             $classNames[] = $className;
         }
 
