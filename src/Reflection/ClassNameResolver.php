@@ -53,9 +53,11 @@ final class ClassNameResolver
                     }
 
                     // PHP 8+: T_NAME_QUALIFIED can appear; PHP 7: it's T_STRING + T_NS_SEPARATOR
-                    if ($tj[0] === T_STRING || $tj[0] === T_NS_SEPARATOR || (defined(
-                        'T_NAME_QUALIFIED'
-                    ) && $tj[0] === T_NAME_QUALIFIED)) {
+                    if (
+                        $tj[0] === T_STRING
+                        || $tj[0] === T_NS_SEPARATOR
+                        || (defined('T_NAME_QUALIFIED') && $tj[0] === T_NAME_QUALIFIED)
+                    ) {
                         $namespace .= $tj[1];
                     }
                 }
@@ -70,8 +72,14 @@ final class ClassNameResolver
                 continue;
             }
 
-            // Skip anonymous classes: "new class (...)"
             $prev = self::previousNonWhitespaceToken($tokens, $i);
+
+            // Skip "::class" constant
+            if (is_array($prev) && $prev[0] === T_DOUBLE_COLON) {
+                continue;
+            }
+
+            // Skip anonymous classes: "new class (...)"
             if (is_array($prev) && $prev[0] === T_NEW) {
                 continue;
             }
