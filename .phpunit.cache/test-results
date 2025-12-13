@@ -1,0 +1,1 @@
+{"version":2,"defects":{"Entropy\\Tests\\Container\\ContainerTest::test":8,"Entropy\\Tests\\Container\\ContainerTest::testCreateServiceWithoutRegistration":8},"times":{"Entropy\\Tests\\Container\\ContainerTest::test":0,"Entropy\\Tests\\Container\\ContainerTest::testRegisterServiceAndCache":0,"Entropy\\Tests\\Container\\ContainerTest::testCreateServiceWithoutRegistration":0}}
