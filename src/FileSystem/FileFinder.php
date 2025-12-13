@@ -43,10 +43,9 @@ final class FileFinder
                 continue;
             }
 
-            if (!in_array($fileInfo->getBasename(), self::SOURCE_DIRECTORIES, true)) {
+            if (! in_array($fileInfo->getBasename(), self::SOURCE_DIRECTORIES, true)) {
                 continue;
             }
-
 
             $sourceDirectories[] = $fileInfo->getPathname();
         }
