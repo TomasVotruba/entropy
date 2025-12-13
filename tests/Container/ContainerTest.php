@@ -73,7 +73,9 @@ final class ContainerTest extends TestCase
     public function testAutodiscoveryOfValueObjects(): void
     {
         $container = new Container(__DIR__ . '/Fixture/project-with-value-objects');
-        $container->findByContract(CommandInterface::class);
+        $commands = $container->findByContract(CommandInterface::class);
+
+        $this->assertCount(0, $commands);
     }
 
     public function testContainerPassInClosure(): void

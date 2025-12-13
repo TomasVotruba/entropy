@@ -189,10 +189,14 @@ final class Container
                 continue;
             }
 
-            dump($classReflection->getInterfaceNames());
-
             // no parent class/interface, nothing to register
             if ($classReflection->getParentClass() === false && $classReflection->getInterfaceNames() === []) {
+                continue;
+            }
+
+
+            // has all parameter with typed class dependencies
+            if (! $this->hasAllParametersWithTypedClasses($classReflection)) {
                 continue;
             }
 
@@ -200,5 +204,21 @@ final class Container
         }
 
         return $classNames;
+    }
+
+    private function hasAllParametersWithTypedClasses(ReflectionClass $classReflection): bool
+    {
+        $constructor = $classReflection->getConstructor();
+        if ($constructor !== null) {
+            $parameters = $constructor->getParameters();
+            foreach ($parameters as $parameter) {
+                $parameterType = $parameter->getType();
+                if (!($parameterType instanceof \ReflectionNamedType) || $parameterType->isBuiltin()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
