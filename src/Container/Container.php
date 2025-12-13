@@ -171,25 +171,4 @@ final class Container
 
         return $dependencies;
     }
-
-    private function findPaths(string $directory): array
-    {
-        $filePaths = [];
-
-        $subPaths = scandir($directory);
-        foreach ($subPaths as $subPath) {
-            if ($subPath === '.' || $subPath === '..') {
-                continue;
-            }
-
-            $fullPath = $this->projectDirectory . DIRECTORY_SEPARATOR . $subPath;
-
-            $filesPaths = $this->findPaths($fullPath);
-            dump($filesPaths);
-            die;
-        }
-
-        dump($filePaths);
-        die;
-    }
 }
