@@ -15,7 +15,7 @@ use ReflectionClass;
 final class Container
 {
     /**
-     * @var array<class-string, callable(): object>
+     * @var array<class-string, callable(Container $container): object>
      */
     private array $services = [];
 
@@ -42,7 +42,7 @@ final class Container
      * @template TType as object
      *
      * @param class-string<TType> $class
-     * @param callable(): TType $factory
+     * @param callable(Container $container): TType $factory
      */
     public function service(string $class, callable $factory): void
     {
