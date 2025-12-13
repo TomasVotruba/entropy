@@ -18,3 +18,8 @@ parameters:
         -
             message: '#Method Entropy\\Container\\Container\:\:make\(\) should return TType of object but returns object#'
             path: src/Container/Container.php
+
+        -
+            message: '#Method Entropy\\Container\\Container\:\:hasAllParametersWithTypedClasses\(\) has parameter \$classReflection with generic class ReflectionClass but does not specify its types\: T#'
+            path: src/Container/Container.php
+
