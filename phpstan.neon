@@ -8,3 +8,9 @@ parameters:
         - tests
 
     treatPhpDocTypesAsCertain: false
+
+    # false positive
+    ignoreErrors:
+        -
+            message: '#Method Entropy\\Container\\Container\:\:make\(\) should return TType of object but returns object#'
+            path: src/Container/Container.php
