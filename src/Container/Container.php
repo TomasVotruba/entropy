@@ -126,7 +126,10 @@ final class Container
             }
         }
 
-        return array_filter($this->instances, fn ($instance): bool => is_a($instance, $contractClass));
+        return array_filter(
+            $this->instances,
+            fn (string $instance): bool => is_a($instance, $contractClass, true)
+        );
     }
 
     /**

@@ -117,7 +117,7 @@ final class ClassNameResolver
      * @param array<int, mixed> $tokens
      * @return array{0:int,1:string,2:int}|string|null
      */
-    private static function previousNonWhitespaceToken(array $tokens, int $index)
+    private static function previousNonWhitespaceToken(array $tokens, int $index): array|string|null
     {
         for ($i = $index - 1; $i >= 0; $i--) {
             $t = $tokens[$i];
