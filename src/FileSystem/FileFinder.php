@@ -17,10 +17,21 @@ final class FileFinder
         $files = [];
         $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory));
 
-        foreach ($iterator as $file) {
-            if ($file->isFile() && $file->getExtension() === 'php') {
-                $files[] = $file->getPathname();
+        foreach ($iterator as $fileInfo) {
+            if (! $fileInfo->isFile()) {
+                continue;
             }
+
+            if ($fileInfo->getExtension() !== 'php') {
+                continue;
+            }
+
+            /** @var \SplFileInfo $fileInfo */
+            if (str_contains($fileInfo->getPathname(), 'vendor')) {
+                continue;
+            }
+
+            $files[] = $fileInfo->getPathname();
         }
 
         return $files;
