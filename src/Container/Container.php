@@ -126,10 +126,7 @@ final class Container
             }
         }
 
-        return array_filter(
-            $this->instances,
-            fn (object $instance): bool => $instance instanceof $contractClass
-        );
+        return array_filter($this->instances, fn (object $instance): bool => $instance instanceof $contractClass);
     }
 
     /**
