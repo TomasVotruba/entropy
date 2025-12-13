@@ -6,7 +6,10 @@ namespace Entropy\Container;
 
 use Entropy\Attributes\RelatedTest;
 use Entropy\Exception\CreateServiceException;
+use Entropy\FileSystem\FileFinder;
+use Entropy\Reflection\ClassNameResolver;
 use Entropy\Tests\Container\ContainerTest;
+use ReflectionClass;
 
 #[RelatedTest(ContainerTest::class)]
 final class Container
@@ -20,6 +23,24 @@ final class Container
      * @var array<class-string, object>
      */
     private array $instances = [];
+
+    private string $projectDirectory;
+
+    private bool $isAutodisovered = false;
+
+    /**
+     * @var array<class-string>
+     */
+    private array $autodiscoveredClasses = [];
+
+    public function __construct(?string $projectDirectory = null)
+    {
+        if ($projectDirectory === null) {
+            $this->projectDirectory = getcwd();
+        } else {
+            $this->projectDirectory = $projectDirectory;
+        }
+    }
 
     /**
      * @template TType as object
@@ -47,14 +68,14 @@ final class Container
         if (isset($this->services[$class])) {
             // create service here
             $factory = $this->services[$class];
-            $instance = $factory();
 
+            $instance = $factory();
             $this->instances[$class] = $instance;
 
             return $instance;
         }
 
-        $classReflection = new \ReflectionClass($class);
+        $classReflection = new ReflectionClass($class);
 
         if ($classReflection->isInstantiable()) {
             // try to create instance without reflectionParameters
@@ -87,6 +108,44 @@ final class Container
     }
 
     /**
+     * @template TType as object
+     *
+     * @param class-string<TType> $contractClassName
+     * @return array<TType>
+     */
+    public function findByContract(string $contractClassName): array
+    {
+        if (! $this->isAutodisovered) {
+            // find alfindByContractl *.php files in given directory using recursive iterator
+            $phpFiles = FileFinder::findPhpFiles($this->projectDirectory);
+
+            $classNames = [];
+
+            foreach ($phpFiles as $phpFile) {
+                $className = ClassNameResolver::resolveFromFilePath($phpFile);
+                if ($className === null) {
+                    continue;
+                }
+
+                $classReflection = new ReflectionClass($className);
+
+                // interface cannot be registered as a service
+                if ($classReflection->isInterface()) {
+                    continue;
+                }
+
+                $classNames[] = $className;
+            }
+
+            $this->autodiscoveredClasses = $classNames;
+            $this->isAutodisovered = true;
+        }
+
+        dump($contractClassName);
+        die;
+    }
+
+    /**
      * @param \ReflectionParameter[] $reflectionParameters
      * @param class-string $class
      * @return array<object>
@@ -111,5 +170,26 @@ final class Container
         }
 
         return $dependencies;
+    }
+
+    private function findPaths(string $directory): array
+    {
+        $filePaths = [];
+
+        $subPaths = scandir($directory);
+        foreach ($subPaths as $subPath) {
+            if ($subPath === '.' || $subPath === '..') {
+                continue;
+            }
+
+            $fullPath = $this->projectDirectory . DIRECTORY_SEPARATOR . $subPath;
+
+            $filesPaths = $this->findPaths($fullPath);
+            dump($filesPaths);
+            die;
+        }
+
+        dump($filePaths);
+        die;
     }
 }

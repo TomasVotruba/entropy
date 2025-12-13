@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Tests\Container;
 
+use App\Project\Contract\CommandInterface;
 use Entropy\Container\Container;
 use Entropy\Tests\Container\Fixture\SomeType;
 use Entropy\Tests\Container\Fixture\WithDependencies;
@@ -18,6 +19,7 @@ final class ContainerTest extends TestCase
             return new SomeType();
         });
 
+        // fetch services
         $firstSomeType = $container->make(SomeType::class);
         $secondSomeType = $container->make(SomeType::class);
 
@@ -52,5 +54,17 @@ final class ContainerTest extends TestCase
         $serviceFetcheSomeType = $withDependencies->getSomeType();
 
         $this->assertSame($serviceFetcheSomeType, $containerFetchedSomeType);
+    }
+
+    public function testContractAutodiscovery(): void
+    {
+        // find all by types without registration
+        // trigger on findAllByType() ...
+        // scan through src/app directories and register services automatically :)
+
+        $container = new Container(__DIR__ . '/Fixture/project-directory');
+
+        $commands = $container->findByContract(CommandInterface::class);
+        $this->assertContainsOnlyInstancesOf(CommandInterface::class, $commands);
     }
 }
