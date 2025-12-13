@@ -14,7 +14,3 @@ parameters:
         -
             message: '#Method Entropy\\Container\\Container\:\:make\(\) should return TType of object but returns object#'
             path: src/Container/Container.php
-
-        -
-            message: '#Parameter \#2 \$callback of function array_filter expects \(callable\(object\)\: bool\)\|null, Closure\(string\)\: bool given#'
-            path: src/Container/Container.php

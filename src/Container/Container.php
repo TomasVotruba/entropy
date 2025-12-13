@@ -128,7 +128,7 @@ final class Container
 
         return array_filter(
             $this->instances,
-            fn (string $instance): bool => is_a($instance, $contractClass, true)
+            fn (object $instance): bool => $instance instanceof $contractClass
         );
     }
 
