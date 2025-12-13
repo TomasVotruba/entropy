@@ -30,7 +30,7 @@ final class ClassNameResolver
 
         for ($i = 0; $i < $count; $i++) {
             $t = $tokens[$i];
-            if (!is_array($t)) {
+            if (! is_array($t)) {
                 continue;
             }
 
@@ -44,12 +44,14 @@ final class ClassNameResolver
                         break;
                     }
 
-                    if (!is_array($tj)) {
+                    if (! is_array($tj)) {
                         continue;
                     }
 
                     // PHP 8+: T_NAME_QUALIFIED can appear; PHP 7: it's T_STRING + T_NS_SEPARATOR
-                    if ($tj[0] === T_STRING || $tj[0] === T_NS_SEPARATOR || (defined('T_NAME_QUALIFIED') && $tj[0] === T_NAME_QUALIFIED)) {
+                    if ($tj[0] === T_STRING || $tj[0] === T_NS_SEPARATOR || (defined(
+                        'T_NAME_QUALIFIED'
+                    ) && $tj[0] === T_NAME_QUALIFIED)) {
                         $namespace .= $tj[1];
                     }
                 }
@@ -60,7 +62,7 @@ final class ClassNameResolver
 
             // Detect class-likes (class/interface/trait/enum)
             $isEnum = defined('T_ENUM') && $t[0] === T_ENUM;
-            if ($t[0] !== T_CLASS && $t[0] !== T_INTERFACE && $t[0] !== T_TRAIT && !$isEnum) {
+            if ($t[0] !== T_CLASS && $t[0] !== T_INTERFACE && $t[0] !== T_TRAIT && ! $isEnum) {
                 continue;
             }
 
@@ -75,7 +77,7 @@ final class ClassNameResolver
             for ($j = $i + 1; $j < $count; $j++) {
                 $tj = $tokens[$j];
 
-                if (!is_array($tj)) {
+                if (! is_array($tj)) {
                     continue;
                 }
 
@@ -124,5 +126,4 @@ final class ClassNameResolver
 
         return null;
     }
-
 }
