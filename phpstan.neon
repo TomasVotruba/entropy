@@ -7,6 +7,10 @@ parameters:
         - src
         - tests
 
+    excludePaths:
+        # test fixtures
+        - */Fixture/*
+
     treatPhpDocTypesAsCertain: false
 
     # false positive
