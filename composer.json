@@ -1,6 +1,7 @@
 {
     "name": "entropy/entropy",
     "license": "proprietary",
+    "description": "Entropy framework",
     "require": {
         "php": "^8.3",
         "ext-tokenizer": "*"
