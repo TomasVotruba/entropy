@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Entropy\Reflection;
 
 use Entropy\Attributes\RelatedTest;
+use Entropy\Tests\Reflection\ClassNameResolver\ClassNameResolverTest;
 
-#[RelatedTest(\Entropy\Reflection\ClassNameResolver::class)]
+#[RelatedTest(ClassNameResolverTest::class)]
 final class ClassNameResolver
 {
     /**
