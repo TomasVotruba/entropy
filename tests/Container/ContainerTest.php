@@ -69,4 +69,15 @@ final class ContainerTest extends TestCase
 
         $this->assertContainsOnlyInstancesOf(CommandInterface::class, $commands);
     }
+
+    public function testContainerPassInClosure(): void
+    {
+        $container = new Container();
+        $container->service(SomeType::class, function (Container $container): SomeType {
+            return new SomeType();
+        });
+
+        $someType = $container->make(SomeType::class);
+        $this->assertInstanceOf(SomeType::class, $someType);
+    }
 }

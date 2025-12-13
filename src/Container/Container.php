@@ -66,7 +66,8 @@ final class Container
             // create service here
             $factory = $this->services[$class];
 
-            $instance = $factory();
+            // pass container itself to factory
+            $instance = $factory($this);
             $this->instances[$class] = $instance;
 
             return $instance;
