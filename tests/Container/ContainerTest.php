@@ -70,6 +70,12 @@ final class ContainerTest extends TestCase
         $this->assertContainsOnlyInstancesOf(CommandInterface::class, $commands);
     }
 
+    public function testAutodiscoveryOfValueObjects(): void
+    {
+        $container = new Container(__DIR__ . '/Fixture/project-with-value-objects');
+        $container->findByContract(CommandInterface::class);
+    }
+
     public function testContainerPassInClosure(): void
     {
         $container = new Container();

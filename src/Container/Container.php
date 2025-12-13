@@ -185,6 +185,15 @@ final class Container
                 continue;
             }
 
+            if ($classReflection->isEnum()) {
+                continue;
+            }
+
+            // no parent class/interface, nothing to register
+            if ($classReflection->getParentClass() === false && $classReflection->getInterfaceNames() === []) {
+                continue;
+            }
+
             $classNames[] = $className;
         }
 

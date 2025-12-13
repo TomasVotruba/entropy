@@ -25,7 +25,10 @@
     "autoload-dev": {
         "psr-4": {
             "Entropy\\Tests\\": "tests",
-            "App\\Project\\": "tests/Container/Fixture/project-directory/src"
+            "App\\Project\\": [
+                "tests/Container/Fixture/project-directory/src",
+                "tests/Container/Fixture/project-with-value-objects/src"
+            ]
         }
     },
     "config": {
