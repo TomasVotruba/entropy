@@ -11,7 +11,9 @@ use Entropy\Tests\Container\ContainerTest;
 #[RelatedTest(ContainerTest::class)]
 final class Container
 {
-    /** @var array<class-string, callable()> */
+    /**
+     * @var array<class-string, callable()>
+     */
     private array $services = [];
 
     /**
