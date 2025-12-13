@@ -12,8 +12,11 @@ final class FileFinder
     /**
      * @var string[]
      */
-    private const SOURCE_DIRECTORIES = ['app', 'src'];
+    private const array SOURCE_DIRECTORIES = ['app', 'src'];
 
+    /**
+     * @return string[]
+     */
     public static function findSourcePhpFiles(string $directory): array
     {
         $sourceDirectories = self::findSourceDirectories($directory);
@@ -34,7 +37,7 @@ final class FileFinder
         $sourceDirectories = [];
 
         foreach (new \DirectoryIterator($directory) as $fileInfo) {
-            /** @var \SplFileInfo $fileInfo */
+            /** @var \DirectoryIterator $fileInfo */
             if ($fileInfo->isDot()) {
                 continue;
             }
