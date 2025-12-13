@@ -110,39 +110,26 @@ final class Container
     /**
      * @template TType as object
      *
-     * @param class-string<TType> $contractClassName
+     * @param class-string<TType> $contractClass
      * @return array<TType>
      */
-    public function findByContract(string $contractClassName): array
+    public function findByContract(string $contractClass): array
     {
         if (! $this->isAutodisovered) {
-            // find alfindByContractl *.php files in given directory using recursive iterator
-            $phpFiles = FileFinder::findPhpFiles($this->projectDirectory);
-
-            $classNames = [];
-
-            foreach ($phpFiles as $phpFile) {
-                $className = ClassNameResolver::resolveFromFilePath($phpFile);
-                if ($className === null) {
-                    continue;
-                }
-
-                $classReflection = new ReflectionClass($className);
-
-                // interface cannot be registered as a service
-                if ($classReflection->isInterface()) {
-                    continue;
-                }
-
-                $classNames[] = $className;
-            }
-
-            $this->autodiscoveredClasses = $classNames;
+            $autodiscoveredClasses = $this->autodiscoverClasses();
             $this->isAutodisovered = true;
+
+            foreach ($autodiscoveredClasses as $autodiscoveredClass) {
+                if (isset($this->instances[$autodiscoveredClass])) {
+                    continue;
+                }
+
+                // register if not yet
+                $this->instances[$autodiscoveredClass] = $this->make($autodiscoveredClass);
+            }
         }
 
-        dump($contractClassName);
-        die;
+        return array_filter($this->instances, fn ($instance): bool => is_a($instance, $contractClass));
     }
 
     /**
@@ -170,5 +157,34 @@ final class Container
         }
 
         return $dependencies;
+    }
+
+    /**
+     * @return array<class-string>
+     */
+    private function autodiscoverClasses(): array
+    {
+        // find alfindByContractl *.php files in given directory using recursive iterator
+        $phpFiles = FileFinder::findPhpFiles($this->projectDirectory);
+
+        $classNames = [];
+
+        foreach ($phpFiles as $phpFile) {
+            $className = ClassNameResolver::resolveFromFilePath($phpFile);
+            if ($className === null) {
+                continue;
+            }
+
+            $classReflection = new ReflectionClass($className);
+
+            // interface cannot be registered as a service
+            if ($classReflection->isInterface()) {
+                continue;
+            }
+
+            $classNames[] = $className;
+        }
+
+        return $classNames;
     }
 }
