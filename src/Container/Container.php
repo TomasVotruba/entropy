@@ -15,7 +15,7 @@ use ReflectionClass;
 final class Container
 {
     /**
-     * @var array<class-string, callable(Container $container): object>
+     * @var array<class-string, callable(Container): object>
      */
     private array $services = [];
 
