@@ -57,7 +57,7 @@ final class Container
         $classReflection = new \ReflectionClass($class);
 
         if ($classReflection->isInstantiable()) {
-            // try to create instance without parameters
+            // try to create instance without reflectionParameters
             $constructor = $classReflection->getConstructor();
             if ($constructor === null || $constructor->getNumberOfParameters() === 0) {
                 $instance = new $class();
@@ -67,11 +67,49 @@ final class Container
 
                 return $instance;
             }
+            // try to resolve dependencies
+            $parameters = $constructor->getParameters();
+
+            $dependencies = $this->resolveDependenciesFromParameterReflections($parameters, $class);
+
+            // create instance with resolved dependencies
+            $instance = $classReflection->newInstanceArgs($dependencies);
+            $this->instances[$class] = $instance;
+
+            return $instance;
+
         }
 
         // @todo create solo instance
         // @todo autowire parameter service
 
         throw new CreateServiceException(sprintf('No service found for "%s" class', $class));
+    }
+
+    /**
+     * @param \ReflectionParameter[] $reflectionParameters
+     * @param class-string $class
+     * @return array<object>
+     */
+    private function resolveDependenciesFromParameterReflections(array $reflectionParameters, string $class): array
+    {
+        $dependencies = [];
+
+        foreach ($reflectionParameters as $parameter) {
+            $parameterType = $parameter->getType();
+            if ($parameterType instanceof \ReflectionNamedType && ! $parameterType->isBuiltin()) {
+                $dependencyClass = $parameterType->getName();
+                $dependencies[] = $this->make($dependencyClass);
+            } else {
+                // cannot resolve non-class parameter
+                throw new CreateServiceException(sprintf(
+                    'Cannot resolve parameter "%s" for class "%s"',
+                    $parameter->getName(),
+                    $class
+                ));
+            }
+        }
+
+        return $dependencies;
     }
 }
