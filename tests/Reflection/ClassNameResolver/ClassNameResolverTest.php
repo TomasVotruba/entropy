@@ -16,7 +16,7 @@ final class ClassNameResolverTest extends TestCase
 
     public function testNothing(): void
     {
-        $className = ClassNameResolver::resolveFromFilePath(__DIR__ . '/Fixture/bare-bin-file.php');
+        $className = ClassNameResolver::resolveFromFilePath(__DIR__ . '/Fixture/bare-bin-file.php.inc');
         $this->assertSame(null, $className);
     }
 }
