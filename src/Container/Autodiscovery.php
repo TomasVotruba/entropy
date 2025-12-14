@@ -7,6 +7,9 @@ namespace Entropy\Container;
 use Entropy\FileSystem\FileFinder;
 use Entropy\Reflection\ClassNameResolver;
 use ReflectionClass;
+use ReflectionMethod;
+use ReflectionNamedType;
+use ReflectionType;
 
 /**
  * Load project classes to services automatically
@@ -46,15 +49,16 @@ final class Autodiscovery
     private function hasAllParametersWithTypedClasses(ReflectionClass $classReflection): bool
     {
         $constructorReflection = $classReflection->getConstructor();
-        if ($constructorReflection !== null) {
+
+        if ($constructorReflection instanceof ReflectionMethod) {
             $parameters = $constructorReflection->getParameters();
             foreach ($parameters as $parameter) {
                 $parameterType = $parameter->getType();
-                if (! $parameterType instanceof \ReflectionType) {
+                if (! $parameterType instanceof ReflectionType) {
                     return false;
                 }
 
-                if (! $parameterType instanceof \ReflectionNamedType) {
+                if (! $parameterType instanceof ReflectionNamedType) {
                     return false;
                 }
 
