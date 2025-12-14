@@ -8,7 +8,6 @@ use App\Project\Contract\CommandInterface;
 use App\Project\Contract\SomeContract;
 use App\Project\SomeApplication;
 use App\Project\SomeCommand;
-use Entropy\Console\Application;
 use Entropy\Container\Container;
 use PHPUnit\Framework\TestCase;
 

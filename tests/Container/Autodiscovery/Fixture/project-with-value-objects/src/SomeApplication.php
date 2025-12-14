@@ -9,8 +9,9 @@ final class SomeApplication
     /**
      * @param CommandInterface[] $commands
      */
-    public function __construct(private readonly array $commands)
-    {
+    public function __construct(
+        private readonly array $commands
+    ) {
     }
 
     /**
