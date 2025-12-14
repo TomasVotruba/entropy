@@ -170,7 +170,7 @@ final class Container
     {
         // warm up instances with registered service of contract
         foreach ($this->services as $class => $factory) {
-            if (!is_a($class, $contractClass, true)) {
+            if (! is_a($class, $contractClass, true)) {
                 continue;
             }
 

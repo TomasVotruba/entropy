@@ -6,5 +6,4 @@ use App\Project\Contract\ServiceTypeInterface;
 
 final class SomeServiceType implements ServiceTypeInterface
 {
-
 }

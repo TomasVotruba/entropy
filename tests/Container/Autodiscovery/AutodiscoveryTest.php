@@ -9,7 +9,6 @@ use App\Project\Contract\CommandInterface;
 use App\Project\Contract\ServiceTypeInterface;
 use App\Project\Contract\SomeContract;
 use App\Project\SomeApplication;
-use App\Project\SomeCommand;
 use Entropy\Container\Container;
 use PHPUnit\Framework\TestCase;
 
