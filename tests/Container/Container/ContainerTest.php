@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Entropy\Tests\Container\Container;
 
-use App\Project\Contract\CommandInterface;
 use Entropy\Container\Container;
 use Entropy\Container\Exception\RegisterServiceException;
 use Entropy\Tests\Container\Container\Fixture\SomeType;
@@ -58,28 +57,6 @@ final class ContainerTest extends TestCase
         $this->assertSame($serviceFetcheSomeType, $containerFetchedSomeType);
     }
 
-    public function testContractAutodiscovery(): void
-    {
-        // find all by types without registration
-        // trigger on findAllByType() ...
-        // scan through src/app directories and register services automatically :)
-
-        $container = new Container(__DIR__ . '/Fixture/project-directory');
-
-        $commands = $container->findByContract(CommandInterface::class);
-        $this->assertCount(1, $commands);
-
-        $this->assertContainsOnlyInstancesOf(CommandInterface::class, $commands);
-    }
-
-    public function testAutodiscoveryOfValueObjects(): void
-    {
-        $container = new Container(__DIR__ . '/Fixture/project-with-value-objects');
-        $commands = $container->findByContract(CommandInterface::class);
-
-        $this->assertCount(0, $commands);
-    }
-
     public function testContainerPassInClosure(): void
     {
         $container = new Container();
@@ -91,7 +68,7 @@ final class ContainerTest extends TestCase
         $this->assertInstanceOf(SomeType::class, $someType);
     }
 
-    public function testOverride(): void
+    public function testPreventServiceOverride(): void
     {
         $container = new Container();
         $container->service(SomeType::class, function (): SomeType {

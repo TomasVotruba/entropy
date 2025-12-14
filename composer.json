@@ -27,8 +27,8 @@
         "psr-4": {
             "Entropy\\Tests\\": "tests",
             "App\\Project\\": [
-                "tests/Container/Container/Fixture/project-directory/src",
-                "tests/Container/Container/Fixture/project-with-value-objects/src"
+                "tests/Container/Autodiscovery/Fixture/project-directory/src",
+                "tests/Container/Autodiscovery/Fixture/project-with-value-objects/src"
             ]
         }
     },

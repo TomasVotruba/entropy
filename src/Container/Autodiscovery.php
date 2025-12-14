@@ -70,6 +70,9 @@ final class Autodiscovery
 
     private function shouldSkipClass(string $className): bool
     {
+        // @todo exclude classes with ValueObject, DTO, Enum, Exception in their namespace
+        // those are not services
+
         $classReflection = new ReflectionClass($className);
 
         // interface cannot be registered as a service

@@ -7,7 +7,7 @@ namespace Entropy\Container;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Container\Exception\CreateServiceException;
 use Entropy\Container\Exception\RegisterServiceException;
-use Entropy\Tests\Container\ContainerTest;
+use Entropy\Tests\Container\Container\ContainerTest;
 use ReflectionClass;
 
 #[RelatedTest(ContainerTest::class)]
