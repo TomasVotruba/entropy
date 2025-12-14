@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Project;
+namespace App\Project\Contract;
 
 interface CommandInterface
 {

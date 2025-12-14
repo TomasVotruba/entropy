@@ -2,7 +2,7 @@
 
 namespace App\Project\ValueObject;
 
-use objects\src\Contract\SomeContract;
+use App\Project\Contract\SomeContract;
 
 final class SomeValueObjectWithScalar implements SomeContract
 {
