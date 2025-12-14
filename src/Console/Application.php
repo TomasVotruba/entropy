@@ -6,9 +6,15 @@ namespace Entropy\Console;
 
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
+use Entropy\Console\Exception\InvalidCommandException;
 
 final class Application
 {
+    /**
+     * @var array<string, CommandInterface>
+     */
+    private array $commandsByName =[];
+
     /**
      * @param CommandInterface[] $commands
      */
@@ -16,6 +22,17 @@ final class Application
         private InputParser $inputParser,
         private array $commands
     ) {
+        foreach ($commands as $command) {
+            $name = $command->name();
+            if ($name === '') {
+                throw new InvalidCommandException('Command name cannot be empty.');
+            }
+            if (isset($this->commandsByName[$name])) {
+                throw new InvalidCommandException(sprintf('Duplicate command name: "%s"', $name));
+            }
+
+            $this->commandsByName[$name] = $command;
+        }
     }
 
     /**

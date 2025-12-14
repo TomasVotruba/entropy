@@ -40,4 +40,14 @@ final class ArgumentsAndOptions
     {
         return $this->options;
     }
+
+    public function arg(int $index, mixed $default = null): mixed
+    {
+        return $this->args[$index] ?? $default;
+    }
+
+    public function option(string $name, mixed $default = null): mixed
+    {
+        return $this->options[$name] ?? $default;
+    }
 }
