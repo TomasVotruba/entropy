@@ -50,11 +50,15 @@ final class Autodiscovery
             $parameters = $constructorReflection->getParameters();
             foreach ($parameters as $parameter) {
                 $parameterType = $parameter->getType();
-                if ($parameterType instanceof \ReflectionType && $parameterType->isBuiltin()) {
+                if (! $parameterType instanceof \ReflectionType) {
                     return false;
                 }
 
                 if (! $parameterType instanceof \ReflectionNamedType) {
+                    return false;
+                }
+
+                if ($parameterType->isBuiltin()) {
                     return false;
                 }
             }
