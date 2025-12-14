@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Entropy\Tests\Container;
+namespace Entropy\Tests\Container\Container;
 
 use App\Project\Contract\CommandInterface;
 use Entropy\Container\Container;
 use Entropy\Container\Exception\RegisterServiceException;
-use Entropy\Tests\Container\Fixture\SomeType;
-use Entropy\Tests\Container\Fixture\WithDependencies;
+use Entropy\Tests\Container\Container\Fixture\SomeType;
+use Entropy\Tests\Container\Container\Fixture\WithDependencies;
 use PHPUnit\Framework\TestCase;
 
 final class ContainerTest extends TestCase
