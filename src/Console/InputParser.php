@@ -61,7 +61,7 @@ final class InputParser
         }
 
         // --option value
-        if ($argv !== [] && !str_starts_with($argv[0], '-')) {
+        if ($argv !== [] && ! str_starts_with($argv[0], '-')) {
             return [$item, array_shift($argv)];
         }
 
