@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Entropy\Tests\Container\Autodiscovery;
 
+use App\Project\Command\OtherCommand;
 use App\Project\Contract\CommandInterface;
+use App\Project\Contract\ServiceTypeInterface;
 use App\Project\Contract\SomeContract;
 use App\Project\SomeApplication;
 use App\Project\SomeCommand;
@@ -39,8 +41,9 @@ final class AutodiscoveryTest extends TestCase
     {
         $container = new Container(__DIR__ . '/Fixture/project-with-value-objects');
 
-        $container->service(SomeCommand::class, function (): SomeCommand {
-            return new SomeCommand();
+        $container->service(OtherCommand::class, function (Container $container): OtherCommand {
+            $serviceTypes = $container->findByContract(ServiceTypeInterface::class);
+            return new OtherCommand($serviceTypes);
         });
 
         $container->service(SomeApplication::class, function (Container $container): SomeApplication {
@@ -48,6 +51,7 @@ final class AutodiscoveryTest extends TestCase
             return new SomeApplication($commands);
         });
 
+        // here the command should be present, as we registered it above
         $someApplication = $container->make(SomeApplication::class);
         $this->assertCount(1, $someApplication->getCommands());
     }
