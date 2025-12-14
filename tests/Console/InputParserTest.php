@@ -13,11 +13,7 @@ final class InputParserTest extends TestCase
     {
         $inputParser = new InputParser();
 
-        $argumentsAndOptions = $inputParser->parse([
-            'bin/rector',
-            'process',
-            'src'
-        ]);
+        $argumentsAndOptions = $inputParser->parse(['bin/rector', 'process', 'src']);
 
         $this->assertSame('process', $argumentsAndOptions->getCommandName());
         $this->assertSame(['src'], $argumentsAndOptions->getArguments());
