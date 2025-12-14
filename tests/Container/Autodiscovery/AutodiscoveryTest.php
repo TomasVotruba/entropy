@@ -8,5 +8,4 @@ use PHPUnit\Framework\TestCase;
 
 final class AutodiscoveryTest extends TestCase
 {
-
 }
