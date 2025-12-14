@@ -6,6 +6,7 @@ namespace Entropy\Tests\Container;
 
 use App\Project\Contract\CommandInterface;
 use Entropy\Container\Container;
+use Entropy\Container\Exception\RegisterServiceException;
 use Entropy\Tests\Container\Fixture\SomeType;
 use Entropy\Tests\Container\Fixture\WithDependencies;
 use PHPUnit\Framework\TestCase;
@@ -87,5 +88,20 @@ final class ContainerTest extends TestCase
 
         $someType = $container->make(SomeType::class);
         $this->assertInstanceOf(SomeType::class, $someType);
+    }
+
+    public function testOverride(): void
+    {
+        $container = new Container();
+        $container->service(SomeType::class, function (): SomeType {
+            return new SomeType();
+        });
+
+        $this->expectException(RegisterServiceException::class);
+
+        // try to override service
+        $container->service(SomeType::class, function (): SomeType {
+            return new SomeType();
+        });
     }
 }

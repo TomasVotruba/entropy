@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Entropy\Exception;
+namespace Entropy\Container\Exception;
 
 use Exception;
 

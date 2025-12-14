@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Entropy\Container;
 
 use Entropy\Attributes\RelatedTest;
-use Entropy\Exception\CreateServiceException;
+use Entropy\Container\Exception\CreateServiceException;
+use Entropy\Container\Exception\RegisterServiceException;
 use Entropy\Tests\Container\ContainerTest;
 use ReflectionClass;
 
@@ -44,6 +45,11 @@ final class Container
      */
     public function service(string $class, callable $factory): void
     {
+        if (isset($this->services[$class])) {
+            // avoid service override
+            throw new RegisterServiceException(sprintf('Service for "%s" class is already registered', $class));
+        }
+
         $this->services[$class] = $factory;
     }
 
