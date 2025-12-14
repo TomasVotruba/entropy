@@ -6,7 +6,7 @@ namespace Entropy\Console\Enum;
 
 final class ExitCode
 {
-    public const SUCCESS = 0;
+    public const int SUCCESS = 0;
 
-    public const ERROR = 1;
+    public const int ERROR = 1;
 }
