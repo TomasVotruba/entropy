@@ -24,6 +24,7 @@ final class ContainerTest extends TestCase
         $firstSomeType = $container->make(SomeType::class);
         $secondSomeType = $container->make(SomeType::class);
 
+        // must be the same instance
         $this->assertInstanceOf(SomeType::class, $firstSomeType);
         $this->assertSame($firstSomeType, $secondSomeType);
     }
