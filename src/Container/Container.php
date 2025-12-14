@@ -133,6 +133,8 @@ final class Container
             }
         }
 
+        $this->warmUpInstanceServices($contractClass);
+
         return array_filter($this->instances, fn (object $instance): bool => $instance instanceof $contractClass);
     }
 
@@ -162,5 +164,22 @@ final class Container
         }
 
         return $dependencies;
+    }
+
+    private function warmUpInstanceServices(string $contractClass): void
+    {
+        // warm up instances with registered service of contract
+        foreach ($this->services as $class => $factory) {
+            if (!is_a($class, $contractClass, true)) {
+                continue;
+            }
+
+            if (isset($this->instances[$class])) {
+                continue;
+            }
+
+            // warm up cache if not yet
+            $this->make($class);
+        }
     }
 }
