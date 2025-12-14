@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Entropy\Tests\Console;
 
-final class ApplicationTest
+use PHPUnit\Framework\TestCase;
+
+final class ApplicationTest extends TestCase
 {
     // @todo
 
