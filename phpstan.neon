@@ -20,6 +20,9 @@ parameters:
             path: src/Container/Container.php
 
         -
-            message: '#Method Entropy\\Container\\Container\:\:hasAllParametersWithTypedClasses\(\) has parameter \$classReflection with generic class ReflectionClass but does not specify its types\: T#'
-            path: src/Container/Container.php
+            message: '#Method Entropy\\Container\\Autodiscovery\:\:hasAllParametersWithTypedClasses\(\) has parameter \$classReflection with generic class ReflectionClass but does not specify its types\: T#'
+            path: src/Container/Autodiscovery.php
+
+
+        - '#Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string<T of object>\|T of object, string given#'
 

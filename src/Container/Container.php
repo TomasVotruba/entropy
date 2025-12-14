@@ -6,8 +6,6 @@ namespace Entropy\Container;
 
 use Entropy\Attributes\RelatedTest;
 use Entropy\Exception\CreateServiceException;
-use Entropy\FileSystem\FileFinder;
-use Entropy\Reflection\ClassNameResolver;
 use Entropy\Tests\Container\ContainerTest;
 use ReflectionClass;
 
@@ -114,7 +112,9 @@ final class Container
     public function findByContract(string $contractClass): array
     {
         if (! $this->isAutodisovered) {
-            $autodiscoveredClasses = $this->autodiscoverClasses();
+            $autodiscovery = new Autodiscovery();
+
+            $autodiscoveredClasses = $autodiscovery->autodiscoverClasses($this->projectDirectory);
             $this->isAutodisovered = true;
 
             foreach ($autodiscoveredClasses as $autodiscoveredClass) {
@@ -156,68 +156,5 @@ final class Container
         }
 
         return $dependencies;
-    }
-
-    /**
-     * @return array<class-string>
-     */
-    private function autodiscoverClasses(): array
-    {
-        // find alfindByContractl *.php files in given directory using recursive iterator
-        $phpFiles = FileFinder::findSourcePhpFiles($this->projectDirectory);
-
-        $classNames = [];
-
-        foreach ($phpFiles as $phpFile) {
-            $className = ClassNameResolver::resolveFromFilePath($phpFile);
-            if ($className === null) {
-                continue;
-            }
-
-            $classReflection = new ReflectionClass($className);
-
-            // interface cannot be registered as a service
-            if ($classReflection->isInterface()) {
-                continue;
-            }
-
-            if ($classReflection->isSubclassOf(\Throwable::class)) {
-                continue;
-            }
-
-            if ($classReflection->isEnum()) {
-                continue;
-            }
-
-            // no parent class/interface, nothing to register
-            if ($classReflection->getParentClass() === false && $classReflection->getInterfaceNames() === []) {
-                continue;
-            }
-
-            // has all parameter with typed class dependencies
-            if (! $this->hasAllParametersWithTypedClasses($classReflection)) {
-                continue;
-            }
-
-            $classNames[] = $className;
-        }
-
-        return $classNames;
-    }
-
-    private function hasAllParametersWithTypedClasses(ReflectionClass $classReflection): bool
-    {
-        $constructor = $classReflection->getConstructor();
-        if ($constructor !== null) {
-            $parameters = $constructor->getParameters();
-            foreach ($parameters as $parameter) {
-                $parameterType = $parameter->getType();
-                if (! ($parameterType instanceof \ReflectionNamedType) || $parameterType->isBuiltin()) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
     }
 }
