@@ -4,8 +4,9 @@ namespace Entropy\Console;
 
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\ValueObject\ArgumentsAndOptions;
+use Entropy\Tests\Console\InputParserTest;
 
-#[RelatedTest()]
+#[RelatedTest(InputParserTest::class)]
 final class InputParser
 {
     /**
@@ -18,7 +19,7 @@ final class InputParser
 
         if ($argv === []) {
             // fallback to show all commands
-            return new ArgumentsAndOptions('list');
+            return new ArgumentsAndOptions(null);
         }
 
         $command = array_shift($argv);
