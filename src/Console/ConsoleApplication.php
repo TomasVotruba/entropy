@@ -15,9 +15,6 @@ use Entropy\Tests\Console\ConsoleApplicationTest;
 #[RelatedTest(ConsoleApplicationTest::class)]
 final class ConsoleApplication
 {
-    /**
-     * @param CommandInterface[] $commands
-     */
     public function __construct(
         private HelpPrinter $helpPrinter,
         private InputParser $inputParser,
@@ -43,7 +40,7 @@ final class ConsoleApplication
         /** @var string $commandName */
         $commandName = $argumentsAndOptions->getCommandName();
 
-        if (! $this->commandRegistry->has($argumentsAndOptions->getCommandName())) {
+        if (! $this->commandRegistry->has($commandName)) {
             fwrite(STDERR, sprintf("Unknown command: %s\n\n", $commandName));
 
             $this->helpPrinter->printHelp();
@@ -53,8 +50,6 @@ final class ConsoleApplication
 
         try {
             $command = $this->commandRegistry->get($commandName);
-
-            $command = $this->commandsByName[$commandName];
             return $command->run($argumentsAndOptions);
         } catch (\Throwable $throwable) {
             fwrite(STDERR, "Unhandled error: {$throwable->getMessage()}\n");

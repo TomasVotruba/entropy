@@ -29,3 +29,6 @@ parameters:
         # false positive, always 2 strings
         - '#Method Entropy\\Console\\Input\\InputParser\:\:parseLongOption\(\) should return array\{mixed, mixed\} but returns non\-empty\-list<string>#'
 
+        # known class-string array
+        - '#Method Entropy\\Reflection\\ParameterTypesResolver\:\:resolve\(\) should return array<class\-string> but returns list<string>#'
+

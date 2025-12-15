@@ -9,8 +9,14 @@ use Entropy\Console\ValueObject\ArgumentsAndOptions;
 
 interface CommandInterface
 {
+    /**
+     * @return non-empty-string
+     */
     public function getName(): string;
 
+    /**
+     * @return non-empty-string
+     */
     public function getDescription(): string;
 
     /**

@@ -12,7 +12,7 @@ final class ParameterTypesResolver
      * @param \ReflectionParameter[] $reflectionParameters
      * @param class-string $class
      *
-     * @return array<class-string>
+     * @return class-string[]
      */
     public static function resolve(array $reflectionParameters, string $class): array
     {
@@ -21,7 +21,6 @@ final class ParameterTypesResolver
         foreach ($reflectionParameters as $parameter) {
             $parameterType = $parameter->getType();
             if ($parameterType instanceof \ReflectionNamedType && ! $parameterType->isBuiltin()) {
-                /** @var class-string $dependencyClass */
                 $parameterTypes[] = $parameterType->getName();
             } else {
                 // cannot resolve non-class parameter

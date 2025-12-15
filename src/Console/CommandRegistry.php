@@ -43,11 +43,17 @@ final class CommandRegistry
     {
         $name = $command->getName();
         if ($name === '') {
-            throw new InvalidCommandException('Command commandName cannot be empty.');
+            throw new InvalidCommandException('Command name cannot be empty');
         }
 
         if (isset($this->commandsByName[$name])) {
-            throw new InvalidCommandException(sprintf('Duplicate command commandName: "%s"', $name));
+            throw new InvalidCommandException(sprintf('Duplicate command name: "%s"', $name));
+        }
+
+        // same for description
+        $description = $command->getDescription();
+        if ($description === '') {
+            throw new InvalidCommandException('Command description cannot be empty');
         }
     }
 
