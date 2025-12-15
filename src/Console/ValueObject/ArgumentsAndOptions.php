@@ -11,7 +11,7 @@ final class ArgumentsAndOptions
      * @param array<string, mixed> $options
      */
     public function __construct(
-        private ?string $commandName,
+        private readonly ?string $commandName,
         private array $arguments = [],
         private array $options = []
     ) {

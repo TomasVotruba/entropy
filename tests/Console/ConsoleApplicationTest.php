@@ -16,9 +16,7 @@ final class ConsoleApplicationTest extends TestCase
     public function testProvideAtLeastOneCommand(): void
     {
         $container = new Container();
-        $container->service(CommandRegistry::class, function () {
-            return new CommandRegistry([]);
-        });
+        $container->service(CommandRegistry::class, fn (): \Entropy\Console\CommandRegistry => new CommandRegistry([]));
 
         $this->expectException(InvalidCommandException::class);
         $container->make(ConsoleApplication::class);
@@ -27,7 +25,7 @@ final class ConsoleApplicationTest extends TestCase
     public function testValidCommandRegistry(): void
     {
         $container = new Container();
-        $container->service(CommandRegistry::class, function (Container $container) {
+        $container->service(CommandRegistry::class, function (Container $container): \Entropy\Console\CommandRegistry {
             $simpleCommand = $container->make(SimpleCommand::class);
 
             return new CommandRegistry([$simpleCommand]);

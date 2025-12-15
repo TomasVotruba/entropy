@@ -68,7 +68,7 @@ final class ClassNameResolver
 
             // Detect class-likes (class/interface/trait/enum)
             $isEnum = defined('T_ENUM') && $t[0] === T_ENUM;
-            if ($t[0] !== T_CLASS && $t[0] !== T_INTERFACE && $t[0] !== T_TRAIT && ! $isEnum) {
+            if (! in_array($t[0], [T_CLASS, T_INTERFACE, T_TRAIT], true) && ! $isEnum) {
                 continue;
             }
 
@@ -130,7 +130,7 @@ final class ClassNameResolver
         for ($i = $index - 1; $i >= 0; $i--) {
             $t = $tokens[$i];
 
-            if (is_array($t) && ($t[0] === T_WHITESPACE || $t[0] === T_COMMENT || $t[0] === T_DOC_COMMENT)) {
+            if (is_array($t) && (in_array($t[0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true))) {
                 continue;
             }
 

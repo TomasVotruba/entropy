@@ -11,7 +11,7 @@ use Entropy\Console\Output\HelpPrinter;
 use Entropy\Tests\Console\ConsoleApplicationTest;
 
 #[RelatedTest(ConsoleApplicationTest::class)]
-final class ConsoleApplication
+final readonly class ConsoleApplication
 {
     public function __construct(
         private HelpPrinter $helpPrinter,

@@ -15,9 +15,7 @@ final class ContainerTest extends TestCase
     public function testRegisterServiceAndCache(): void
     {
         $container = new Container();
-        $container->service(SomeType::class, function (): SomeType {
-            return new SomeType();
-        });
+        $container->service(SomeType::class, fn (): SomeType => new SomeType());
 
         // fetch services
         $firstSomeType = $container->make(SomeType::class);
@@ -60,9 +58,7 @@ final class ContainerTest extends TestCase
     public function testContainerPassInClosure(): void
     {
         $container = new Container();
-        $container->service(SomeType::class, function (Container $container): SomeType {
-            return new SomeType();
-        });
+        $container->service(SomeType::class, fn (Container $container): SomeType => new SomeType());
 
         $someType = $container->make(SomeType::class);
         $this->assertInstanceOf(SomeType::class, $someType);
@@ -71,15 +67,11 @@ final class ContainerTest extends TestCase
     public function testPreventServiceOverride(): void
     {
         $container = new Container();
-        $container->service(SomeType::class, function (): SomeType {
-            return new SomeType();
-        });
+        $container->service(SomeType::class, fn (): SomeType => new SomeType());
 
         $this->expectException(RegisterServiceException::class);
 
         // try to override service
-        $container->service(SomeType::class, function (): SomeType {
-            return new SomeType();
-        });
+        $container->service(SomeType::class, fn (): SomeType => new SomeType());
     }
 }

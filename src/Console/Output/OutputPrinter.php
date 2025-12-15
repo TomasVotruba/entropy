@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Console\Output;
 
-final class OutputPrinter
+final readonly class OutputPrinter
 {
     private bool $useColors;
 

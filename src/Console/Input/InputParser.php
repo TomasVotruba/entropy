@@ -29,15 +29,15 @@ final class InputParser
             $item = array_shift($argv);
 
             // --option or --option=value
-            if (str_starts_with($item, '--')) {
-                [$name, $value] = self::parseLongOption($item, $argv);
+            if (str_starts_with((string) $item, '--')) {
+                [$name, $value] = $this->parseLongOption($item, $argv);
                 $options[$name] = $value;
                 continue;
             }
 
             // -v
-            if (str_starts_with($item, '-')) {
-                $options[ltrim($item, '-')] = true;
+            if (str_starts_with((string) $item, '-')) {
+                $options[ltrim((string) $item, '-')] = true;
                 continue;
             }
 
@@ -52,7 +52,7 @@ final class InputParser
      * @param mixed[] $argv
      * @return array{mixed, mixed}
      */
-    private static function parseLongOption(string $item, array &$argv): array
+    private function parseLongOption(string $item, array &$argv): array
     {
         $item = ltrim($item, '--');
 
@@ -61,7 +61,7 @@ final class InputParser
         }
 
         // --option value
-        if ($argv !== [] && ! str_starts_with($argv[0], '-')) {
+        if ($argv !== [] && ! str_starts_with((string) $argv[0], '-')) {
             return [$item, array_shift($argv)];
         }
 

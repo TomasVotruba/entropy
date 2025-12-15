@@ -159,7 +159,7 @@ final class Container
     private function warmUpInstanceServices(string $contractClass): void
     {
         // warm up instances with registered service of contract
-        foreach ($this->services as $class => $factory) {
+        foreach (array_keys($this->services) as $class) {
             if (! is_a($class, $contractClass, true)) {
                 continue;
             }
