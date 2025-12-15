@@ -9,7 +9,8 @@ use Entropy\Console\CommandRegistry;
 final readonly class HelpPrinter
 {
     public function __construct(
-        private CommandRegistry $commandRegistry
+        private CommandRegistry $commandRegistry,
+        private OutputPrinter $outputPrinter
     ) {
 
     }
@@ -18,18 +19,22 @@ final readonly class HelpPrinter
     {
         $script = basename($_SERVER['argv'][0] ?? 'tool.php');
 
-        echo "Usage:\n";
-        echo "  php {$script} <command> [args...] [--options]\n\n";
-        echo "Commands:\n";
+        $this->outputPrinter->warning('Usage:');
+        $this->outputPrinter->writeln(sprintf('  %s <command> [args...] [--options]', $script), 2);
+
+        $this->outputPrinter->warning('Commands:');
 
         $maxCommandNameLength = $this->commandRegistry->getCommandNameMaxLength();
 
         foreach ($this->commandRegistry->all() as $command) {
             $name = str_pad($command->getName(), $maxCommandNameLength + 5);
-            echo "  {$name}  {$command->getDescription()}\n";
+
+            $this->outputPrinter->writeln(sprintf('  <fg=green>%s</>  %s', $name, $command->getDescription()));
         }
 
-        echo "\nGlobal options:\n";
-        echo "  --help, -h  Show this help\n";
+        $this->outputPrinter->newline();
+
+        $this->outputPrinter->warning('Global options:');
+        $this->outputPrinter->writeln(sprintf('  <fg=green>%s</>  %s', '--help, -h', 'Show this help'));
     }
 }

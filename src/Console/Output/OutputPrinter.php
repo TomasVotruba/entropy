@@ -18,13 +18,17 @@ final readonly class OutputPrinter
         $this->isSilent = defined('PHPUNIT_COMPOSER_INSTALL');
     }
 
-    public function writeln(string $text = ''): void
+    public function writeln(string $text = '', int $newlineCount = 0): void
     {
         if ($this->isSilent) {
             return;
         }
 
         fwrite(STDOUT, $text . PHP_EOL);
+
+        if ($newlineCount) {
+            $this->newline($newlineCount);
+        }
     }
 
     public function info(string $text): void
@@ -70,5 +74,14 @@ final readonly class OutputPrinter
 
         // Fallback: respect NO_COLOR if present
         return getenv('NO_COLOR') === false;
+    }
+
+    public function newline(int $count = 1): void
+    {
+        if ($this->isSilent) {
+            return;
+        }
+
+        fwrite(STDOUT, str_repeat(PHP_EOL, $count));
     }
 }
