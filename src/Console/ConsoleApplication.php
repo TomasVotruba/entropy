@@ -10,9 +10,9 @@ use Entropy\Console\Enum\ExitCode;
 use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Console\Input\InputParser;
 use Entropy\Console\Output\HelpPrinter;
-use Entropy\Tests\Console\ApplicationTest;
+use Entropy\Tests\Console\ConsoleApplicationTest;
 
-#[RelatedTest(ApplicationTest::class)]
+#[RelatedTest(ConsoleApplicationTest::class)]
 final class ConsoleApplication
 {
     /**
