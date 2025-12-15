@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Entropy\Console\ValueObject;
 
-/**
- * @api to be used soon
- */
 final class ArgumentsAndOptions
 {
     /**
@@ -43,7 +40,7 @@ final class ArgumentsAndOptions
 
     public function arg(int $index, mixed $default = null): mixed
     {
-        return $this->args[$index] ?? $default;
+        return $this->arguments[$index] ?? $default;
     }
 
     public function option(string $name, mixed $default = null): mixed
