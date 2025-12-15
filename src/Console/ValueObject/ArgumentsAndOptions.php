@@ -40,11 +40,21 @@ final class ArgumentsAndOptions
 
     public function arg(int $index, mixed $default = null): mixed
     {
-        return $this->arguments[$index] ?? $default;
+        return $this->arguments[$index] ??  $default;
     }
 
     public function option(string $name, mixed $default = null): mixed
     {
         return $this->options[$name] ?? $default;
+    }
+
+    public function isHelp(): bool
+    {
+        if ($this->commandName === null) {
+            return true;
+        }
+
+        $optionNames = array_keys($this->options);
+        return array_intersect(['help', 'h'], $optionNames) !== [];
     }
 }

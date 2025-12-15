@@ -14,7 +14,7 @@ final class InputParser
      */
     public function parse(array $argv): ArgumentsAndOptions
     {
-        // remove script getName
+        // remove script name
         array_shift($argv);
 
         if ($argv === []) {

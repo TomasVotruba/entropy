@@ -45,21 +45,14 @@ final class ConsoleApplication
         $argumentsAndOptions = $this->inputParser->parse($argv);
 
         // global help
-        if (in_array('--help', $argv, true) || in_array('-h', $argv, true)) {
+        if ($argumentsAndOptions->isHelp()) {
             $this->helpPrinter->printHelp($this->commandsByName);
             return 0;
         }
 
         $commandName = $argumentsAndOptions->getCommandName();
         if (! isset($this->commandsByName[$commandName])) {
-            fwrite(STDERR, sprintf(
-                "Unknown command: %s\n\n Available commands are:\n%s",
-                $commandName,
-                implode(
-                    "\n",
-                    array_map(fn (CommandInterface $command) => '  - ' . $command->getName(), $this->commandsByName)
-                )
-            ));
+            fwrite(STDERR, sprintf("Unknown command: %s\n\n", $commandName));
 
             $this->helpPrinter->printHelp($this->commandsByName);
 
