@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -20,6 +21,7 @@ return RectorConfig::configure()
         // validation
         RemoveUnusedConstructorParamRector::class => __DIR__ . '/src/Attributes',
 
-        \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class => __DIR__ . '/tests/Reflection/ClassNameResolver/ClassNameResolverTest.php',
+        // testing string to class name resolution
+        StringClassNameToClassConstantRector::class => __DIR__ . '/tests/Reflection/ClassNameResolver/ClassNameResolverTest.php',
     ])
     ->withSkip(['*/Fixture/*']);
