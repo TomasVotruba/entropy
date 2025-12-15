@@ -19,5 +19,7 @@ return RectorConfig::configure()
     ->withSkip([
         // validation
         RemoveUnusedConstructorParamRector::class => __DIR__ . '/src/Attributes',
+
+        \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class => __DIR__ . '/tests/Reflection/ClassNameResolver/ClassNameResolverTest.php',
     ])
     ->withSkip(['*/Fixture/*']);

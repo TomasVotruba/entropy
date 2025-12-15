@@ -11,7 +11,7 @@ final class ClassNameResolverTest extends TestCase
     {
         $className = ClassNameResolver::resolveFromFilePath(__DIR__ . '/Fixture/SomeClass.php');
 
-        $this->assertSame(\App\SomeNamespace\SomeClass::class, $className);
+        $this->assertSame('App\SomeNamespace\SomeClass', $className);
     }
 
     public function testNothing(): void
