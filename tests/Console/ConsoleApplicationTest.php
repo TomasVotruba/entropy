@@ -8,6 +8,7 @@ use Entropy\Console\CommandRegistry;
 use Entropy\Console\ConsoleApplication;
 use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Container\Container;
+use Entropy\Tests\Console\Fixture\SimpleCommand;
 use PHPUnit\Framework\TestCase;
 
 final class ConsoleApplicationTest extends TestCase
@@ -21,5 +22,19 @@ final class ConsoleApplicationTest extends TestCase
 
         $this->expectException(InvalidCommandException::class);
         $container->make(ConsoleApplication::class);
+    }
+
+    public function testValidCommandRegistry(): void
+    {
+        $container = new Container();
+        $container->service(CommandRegistry::class, function (Container $container) {
+            $simpleCommand = $container->make(SimpleCommand::class);
+
+            return new CommandRegistry([$simpleCommand]);
+        });
+
+        $this->expectException(InvalidCommandException::class);
+        $container->make(ConsoleApplication::class);
+
     }
 }
