@@ -9,6 +9,7 @@ use Entropy\Console\ConsoleApplication;
 use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Container\Container;
 use Entropy\Tests\Console\Fixture\SimpleCommand;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 
 final class ConsoleApplicationTest extends TestCase
@@ -22,6 +23,7 @@ final class ConsoleApplicationTest extends TestCase
         $container->make(ConsoleApplication::class);
     }
 
+    #[DoesNotPerformAssertions]
     public function testValidCommandRegistry(): void
     {
         $container = new Container();
@@ -31,8 +33,6 @@ final class ConsoleApplicationTest extends TestCase
             return new CommandRegistry([$simpleCommand]);
         });
 
-        $this->expectException(InvalidCommandException::class);
         $container->make(ConsoleApplication::class);
-
     }
 }
