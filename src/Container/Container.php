@@ -81,31 +81,11 @@ final class Container
         $classReflection = new ReflectionClass($class);
 
         if ($classReflection->isInstantiable()) {
-            // try to create instance without reflectionParameters
-            $constructor = $classReflection->getConstructor();
-            if ($constructor === null || $constructor->getNumberOfParameters() === 0) {
-                $instance = new $class();
-
-                // cache
-                $this->instances[$class] = $instance;
-
-                return $instance;
-            }
-            // try to resolve dependencies
-            $parameters = $constructor->getParameters();
-
-            $dependencies = $this->resolveDependenciesFromParameterReflections($parameters, $class);
-
-            // create instance with resolved dependencies
-            $instance = $classReflection->newInstanceArgs($dependencies);
+            $instance = $this->tryToCreateInstanceWithoutReflectionParameters($classReflection);
             $this->instances[$class] = $instance;
 
             return $instance;
-
         }
-
-        // @todo create solo instance
-        // @todo autowire parameter service
 
         throw new CreateServiceException(sprintf('No service found for "%s" class', $class));
     }
@@ -171,5 +151,22 @@ final class Container
             // warm up cache if not yet
             $this->make($class);
         }
+    }
+
+    private function tryToCreateInstanceWithoutReflectionParameters(ReflectionClass $classReflection): mixed
+    {
+        // try to create instance without reflectionParameters
+        $constructor = $classReflection->getConstructor();
+        if ($constructor === null || $constructor->getNumberOfParameters() === 0) {
+            $className = $classReflection->getName();
+            return new $className();
+        }
+
+        // try to resolve dependencies
+        $parameters = $constructor->getParameters();
+        $dependencies = $this->resolveDependenciesFromParameterReflections($parameters, $classReflection->getName());
+
+        // create instance with resolved dependencies
+        return $classReflection->newInstanceArgs($dependencies);
     }
 }

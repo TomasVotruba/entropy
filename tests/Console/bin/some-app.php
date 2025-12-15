@@ -8,12 +8,12 @@ use Entropy\Console\CommandRegistry;
 use Entropy\Container\Container;
 use Entropy\Tests\Console\Fixture\SimpleCommand;
 
-$container = new Container();
-$container->service(CommandRegistry::class, function (Container $container): CommandRegistry {
-    $someCommand = $container->make(SimpleCommand::class);
-
-    return new CommandRegistry([$someCommand]);
-});
+$container = new Container(getcwd());
+//$container->service(CommandRegistry::class, function (Container $container): CommandRegistry {
+//    $someCommand = $container->make(SimpleCommand::class);
+//
+//    return new CommandRegistry([$someCommand]);
+//});
 
 $consoleApplication = $container->make(\Entropy\Console\ConsoleApplication::class);
 $consoleApplication->run($argv);
