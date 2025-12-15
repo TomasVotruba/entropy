@@ -19,6 +19,7 @@ final class ConsoleApplication
      * @param CommandInterface[] $commands
      */
     public function __construct(
+        private HelpPrinter $helpPrinter,
         private InputParser $inputParser,
         array $commands
     ) {
@@ -45,7 +46,7 @@ final class ConsoleApplication
 
         // global help
         if (in_array('--help', $argv, true) || in_array('-h', $argv, true)) {
-            $this->printHelp();
+            $this->helpPrinter->printHelp($this->commandsByName);
             return 0;
         }
 
@@ -60,7 +61,8 @@ final class ConsoleApplication
                 )
             ));
 
-            $this->printHelp();
+            $this->helpPrinter->printHelp($this->commandsByName);
+
             return ExitCode::INVALID_COMMAND;
         }
 
@@ -73,25 +75,5 @@ final class ConsoleApplication
         }
     }
 
-    private function printHelp(): void
-    {
-        $script = basename($_SERVER['argv'][0] ?? 'tool.php');
 
-        echo "Usage:\n";
-        echo "  php {$script} <command> [args...] [--options]\n\n";
-        echo "Commands:\n";
-
-        $max = 0;
-        foreach ($this->commandsByName as $cmd) {
-            $max = max($max, strlen($cmd->getName()));
-        }
-
-        foreach ($this->commandsByName as $cmd) {
-            $name = str_pad($cmd->getName(), $max);
-            echo "  {$name}  {$cmd->getDescription()}\n";
-        }
-
-        echo "\nGlobal options:\n";
-        echo "  --help, -h  Show this help\n";
-    }
 }
