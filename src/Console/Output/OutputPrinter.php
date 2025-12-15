@@ -18,10 +18,18 @@ final readonly class OutputPrinter
         $this->isSilent = defined('PHPUNIT_COMPOSER_INSTALL');
     }
 
-    public function writeln(string $text = '', int $newlineCount = 0): void
+    public function writeln(string $text, int $newlineCount = 0): void
     {
         if ($this->isSilent) {
             return;
+        }
+
+        // decorate colors if needed, e.g. <fg=green>text</>
+        if (preg_match_all('/<fg=(green|yellow|red|cyan)>(.*?)<\/>/', $text, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $match) {
+                $coloredText = $this->color($match[2], $match[1]);
+                $text = str_replace($match[0], $coloredText, $text);
+            }
         }
 
         fwrite(STDOUT, $text . PHP_EOL);
@@ -31,9 +39,14 @@ final readonly class OutputPrinter
         }
     }
 
-    public function info(string $text): void
+    public function cyan(string $text): void
     {
         $this->writeln($this->color($text, 'cyan'));
+    }
+
+    public function yellow(string $text): void
+    {
+        $this->writeln($this->color($text, 'yellow'));
     }
 
     public function success(string $text): void
@@ -41,14 +54,18 @@ final readonly class OutputPrinter
         $this->writeln($this->color('✔ ' . $text, 'green'));
     }
 
-    public function warning(string $text): void
-    {
-        $this->writeln($this->color('! ' . $text, 'yellow'));
-    }
-
     public function error(string $text): void
     {
         fwrite(STDERR, $this->color('✘ ' . $text, 'red') . PHP_EOL);
+    }
+
+    public function newline(int $count = 1): void
+    {
+        if ($this->isSilent) {
+            return;
+        }
+
+        fwrite(STDOUT, str_repeat(PHP_EOL, $count));
     }
 
     private function color(string $text, string $type): string
@@ -74,14 +91,5 @@ final readonly class OutputPrinter
 
         // Fallback: respect NO_COLOR if present
         return getenv('NO_COLOR') === false;
-    }
-
-    public function newline(int $count = 1): void
-    {
-        if ($this->isSilent) {
-            return;
-        }
-
-        fwrite(STDOUT, str_repeat(PHP_EOL, $count));
     }
 }

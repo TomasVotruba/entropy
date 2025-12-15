@@ -20,8 +20,12 @@ final class ParameterTypesResolver
 
         foreach ($reflectionParameters as $parameter) {
             $parameterType = $parameter->getType();
+
             if ($parameterType instanceof \ReflectionNamedType && ! $parameterType->isBuiltin()) {
                 $parameterTypes[] = $parameterType->getName();
+                // skip default value as not required
+            } elseif ($parameter->isDefaultValueAvailable()) {
+                continue;
             } else {
                 // cannot resolve non-class parameter
                 throw new CreateServiceException(sprintf(

@@ -8,6 +8,8 @@ use Entropy\Console\CommandRegistry;
 
 final readonly class HelpPrinter
 {
+    private const int MIN_WIDTH = 10;
+
     public function __construct(
         private CommandRegistry $commandRegistry,
         private OutputPrinter $outputPrinter
@@ -17,24 +19,20 @@ final readonly class HelpPrinter
 
     public function printHelp(): void
     {
-        $script = basename($_SERVER['argv'][0] ?? 'tool.php');
-
-        $this->outputPrinter->warning('Usage:');
-        $this->outputPrinter->writeln(sprintf('  %s <command> [args...] [--options]', $script), 2);
-
-        $this->outputPrinter->warning('Commands:');
+        $this->outputPrinter->yellow('Commands:');
 
         $maxCommandNameLength = $this->commandRegistry->getCommandNameMaxLength();
+        $firstColumnWith = max(self::MIN_WIDTH, $maxCommandNameLength) + 3;
 
         foreach ($this->commandRegistry->all() as $command) {
-            $name = str_pad($command->getName(), $maxCommandNameLength + 5);
-
+            $name = str_pad($command->getName(), $firstColumnWith);
             $this->outputPrinter->writeln(sprintf('  <fg=green>%s</>  %s', $name, $command->getDescription()));
         }
 
         $this->outputPrinter->newline();
+        $this->outputPrinter->yellow('Global options:');
 
-        $this->outputPrinter->warning('Global options:');
-        $this->outputPrinter->writeln(sprintf('  <fg=green>%s</>  %s', '--help, -h', 'Show this help'));
+        $optionName = str_pad('--help, -h', $firstColumnWith);
+        $this->outputPrinter->writeln(sprintf('  <fg=green>%s</>  Show this help', $optionName));
     }
 }
