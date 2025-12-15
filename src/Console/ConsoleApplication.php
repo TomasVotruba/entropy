@@ -29,15 +29,8 @@ final class ConsoleApplication
         array $commands
     ) {
         foreach ($commands as $command) {
-            $name = $command->getName();
-            if ($name === '') {
-                throw new InvalidCommandException('Command getName cannot be empty.');
-            }
-            if (isset($this->commandsByName[$name])) {
-                throw new InvalidCommandException(sprintf('Duplicate command getName: "%s"', $name));
-            }
-
-            $this->commandsByName[$name] = $command;
+            $this->validateCommandName($command);
+            $this->commandsByName[$command->getName()] = $command;
         }
     }
 
@@ -70,6 +63,18 @@ final class ConsoleApplication
         } catch (\Throwable $throwable) {
             fwrite(STDERR, "Unhandled error: {$throwable->getMessage()}\n");
             return ExitCode::ERROR;
+        }
+    }
+
+    private function validateCommandName(CommandInterface $command): void
+    {
+        $name = $command->getName();
+        if ($name === '') {
+            throw new InvalidCommandException('Command name cannot be empty.');
+        }
+
+        if (isset($this->commandsByName[$name])) {
+            throw new InvalidCommandException(sprintf('Duplicate command name: "%s"', $name));
         }
     }
 }

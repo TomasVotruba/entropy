@@ -7,6 +7,7 @@ namespace Entropy\Container;
 use Entropy\Attributes\RelatedTest;
 use Entropy\FileSystem\FileFinder;
 use Entropy\Reflection\ClassNameResolver;
+use Entropy\Tests\Container\Autodiscovery\AutodiscoveryTest;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -14,7 +15,7 @@ use ReflectionNamedType;
 /**
  * Load project classes to services automatically
  */
-#[RelatedTest(\Entropy\Tests\Container\Autodiscovery\AutodiscoveryTest::class)]
+#[RelatedTest(AutodiscoveryTest::class)]
 final class Autodiscovery
 {
     /**
