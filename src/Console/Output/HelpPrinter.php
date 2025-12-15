@@ -30,7 +30,7 @@ final readonly class HelpPrinter
         }
 
         $this->outputPrinter->newline();
-        $this->outputPrinter->yellow('Global options:');
+        $this->outputPrinter->yellow('Options:');
 
         $optionName = str_pad('--help, -h', $firstColumnWith);
         $this->outputPrinter->writeln(sprintf('  <fg=green>%s</>  Show this help', $optionName));
