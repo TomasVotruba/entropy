@@ -40,7 +40,7 @@ final class ArgumentsAndOptions
 
     public function arg(int $index, mixed $default = null): mixed
     {
-        return $this->arguments[$index] ??  $default;
+        return $this->arguments[$index] ?? $default;
     }
 
     public function option(string $name, mixed $default = null): mixed
