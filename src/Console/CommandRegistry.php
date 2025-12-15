@@ -20,7 +20,10 @@ final class CommandRegistry
      */
     public function __construct(array $commands)
     {
-        Assert::notEmpty($commands);
+        if ($commands === []) {
+            throw new InvalidCommandException('Register at leats one command, so application can run');
+        }
+
         Assert::allIsInstanceOf($commands, CommandInterface::class);
 
         foreach ($commands as $command) {
@@ -73,9 +76,7 @@ final class CommandRegistry
             throw new InvalidCommandException(sprintf('Duplicate command name: "%s"', $name));
         }
 
-        // same for description
-        $description = $command->getDescription();
-        if ($description === '') {
+        if ($command->getDescription() === '') {
             throw new InvalidCommandException('Command description cannot be empty');
         }
     }
