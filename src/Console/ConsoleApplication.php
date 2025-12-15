@@ -74,6 +74,4 @@ final class ConsoleApplication
             return ExitCode::ERROR;
         }
     }
-
-
 }
