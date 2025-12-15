@@ -34,5 +34,4 @@ final class ParameterTypesResolver
 
         return $parameterTypes;
     }
-
 }

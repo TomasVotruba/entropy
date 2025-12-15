@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Entropy\Console\Output;
 
 use Entropy\Console\CommandRegistry;
-use Entropy\Console\Contract\CommandInterface;
 
 final readonly class HelpPrinter
 {
-    public function __construct(private CommandRegistry $commandRegistry)
-    {
+    public function __construct(
+        private CommandRegistry $commandRegistry
+    ) {
 
     }
 

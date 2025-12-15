@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Entropy\Console;
 
 use Entropy\Attributes\RelatedTest;
-use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
-use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Console\Input\InputParser;
 use Entropy\Console\Output\HelpPrinter;
 use Entropy\Tests\Console\ConsoleApplicationTest;
@@ -35,7 +33,6 @@ final class ConsoleApplication
             $this->helpPrinter->printHelp();
             return 0;
         }
-
 
         /** @var string $commandName */
         $commandName = $argumentsAndOptions->getCommandName();

@@ -39,24 +39,6 @@ final class CommandRegistry
         return $this->commandsByName[$name];
     }
 
-    private function validateCommand(CommandInterface $command): void
-    {
-        $name = $command->getName();
-        if ($name === '') {
-            throw new InvalidCommandException('Command name cannot be empty');
-        }
-
-        if (isset($this->commandsByName[$name])) {
-            throw new InvalidCommandException(sprintf('Duplicate command name: "%s"', $name));
-        }
-
-        // same for description
-        $description = $command->getDescription();
-        if ($description === '') {
-            throw new InvalidCommandException('Command description cannot be empty');
-        }
-    }
-
     public function getCommandNameMaxLength(): int
     {
         $maxCommandNameLength = 0;
@@ -78,5 +60,23 @@ final class CommandRegistry
     public function has(string $commandName): bool
     {
         return isset($this->commandsByName[$commandName]);
+    }
+
+    private function validateCommand(CommandInterface $command): void
+    {
+        $name = $command->getName();
+        if ($name === '') {
+            throw new InvalidCommandException('Command name cannot be empty');
+        }
+
+        if (isset($this->commandsByName[$name])) {
+            throw new InvalidCommandException(sprintf('Duplicate command name: "%s"', $name));
+        }
+
+        // same for description
+        $description = $command->getDescription();
+        if ($description === '') {
+            throw new InvalidCommandException('Command description cannot be empty');
+        }
     }
 }
