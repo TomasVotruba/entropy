@@ -13,7 +13,7 @@ final class ConsoleApplication
     /**
      * @var array<string, CommandInterface>
      */
-    private array $commandsByName =[];
+    private array $commandsByName = [];
 
     /**
      * @param CommandInterface[] $commands
@@ -50,12 +50,15 @@ final class ConsoleApplication
         }
 
         $commandName = $argumentsAndOptions->getCommandName();
-        if (!isset($this->commandsByName[$commandName])) {
+        if (! isset($this->commandsByName[$commandName])) {
             fwrite(STDERR, sprintf(
                 "Unknown command: %s\n\n Available commands are:\n%s",
                 $commandName,
-                implode("\n", array_map(fn (CommandInterface $command) => '  - ' . $command->getName(), $this->commandsByName)
-            )));
+                implode(
+                    "\n",
+                    array_map(fn (CommandInterface $command) => '  - ' . $command->getName(), $this->commandsByName)
+                )
+            ));
 
             $this->printHelp();
             return ExitCode::INVALID_COMMAND;
