@@ -16,22 +16,13 @@ use Entropy\Tests\Console\ConsoleApplicationTest;
 final class ConsoleApplication
 {
     /**
-     * @var array<string, CommandInterface>
-     */
-    private array $commandsByName = [];
-
-    /**
      * @param CommandInterface[] $commands
      */
     public function __construct(
         private HelpPrinter $helpPrinter,
         private InputParser $inputParser,
-        array $commands
+        private CommandRegistry $commandRegistry
     ) {
-        foreach ($commands as $command) {
-            $this->validateCommandName($command);
-            $this->commandsByName[$command->getName()] = $command;
-        }
     }
 
     /**
@@ -44,37 +35,30 @@ final class ConsoleApplication
 
         // global help
         if ($argumentsAndOptions->isHelp()) {
-            $this->helpPrinter->printHelp($this->commandsByName);
+            $this->helpPrinter->printHelp();
             return 0;
         }
 
+
+        /** @var string $commandName */
         $commandName = $argumentsAndOptions->getCommandName();
-        if (! isset($this->commandsByName[$commandName])) {
+
+        if (! $this->commandRegistry->has($argumentsAndOptions->getCommandName())) {
             fwrite(STDERR, sprintf("Unknown command: %s\n\n", $commandName));
 
-            $this->helpPrinter->printHelp($this->commandsByName);
+            $this->helpPrinter->printHelp();
 
             return ExitCode::INVALID_COMMAND;
         }
 
         try {
+            $command = $this->commandRegistry->get($commandName);
+
             $command = $this->commandsByName[$commandName];
             return $command->run($argumentsAndOptions);
         } catch (\Throwable $throwable) {
             fwrite(STDERR, "Unhandled error: {$throwable->getMessage()}\n");
             return ExitCode::ERROR;
-        }
-    }
-
-    private function validateCommandName(CommandInterface $command): void
-    {
-        $name = $command->getName();
-        if ($name === '') {
-            throw new InvalidCommandException('Command name cannot be empty.');
-        }
-
-        if (isset($this->commandsByName[$name])) {
-            throw new InvalidCommandException(sprintf('Duplicate command name: "%s"', $name));
         }
     }
 }

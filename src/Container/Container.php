@@ -7,6 +7,7 @@ namespace Entropy\Container;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Container\Exception\CreateServiceException;
 use Entropy\Container\Exception\RegisterServiceException;
+use Entropy\Reflection\ParameterTypesResolver;
 use Entropy\Tests\Container\Container\ContainerTest;
 use ReflectionClass;
 
@@ -145,22 +146,11 @@ final class Container
      */
     private function resolveDependenciesFromParameterReflections(array $reflectionParameters, string $class): array
     {
-        $dependencies = [];
+        $parameterTypes = ParameterTypesResolver::resolve($reflectionParameters, $class);
 
-        foreach ($reflectionParameters as $parameter) {
-            $parameterType = $parameter->getType();
-            if ($parameterType instanceof \ReflectionNamedType && ! $parameterType->isBuiltin()) {
-                /** @var class-string $dependencyClass */
-                $dependencyClass = $parameterType->getName();
-                $dependencies[] = $this->make($dependencyClass);
-            } else {
-                // cannot resolve non-class parameter
-                throw new CreateServiceException(sprintf(
-                    'Cannot resolve parameter "%s" for class "%s"',
-                    $parameter->getName(),
-                    $class
-                ));
-            }
+        $dependencies = [];
+        foreach ($parameterTypes as $parameterType) {
+            $dependencies[] = $this->make($parameterType);
         }
 
         return $dependencies;
