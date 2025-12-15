@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Entropy\Tests\Console;
+namespace Entropy\Tests\Console\Input;
 
-use Entropy\Console\InputParser;
+use Entropy\Console\Input\InputParser;
 use PHPUnit\Framework\TestCase;
 
 final class InputParserTest extends TestCase

@@ -1,12 +1,11 @@
 <?php
 
-namespace Entropy\Console;
+namespace Entropy\Console\Input;
 
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\ValueObject\ArgumentsAndOptions;
-use Entropy\Tests\Console\InputParserTest;
 
-#[RelatedTest(InputParserTest::class)]
+#[RelatedTest(\Entropy\Tests\Console\Input\InputParserTest::class)]
 final class InputParser
 {
     /**

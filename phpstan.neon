@@ -27,5 +27,5 @@ parameters:
         - '#Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string<T of object>\|T of object, string given#'
 
         # false positive, always 2 strings
-        - '#Method Entropy\\Console\\InputParser\:\:parseLongOption\(\) should return array\{mixed, mixed\} but returns non\-empty\-list<string>#'
+        - '#Method Entropy\\Console\\Input\\InputParser\:\:parseLongOption\(\) should return array\{mixed, mixed\} but returns non\-empty\-list<string>#'
 

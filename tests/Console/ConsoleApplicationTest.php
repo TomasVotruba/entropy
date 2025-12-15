@@ -4,10 +4,22 @@ declare(strict_types=1);
 
 namespace Entropy\Tests\Console;
 
+use Entropy\Console\ConsoleApplication;
+use Entropy\Console\HelpPrinter;
+use Entropy\Console\Input\InputParser;
 use PHPUnit\Framework\TestCase;
 
-final class ApplicationTest extends TestCase
+final class ConsoleApplicationTest extends TestCase
 {
-    // @todo
+    public function test(): void
+    {
+        $inputParser = new InputParser();
+        $helpPrinter = new HelpPrinter();
 
+        $consoleApplication = new ConsoleApplication($helpPrinter, $inputParser, [
+
+        ]);
+
+        $consoleApplication->run([]);
+    }
 }
