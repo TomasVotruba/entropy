@@ -13,16 +13,20 @@ jobs:
             matrix:
                 actions:
                     -
+                        name: 'Run dummy CLI app'
+                        run: php tests/Console/bin/some-app.php
+
+                    -
                         name: 'PHPStan'
-                        run: vendor/bin/phpstan --ansi
+                        run: vendor/bin/phpstan
 
                     -
                         name: 'Composer Validate'
-                        run: composer validate --ansi
+                        run: composer validate
 
                     -
                         name: 'Coding Standard'
-                        run: vendor/bin/ecs --ansi
+                        run: vendor/bin/ecs
 
                     -
                         name: 'Tests'
