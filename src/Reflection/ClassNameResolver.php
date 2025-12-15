@@ -84,7 +84,7 @@ final class ClassNameResolver
                 continue;
             }
 
-            // Next T_STRING is the name (skip whitespace, attributes/comments, etc.)
+            // Next T_STRING is the getName (skip whitespace, attributes/comments, etc.)
             $name = null;
             for ($j = $i + 1; $j < $count; $j++) {
                 $tj = $tokens[$j];
@@ -98,7 +98,7 @@ final class ClassNameResolver
                     break;
                 }
 
-                // If we hit "{" or "(" before name, something is off (e.g. anonymous or invalid)
+                // If we hit "{" or "(" before getName, something is off (e.g. anonymous or invalid)
                 if ($tj[0] === ord('{') || $tj[0] === ord('(')) {
                     break;
                 }

@@ -9,9 +9,9 @@ use Entropy\Console\ValueObject\ArgumentsAndOptions;
 
 interface CommandInterface
 {
-    public function name(): string;
+    public function getName(): string;
 
-    public function description(): string;
+    public function getDescription(): string;
 
     /**
      * @return ExitCode::*
