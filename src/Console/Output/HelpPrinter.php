@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Entropy\Console;
+namespace Entropy\Console\Output;
 
 use Entropy\Console\Contract\CommandInterface;
 

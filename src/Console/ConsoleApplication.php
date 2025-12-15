@@ -9,6 +9,7 @@ use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
 use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Console\Input\InputParser;
+use Entropy\Console\Output\HelpPrinter;
 use Entropy\Tests\Console\ApplicationTest;
 
 #[RelatedTest(ApplicationTest::class)]
