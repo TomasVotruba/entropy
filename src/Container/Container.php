@@ -81,7 +81,7 @@ final class Container
         $classReflection = new ReflectionClass($class);
 
         if ($classReflection->isInstantiable()) {
-            $instance = $this->tryToCreateInstanceWithoutReflectionParameters($classReflection);
+            $instance = $this->createInstance($classReflection);
             $this->instances[$class] = $instance;
 
             return $instance;
@@ -153,7 +153,7 @@ final class Container
         }
     }
 
-    private function tryToCreateInstanceWithoutReflectionParameters(ReflectionClass $classReflection): mixed
+    private function createInstance(ReflectionClass $classReflection): mixed
     {
         // try to create instance without reflectionParameters
         $constructor = $classReflection->getConstructor();
