@@ -50,9 +50,15 @@ final class CommandOptionsMapper
             } elseif ($parameterReflection->isDefaultValueAvailable()) {
                 $value = $parameterReflection->getDefaultValue();
             } elseif ($isBool) {
+                // bool flag missing => false (not required)
                 $value = false;
             } else {
-                throw new ConsoleInputMappingException(sprintf('Missing required argument: %s', $name));
+                // Required parameter missing: tell user the expected option name too
+                throw new ConsoleInputMappingException(sprintf(
+                    'Missing required value for "%s" (use "--%s" to provide it)',
+                    $name,
+                    $optionName,
+                ));
             }
 
             $args[] = $this->castValueByParameterType($value, $type);
@@ -61,14 +67,21 @@ final class CommandOptionsMapper
         // 1) Extra positional args
         if (count($positionals) > $positionIndex) {
             $extra = array_slice($positionals, $positionIndex);
+
             throw new ConsoleInputMappingException(sprintf(
                 'Too many arguments. Unexpected: %s',
-                implode(', ', $extra)
+                implode(', ', array_map(static fn ($v): string => (string) $v, $extra))
             ));
         }
 
-        // 2) Extra options (unknown to run() signature)
-        $unknownOptions = array_diff_key($options, $consumedOptionNames);
+        // 2) Extra options (unknown to run() signature) - ignore global ones
+        $ignoredOptions = [
+            'help' => true,
+            'h' => true,
+        ];
+
+        $unknownOptions = array_diff_key($options, $consumedOptionNames, $ignoredOptions);
+
         if ($unknownOptions !== []) {
             throw new ConsoleInputMappingException(sprintf(
                 'Unknown option%s: %s',

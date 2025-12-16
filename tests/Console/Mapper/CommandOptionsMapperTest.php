@@ -66,7 +66,7 @@ final class CommandOptionsMapperTest extends TestCase
         );
 
         $this->expectException(ConsoleInputMappingException::class);
-        $this->expectExceptionMessage('Missing option: "--count"');
+        $this->expectExceptionMessage('Missing required value for "count" (use "--count" to provide it)');
 
         $this->commandOptionsMapper->resolveArguments($this->someCommand, $argumentsAndOptions);
 
