@@ -18,29 +18,21 @@ final class CommandOptionsMapperTest extends TestCase
         $this->commandOptionsMapper = new CommandOptionsMapper();
     }
 
-
     public function test(): void
     {
         $someCommand = new SomeCommand();
 
-        $argumentsAndOptions = new ArgumentsAndOptions('some',
-            arguments: [
-                '/some/path',
-            ],
+        $argumentsAndOptions = new ArgumentsAndOptions(
+            'some',
+            arguments: ['/some/path'],
             options: [
-            'flag' => true,
-            'count' => '5',
-        ]);
-
-        $arguments = $this->commandOptionsMapper->resolveArguments(
-            $someCommand,
-            $argumentsAndOptions
+                'flag' => true,
+                'count' => '5',
+            ]
         );
 
-        $this->assertSame([
-            '/some/path',
-            true,
-            5,
-        ], $arguments);
+        $arguments = $this->commandOptionsMapper->resolveArguments($someCommand, $argumentsAndOptions);
+
+        $this->assertSame(['/some/path', true, 5], $arguments);
     }
 }
