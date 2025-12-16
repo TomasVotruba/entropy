@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Entropy\Container;
 
 use Entropy\Attributes\RelatedTest;
+use Entropy\Console\CommandRegistry;
+use Entropy\Console\Contract\CommandInterface;
 use Entropy\Container\Exception\CreateServiceException;
 use Entropy\Container\Exception\RegisterServiceException;
 use Entropy\Reflection\ParameterTypesResolver;
@@ -36,6 +38,12 @@ final class Container
         } else {
             $this->projectDirectory = $projectDirectory;
         }
+
+        // setup default console service
+        $this->service(CommandRegistry::class, function (Container $container) {
+            $commands = $container->findByContract(CommandInterface::class);
+            return new CommandRegistry($commands);
+        });
     }
 
     /**

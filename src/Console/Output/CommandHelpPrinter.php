@@ -22,7 +22,7 @@ final readonly class CommandHelpPrinter
         $help = [];
 
         if ($command->getDescription() !== '') {
-            $help[] = $this->formatSection('Description:');
+            $help[] = '<fg=yellow>Description:</>' . PHP_EOL;
             $help[] = '  ' . $command->getDescription();
             $help[] = '';
         }
@@ -38,7 +38,7 @@ final readonly class CommandHelpPrinter
             /** @var array<string, string> $arguments */
             $arguments = (array) $command->getArguments();
             if ($arguments !== []) {
-                $help[] = $this->formatSection('Arguments:');
+                $help[] = '<fg=yellow>Arguments:</>'  PHP_EOL;
                 foreach ($arguments as $argName => $argDesc) {
                     $help[] = sprintf('  %-18s %s', $argName, $argDesc);
                 }
@@ -66,19 +66,5 @@ final readonly class CommandHelpPrinter
         $this->outputPrinter->writeln($text);
 
         return $text;
-    }
-
-    private function formatSection(string $text): string
-    {
-        return $this->color($text, "\033[33m");
-    }
-
-    private function color(string $text, string $open): string
-    {
-        if (! method_exists($this->outputPrinter, 'supportsColors') || ! $this->outputPrinter->supportsColors()) {
-            return $text;
-        }
-
-        return $open . $text . "\033[0m";
     }
 }
