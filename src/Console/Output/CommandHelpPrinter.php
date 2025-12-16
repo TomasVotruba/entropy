@@ -46,6 +46,9 @@ final readonly class CommandHelpPrinter
             }
         }
 
+        // get options from the refletion!
+        // @todo
+
         if (method_exists($command, 'getOptions')) {
             /** @var array<string, string> $options */
             $options = (array) $command->getOptions();
