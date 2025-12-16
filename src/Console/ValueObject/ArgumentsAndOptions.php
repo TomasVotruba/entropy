@@ -53,11 +53,15 @@ final class ArgumentsAndOptions
 
     public function isHelp(): bool
     {
+        return $this->commandName === null;
+    }
+
+    public function isCommandHelp(): bool
+    {
         if ($this->commandName === null) {
-            return true;
+            return false;
         }
 
-        $optionNames = array_keys($this->options);
-        return array_intersect(['help', 'h'], $optionNames) !== [];
+        return array_intersect(['h', 'help'], array_keys($this->options)) !== [];
     }
 }

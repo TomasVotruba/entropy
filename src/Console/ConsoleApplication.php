@@ -33,7 +33,7 @@ final readonly class ConsoleApplication
         // global help
         if ($argumentsAndOptions->isHelp()) {
             $this->helpPrinter->printHelp();
-            return 0;
+            return ExitCode::SUCCESS;
         }
 
         /** @var string $commandName */
@@ -49,6 +49,12 @@ final readonly class ConsoleApplication
 
         try {
             $command = $this->commandRegistry->get($commandName);
+
+            if ($argumentsAndOptions->isCommandHelp()) {
+                // print command help here :)
+                dump('command help');
+                die;
+            }
 
             $arguments = $this->commandOptionsMapper->resolveArguments($command, $argumentsAndOptions);
             return $command->run(...$arguments);
