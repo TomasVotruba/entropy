@@ -26,8 +26,12 @@ final class CommandOptionsMapper
         $args = [];
 
         $positionals = $argumentsAndOptions->getArguments();
+        $options = $argumentsAndOptions->getOptions();
 
         $positionIndex = 0;
+
+        /** @var array<string, true> */
+        $consumedOptionNames = [];
 
         foreach ($runMethodReflection->getParameters() as $parameterReflection) {
             $name = $parameterReflection->getName();
@@ -38,8 +42,9 @@ final class CommandOptionsMapper
             // option name: dryRun → dry-run
             $optionName = $this->camelToKebab($name);
 
-            if (array_key_exists($optionName, $argumentsAndOptions->getOptions())) {
+            if (array_key_exists($optionName, $options)) {
                 $value = $argumentsAndOptions->option($optionName);
+                $consumedOptionNames[$optionName] = true;
             } elseif (! $isBool && isset($positionals[$positionIndex])) {
                 $value = $positionals[$positionIndex++];
             } elseif ($parameterReflection->isDefaultValueAvailable()) {
@@ -51,6 +56,28 @@ final class CommandOptionsMapper
             }
 
             $args[] = $this->castValueByParameterType($value, $type);
+        }
+
+        // 1) Extra positional args
+        if (count($positionals) > $positionIndex) {
+            $extra = array_slice($positionals, $positionIndex);
+            throw new ConsoleInputMappingException(sprintf(
+                'Too many arguments. Unexpected: %s',
+                implode(', ', array_map(static fn ($v): string => (string) $v, $extra))
+            ));
+        }
+
+        // 2) Extra options (unknown to run() signature)
+        $unknownOptions = array_diff_key($options, $consumedOptionNames);
+        if ($unknownOptions !== []) {
+            throw new ConsoleInputMappingException(sprintf(
+                'Unknown option%s: %s',
+                count($unknownOptions) > 1 ? 's' : '',
+                implode(', ', array_map(
+                    static fn (string $name): string => '"--' . $name . '"',
+                    array_keys($unknownOptions)
+                ))
+            ));
         }
 
         return $args;
