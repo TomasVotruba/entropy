@@ -9,7 +9,7 @@ use Entropy\Console\Enum\ExitCode;
 use Entropy\Console\Input\InputParser;
 use Entropy\Console\Mapper\CommandOptionsMapper;
 use Entropy\Console\Output\HelpPrinter;
-use Entropy\Tests\Console\ConsoleApplicationTest;
+use Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
 
 #[RelatedTest(ConsoleApplicationTest::class)]
 final readonly class ConsoleApplication

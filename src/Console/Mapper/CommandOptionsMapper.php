@@ -56,7 +56,7 @@ final class CommandOptionsMapper
 
     private function camelToKebab(string $name): string
     {
-        return strtolower(preg_replace('/[A-Z]/', '-$0', $name));
+        return strtolower((string) preg_replace('/[A-Z]/', '-$0', $name));
     }
 
     private function cast(mixed $value, ?\ReflectionType $type): mixed
