@@ -27,6 +27,7 @@ final readonly class CommandHelpPrinter
             $help[] = '';
         }
 
+        // has arguments?
         //        $help[] = $this->formatSection('Usage:');
         //        $help[] = sprintf('  %s [options]', $name);
         //        $help[] = '';
@@ -49,7 +50,7 @@ final readonly class CommandHelpPrinter
             /** @var array<string, string> $options */
             $options = (array) $command->getOptions();
             if ($options !== []) {
-                $help[] = $this->formatSection('Options:');
+                $help[] = $this->outputPrinter->writeln('<fg=yellow>Options:</>');
                 foreach ($options as $optName => $optDesc) {
                     // allow either "dry-run" or "--dry-run"
                     $optLabel = str_starts_with($optName, '-') ? $optName : '--' . $optName;
