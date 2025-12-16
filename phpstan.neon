@@ -30,3 +30,5 @@ parameters:
         # known class-string array
         - '#Method Entropy\\Reflection\\ParameterTypesResolver\:\:resolve\(\) should return array<class\-string> but returns list<string>#'
 
+        # dynamic CommentInterface contract
+        - '#Call to an undefined method Entropy\\Console\\Contract\\CommandInterface\:\:run\(\)#'
