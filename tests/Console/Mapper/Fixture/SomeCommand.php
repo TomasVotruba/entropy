@@ -10,14 +10,17 @@ final class SomeCommand implements CommandInterface
 {
     public function getName(): string
     {
-        return 'some';
+        return 'some-name';
     }
 
     public function getDescription(): string
     {
-        return 'command';
+        return 'Command description';
     }
 
+    /**
+     * @param bool $flag Enable extra features
+     */
     public function run(string $path, bool $flag, int $count): void
     {
     }
