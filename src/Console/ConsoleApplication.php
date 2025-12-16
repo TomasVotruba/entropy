@@ -50,8 +50,6 @@ final readonly class ConsoleApplication
         try {
             $command = $this->commandRegistry->get($commandName);
 
-
-
             $arguments = $this->commandOptionsMapper->resolveArguments($command, $argumentsAndOptions);
             dump($arguments);
             die;

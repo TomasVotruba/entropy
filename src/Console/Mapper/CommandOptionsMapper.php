@@ -33,17 +33,14 @@ final class CommandOptionsMapper
 
             if (array_key_exists($optionName, $argumentsAndOptions->getOptions())) {
                 $value = $argumentsAndOptions->option($optionName);
-            } elseif (!$isBool && isset($positionals[$posIndex])) {
+            } elseif (! $isBool && isset($positionals[$posIndex])) {
                 $value = $positionals[$posIndex++];
             } elseif ($parameterReflection->isDefaultValueAvailable()) {
                 $value = $parameterReflection->getDefaultValue();
             } elseif ($isBool) {
                 $value = false;
             } else {
-                throw new \RuntimeException(sprintf(
-                    'Missing required argument: %s',
-                    $name
-                ));
+                throw new \RuntimeException(sprintf('Missing required argument: %s', $name));
             }
 
             $args[] = $this->cast($value, $type);
@@ -59,17 +56,16 @@ final class CommandOptionsMapper
 
     private function cast(mixed $value, ?\ReflectionType $type): mixed
     {
-        if (!$type instanceof \ReflectionNamedType) {
+        if (! $type instanceof \ReflectionNamedType) {
             return $value;
         }
 
         return match ($type->getName()) {
             'bool' => filter_var($value, FILTER_VALIDATE_BOOL),
-            'int' => (int)$value,
-            'float' => (float)$value,
-            'string' => (string)$value,
+            'int' => (int) $value,
+            'float' => (float) $value,
+            'string' => (string) $value,
             default => $value,
         };
     }
 }
-

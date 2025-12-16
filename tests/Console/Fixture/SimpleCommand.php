@@ -6,7 +6,6 @@ namespace Entropy\Tests\Console\Fixture;
 
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
-use Entropy\Console\ValueObject\ArgumentsAndOptions;
 
 final class SimpleCommand implements CommandInterface
 {
