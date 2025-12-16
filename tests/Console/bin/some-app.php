@@ -7,7 +7,7 @@ require __DIR__ . '/../../../vendor/autoload.php';
 use Entropy\Console\CommandRegistry;
 use Entropy\Console\ConsoleApplication;
 use Entropy\Container\Container;
-use Entropy\Tests\Console\Fixture\SimpleCommand;
+use Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand;
 
 $container = new Container(getcwd());
 

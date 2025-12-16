@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Entropy\Console\Mapper;
 
+use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\ValueObject\ArgumentsAndOptions;
+use Webmozart\Assert\Assert;
 
+#[RelatedTest(\Entropy\Tests\Console\Mapper\CommandOptionsMapperTest::class)]
 final class CommandOptionsMapper
 {
     /**
@@ -14,6 +17,8 @@ final class CommandOptionsMapper
      */
     public function resolveArguments(CommandInterface $command, ArgumentsAndOptions $argumentsAndOptions): array
     {
+        Assert::methodExists($command, 'run');
+
         $runMethodReflection = new \ReflectionMethod($command, 'run');
 
         $args = [];

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Entropy\Console\ValueObject;
 
+use Webmozart\Assert\Assert;
+
 final class ArgumentsAndOptions
 {
     /**
@@ -15,6 +17,7 @@ final class ArgumentsAndOptions
         private array $arguments = [],
         private array $options = []
     ) {
+        Assert::allString(array_keys($options));
     }
 
     public function getCommandName(): ?string

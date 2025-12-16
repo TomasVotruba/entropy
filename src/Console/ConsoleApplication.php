@@ -51,10 +51,8 @@ final readonly class ConsoleApplication
             $command = $this->commandRegistry->get($commandName);
 
             $arguments = $this->commandOptionsMapper->resolveArguments($command, $argumentsAndOptions);
-            dump($arguments);
-            die;
+            return $command->run(...$arguments);
 
-            return $command->run($argumentsAndOptions);
         } catch (\Throwable $throwable) {
             fwrite(STDERR, "Unhandled error: {$throwable->getMessage()}\n");
             return ExitCode::ERROR;

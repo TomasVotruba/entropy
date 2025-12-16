@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Entropy\Tests\Console;
+namespace Entropy\Tests\Console\ConsoleApplication;
 
 use Entropy\Console\CommandRegistry;
 use Entropy\Console\ConsoleApplication;
 use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Container\Container;
-use Entropy\Tests\Console\Fixture\SimpleCommand;
+use Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 

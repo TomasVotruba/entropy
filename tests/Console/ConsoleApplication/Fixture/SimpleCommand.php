@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Entropy\Tests\Console\Fixture;
+namespace Entropy\Tests\Console\ConsoleApplication\Fixture;
 
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
@@ -19,8 +19,16 @@ final class SimpleCommand implements CommandInterface
         return 'Testing command';
     }
 
-    public function run(bool $dryRun = false): int
+    /**
+     * @param string[] $paths
+     * @param bool $dryRun Show changes, but do not apply them.
+     *
+     * @return ExitCode::*
+     */
+    public function run(array $paths, bool $dryRun = false): int
     {
+        dump($paths);
+
         dump($dryRun);
         die;
 
