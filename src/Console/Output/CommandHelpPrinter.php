@@ -50,7 +50,7 @@ final readonly class CommandHelpPrinter
             /** @var array<string, string> $options */
             $options = (array) $command->getOptions();
             if ($options !== []) {
-                $help[] = $this->outputPrinter->writeln('<fg=yellow>Options:</>');
+                $help[] = '<fg=yellow>Options:</>' . PHP_EOL;
                 foreach ($options as $optName => $optDesc) {
                     // allow either "dry-run" or "--dry-run"
                     $optLabel = str_starts_with($optName, '-') ? $optName : '--' . $optName;
