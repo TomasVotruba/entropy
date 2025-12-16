@@ -63,7 +63,7 @@ final class CommandOptionsMapper
             $extra = array_slice($positionals, $positionIndex);
             throw new ConsoleInputMappingException(sprintf(
                 'Too many arguments. Unexpected: %s',
-                implode(', ', array_map(static fn ($v): string => (string) $v, $extra))
+                implode(', ', $extra)
             ));
         }
 
