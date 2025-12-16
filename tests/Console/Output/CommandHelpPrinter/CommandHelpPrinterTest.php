@@ -18,16 +18,13 @@ final class CommandHelpPrinterTest extends TestCase
 
         $helpDescription = $commandHelpPrinter->print(new SomeCommand());
 
-
         // show description of options
 
-        $this->assertSame(
-<<<HELP
+        $this->assertSame(<<<HELP
 Description:
   Command description
 
 HELP
-        , $helpDescription);
+            , $helpDescription);
     }
-
 }

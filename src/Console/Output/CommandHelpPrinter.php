@@ -27,9 +27,9 @@ final readonly class CommandHelpPrinter
             $help[] = '';
         }
 
-//        $help[] = $this->formatSection('Usage:');
-//        $help[] = sprintf('  %s [options]', $name);
-//        $help[] = '';
+        //        $help[] = $this->formatSection('Usage:');
+        //        $help[] = sprintf('  %s [options]', $name);
+        //        $help[] = '';
 
         // Optional: print args/options if your CommandInterface provides them.
         // Keep it safe: only call when the method exists.
@@ -74,7 +74,7 @@ final readonly class CommandHelpPrinter
 
     private function color(string $text, string $open): string
     {
-        if (!method_exists($this->outputPrinter, 'supportsColors') || !$this->outputPrinter->supportsColors()) {
+        if (! method_exists($this->outputPrinter, 'supportsColors') || ! $this->outputPrinter->supportsColors()) {
             return $text;
         }
 
