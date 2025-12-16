@@ -1,5 +1,5 @@
-/tests export-ignore
-ecs.php
-phpstan.neon
-rector.php
-phpunit.xml
+/tests           export-ignore
+ecs.php          export-ignore
+phpstan.neon     export-ignore
+rector.php       export-ignore
+phpunit.xml      export-ignore
