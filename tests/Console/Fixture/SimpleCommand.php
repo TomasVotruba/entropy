@@ -20,8 +20,11 @@ final class SimpleCommand implements CommandInterface
         return 'Testing command';
     }
 
-    public function run(ArgumentsAndOptions $argumentsAndOptions): int
+    public function run(bool $dryRun = false): int
     {
+        dump($dryRun);
+        die;
+
         return ExitCode::SUCCESS;
     }
 }

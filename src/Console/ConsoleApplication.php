@@ -7,6 +7,7 @@ namespace Entropy\Console;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Enum\ExitCode;
 use Entropy\Console\Input\InputParser;
+use Entropy\Console\Mapper\CommandOptionsMapper;
 use Entropy\Console\Output\HelpPrinter;
 use Entropy\Tests\Console\ConsoleApplicationTest;
 
@@ -16,7 +17,8 @@ final readonly class ConsoleApplication
     public function __construct(
         private HelpPrinter $helpPrinter,
         private InputParser $inputParser,
-        private CommandRegistry $commandRegistry
+        private CommandRegistry $commandRegistry,
+        private CommandOptionsMapper $commandOptionsMapper,
     ) {
     }
 
@@ -47,6 +49,13 @@ final readonly class ConsoleApplication
 
         try {
             $command = $this->commandRegistry->get($commandName);
+
+
+
+            $arguments = $this->commandOptionsMapper->resolveArguments($command, $argumentsAndOptions);
+            dump($arguments);
+            die;
+
             return $command->run($argumentsAndOptions);
         } catch (\Throwable $throwable) {
             fwrite(STDERR, "Unhandled error: {$throwable->getMessage()}\n");
