@@ -6,5 +6,4 @@ namespace Entropy\Reflection;
 
 final class ParameterDescriptionResolver
 {
-
 }
