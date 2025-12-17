@@ -12,7 +12,7 @@ use ReflectionNamedType;
 use ReflectionType;
 use Webmozart\Assert\Assert;
 
-#[RelatedTest(\Entropy\Tests\Console\Mapper\CommandOptionsMapperTest::class)]
+#[RelatedTest(\Entropy\Tests\Console\Mapper\CLIRequestMapperTest::class)]
 final class CLIRequestMapper
 {
     /**

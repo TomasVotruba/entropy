@@ -6,6 +6,7 @@ namespace Entropy\Console\Output;
 
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
+use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Console\ValueObject\Argument;
 use Entropy\Console\ValueObject\Option;
 use Entropy\Tests\Console\Output\CommandHelpPrinter\CommandHelpPrinterTest;
@@ -59,18 +60,25 @@ final readonly class CommandHelpPrinter
         $options = [];
 
         foreach ($runReflectionMethod->getParameters() as $key => $reflectionParameter) {
+            $parameterType = $reflectionParameter->getType();
+            if (! $parameterType instanceof \ReflectionNamedType) {
+                throw new InvalidCommandException(sprintf(
+                    'Parameter "%s" of command "%s" must have a type declaration',
+                    $reflectionParameter->getName(),
+                    $command->getName()
+                ));
+            }
+
             // 1st param is argument by convention
             if ($key === 0) {
                 $arguments[] = new Argument(
                     $reflectionParameter->getName(),
-                    $reflectionParameter->getType()
-                        ->getName()
+                    $parameterType->getName()
                 );
             } else {
                 $options[] = new Option(
                     $reflectionParameter->getName(),
-                    $reflectionParameter->getType()
-                        ->getName()
+                    $parameterType->getName()
                 );
             }
         }
