@@ -23,7 +23,7 @@ final readonly class CommandHelpPrinter
         $help = [];
 
         if ($command->getDescription() !== '') {
-            $help[] = '<fg=yellow>Description:</>' . PHP_EOL;
+            $help[] = '<fg=yellow>Description:</>';
             $help[] = '  ' . $command->getDescription();
             $help[] = '';
         }
