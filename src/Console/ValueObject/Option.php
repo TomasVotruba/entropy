@@ -11,6 +11,7 @@ final readonly class Option
     public function __construct(
         private string $name,
         private string $type,
+        private ?string $description = null,
     ) {
         $this->cliName = (string) preg_replace('/([a-z])([A-Z])/', '$1-$2', $name);
     }
@@ -28,5 +29,10 @@ final readonly class Option
     public function getCliName(): string
     {
         return $this->cliName;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 }
