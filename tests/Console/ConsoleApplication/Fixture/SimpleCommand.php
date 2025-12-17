@@ -28,7 +28,6 @@ final class SimpleCommand implements CommandInterface
     public function run(array $paths, bool $dryRun = false): int
     {
         dump($paths);
-
         dump($dryRun);
         die;
 

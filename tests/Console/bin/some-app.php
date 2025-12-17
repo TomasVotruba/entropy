@@ -1,22 +1,23 @@
 <?php
 
-// simple manual test to run console app
+declare(strict_types=1);
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
-use Entropy\Console\CommandRegistry;
 use Entropy\Console\ConsoleApplication;
 use Entropy\Container\Container;
-use Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand;
 
-$container = new Container(getcwd());
+$container = new Container();
 
-// @todo this should not be need, as another useless manual labour
-$container->service(CommandRegistry::class, function (Container $container): CommandRegistry {
-    $someCommand = $container->make(SimpleCommand::class);
+$container->service(\Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand::class, fn ()
+=> new \Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand());
 
-    return new CommandRegistry([$someCommand]);
-});
+//// @todo this should not be need, as another useless manual labour
+//$container->service(CommandRegistry::class, function (Container $container): CommandRegistry {
+//    $someCommand = $container->make(SimpleCommand::class);
+//
+//    return new CommandRegistry([$someCommand]);
+//});
 
 $consoleApplication = $container->make(ConsoleApplication::class);
 $consoleApplication->run($argv);

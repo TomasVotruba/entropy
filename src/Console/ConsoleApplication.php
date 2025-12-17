@@ -8,6 +8,7 @@ use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Enum\ExitCode;
 use Entropy\Console\Input\InputParser;
 use Entropy\Console\Mapper\CommandOptionsMapper;
+use Entropy\Console\Output\CommandHelpPrinter;
 use Entropy\Console\Output\HelpPrinter;
 use Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
 
@@ -15,9 +16,10 @@ use Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
 final readonly class ConsoleApplication
 {
     public function __construct(
-        private HelpPrinter $helpPrinter,
-        private InputParser $inputParser,
-        private CommandRegistry $commandRegistry,
+        private HelpPrinter          $helpPrinter,
+        private CommandHelpPrinter   $commandHelpPrinter,
+        private InputParser          $inputParser,
+        private CommandRegistry      $commandRegistry,
         private CommandOptionsMapper $commandOptionsMapper,
     ) {
     }
@@ -32,17 +34,18 @@ final readonly class ConsoleApplication
 
         // global help
         if ($argumentsAndOptions->isHelp()) {
-            $this->helpPrinter->printHelp();
+            $this->helpPrinter->print();
             return ExitCode::SUCCESS;
         }
 
         /** @var string $commandName */
         $commandName = $argumentsAndOptions->getCommandName();
 
+
         if (! $this->commandRegistry->has($commandName)) {
             fwrite(STDERR, sprintf("Unknown command: %s\n\n", $commandName));
 
-            $this->helpPrinter->printHelp();
+            $this->helpPrinter->print();
 
             return ExitCode::INVALID_COMMAND;
         }
@@ -52,8 +55,8 @@ final readonly class ConsoleApplication
 
             if ($argumentsAndOptions->isCommandHelp()) {
                 // print command help here :)
-                dump('command help');
-                die;
+                $this->commandHelpPrinter->print($command);
+                return ExitCode::SUCCESS;
             }
 
             $arguments = $this->commandOptionsMapper->resolveArguments($command, $argumentsAndOptions);

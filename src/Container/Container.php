@@ -110,6 +110,7 @@ final class Container
             $autodiscovery = new Autodiscovery();
 
             $autodiscoveredClasses = $autodiscovery->autodiscoverClasses($this->projectDirectory);
+
             $this->isAutodisovered = true;
 
             foreach ($autodiscoveredClasses as $autodiscoveredClass) {

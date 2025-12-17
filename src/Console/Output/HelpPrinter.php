@@ -17,7 +17,7 @@ final readonly class HelpPrinter
 
     }
 
-    public function printHelp(): void
+    public function print(): void
     {
         $this->outputPrinter->yellow('Commands:');
 

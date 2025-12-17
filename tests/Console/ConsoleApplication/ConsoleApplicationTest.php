@@ -17,7 +17,7 @@ final class ConsoleApplicationTest extends TestCase
     public function testProvideAtLeastOneCommand(): void
     {
         $container = new Container();
-        $container->service(CommandRegistry::class, fn (): \Entropy\Console\CommandRegistry => new CommandRegistry([]));
+//        $container->service(CommandRegistry::class, fn (): \Entropy\Console\CommandRegistry => new CommandRegistry([]));
 
         $this->expectException(InvalidCommandException::class);
         $container->make(ConsoleApplication::class);

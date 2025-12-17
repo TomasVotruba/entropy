@@ -53,11 +53,13 @@ final readonly class CommandHelpPrinter
 
         $runReflectionMethod = new ReflectionMethod($command, 'run');
 
+        $argumentMetadata = [];
+        $optionsMetadata = [];
+
         foreach  ($runReflectionMethod->getParameters() as $reflectionParameter) {
             // 1st param is argument by convention
             dump($reflectionParameter);
         }
-        die;
 
         if (method_exists($command, 'getOptions')) {
             /** @var array<string, string> $options */

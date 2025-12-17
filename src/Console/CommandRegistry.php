@@ -62,6 +62,10 @@ final class CommandRegistry
 
     public function has(string $commandName): bool
     {
+        if (isset($this->commandsByName[$commandName])) {
+            return true;
+        }
+
         return isset($this->commandsByName[$commandName]);
     }
 
