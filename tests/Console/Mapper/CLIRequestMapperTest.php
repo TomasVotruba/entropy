@@ -5,26 +5,26 @@ declare(strict_types=1);
 namespace Entropy\Tests\Console\Mapper;
 
 use Entropy\Console\Exception\ConsoleInputMappingException;
-use Entropy\Console\Mapper\CommandOptionsMapper;
+use Entropy\Console\Mapper\CLIRequestMapper;
 use Entropy\Console\ValueObject\CLIRequest;
 use Entropy\Tests\Console\Mapper\Fixture\SomeCommand;
 use PHPUnit\Framework\TestCase;
 
-final class CommandOptionsMapperTest extends TestCase
+final class CLIRequestMapperTest extends TestCase
 {
     private SomeCommand $someCommand;
 
-    private CommandOptionsMapper $commandOptionsMapper;
+    private CLIRequestMapper $cliRequestMapper;
 
     protected function setUp(): void
     {
-        $this->commandOptionsMapper = new CommandOptionsMapper();
+        $this->cliRequestMapper = new CLIRequestMapper();
         $this->someCommand = new SomeCommand();
     }
 
     public function testMapping(): void
     {
-        $argumentsAndOptions = new CLIRequest(
+        $cliRequest = new CLIRequest(
             'some',
             arguments: ['/some/path'],
             options: [
@@ -33,13 +33,13 @@ final class CommandOptionsMapperTest extends TestCase
             ]
         );
 
-        $arguments = $this->commandOptionsMapper->resolveArguments($this->someCommand, $argumentsAndOptions);
+        $arguments = $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
         $this->assertSame(['/some/path', true, 5], $arguments);
     }
 
     public function testExtraOption(): void
     {
-        $argumentsAndOptions = new CLIRequest(
+        $cliRequest = new CLIRequest(
             'some',
             arguments: ['/some/path'],
             options: [
@@ -52,12 +52,12 @@ final class CommandOptionsMapperTest extends TestCase
         $this->expectException(ConsoleInputMappingException::class);
         $this->expectExceptionMessage('Unknown option: "--extra-option"');
 
-        $this->commandOptionsMapper->resolveArguments($this->someCommand, $argumentsAndOptions);
+        $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
     }
 
     public function testMissingOption(): void
     {
-        $argumentsAndOptions = new CLIRequest(
+        $cliRequest = new CLIRequest(
             'some',
             arguments: ['/some/path'],
             options: [
@@ -68,7 +68,7 @@ final class CommandOptionsMapperTest extends TestCase
         $this->expectException(ConsoleInputMappingException::class);
         $this->expectExceptionMessage('Missing required value for "count" (use "--count" to provide it)');
 
-        $this->commandOptionsMapper->resolveArguments($this->someCommand, $argumentsAndOptions);
+        $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
 
     }
 }

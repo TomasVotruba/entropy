@@ -21,7 +21,7 @@ final readonly class CommandHelpPrinter
 
     public function print(CommandInterface $command): string
     {
-        $name = $command->getName();
+        $command->getName();
 
         $help = [];
 
@@ -79,26 +79,5 @@ final readonly class CommandHelpPrinter
         dump($options);
 
         die;
-
-        if (method_exists($command, 'getOptions')) {
-            /** @var array<string, string> $options */
-            $options = (array) $command->getOptions();
-            if ($options !== []) {
-                $help[] = '<fg=yellow>Options:</>' . PHP_EOL;
-                foreach ($options as $optName => $optDesc) {
-                    // allow either "dry-run" or "--dry-run"
-                    $optLabel = str_starts_with($optName, '-') ? $optName : '--' . $optName;
-                    $help[] = sprintf('  %-18s %s', $optLabel, $optDesc);
-                }
-                $help[] = '';
-            }
-        }
-
-        $text = implode(PHP_EOL, $help);
-
-        // Print it (and return for tests)
-        $this->outputPrinter->writeln($text);
-
-        return $text;
     }
 }

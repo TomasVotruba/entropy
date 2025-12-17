@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Console\ValueObject;
 
-final class Option
+final readonly class Option
 {
     private string $cliName;
 
@@ -12,8 +12,21 @@ final class Option
         private string $name,
         private string $type,
     ) {
-        $this->cliName = preg_replace('/([a-z])([A-Z])/', '$1-$2', $name);
+        $this->cliName = (string) preg_replace('/([a-z])([A-Z])/', '$1-$2', $name);
+    }
 
-        dump($this->cliName);
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getCliName(): string
+    {
+        return $this->cliName;
     }
 }

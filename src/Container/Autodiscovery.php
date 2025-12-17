@@ -48,9 +48,9 @@ final class Autodiscovery
      * Class constructor must be with all parameters typed as classes
      * (no built-in scalar types, no untyped)
      */
-    private function hasAllParametersWithTypedClasses(ReflectionClass $classReflection): bool
+    private function hasAllParametersWithTypedClasses(ReflectionClass $reflectionClass): bool
     {
-        $constructorReflection = $classReflection->getConstructor();
+        $constructorReflection = $reflectionClass->getConstructor();
         if (! $constructorReflection instanceof ReflectionMethod) {
             return true;
         }
@@ -76,27 +76,27 @@ final class Autodiscovery
         // @todo exclude classes with ValueObject, DTO, Enum, Exception in their namespace
         // those are not services
 
-        $classReflection = new ReflectionClass($className);
+        $reflectionClass = new ReflectionClass($className);
 
         // interface cannot be registered as a service
-        if ($classReflection->isInterface()) {
+        if ($reflectionClass->isInterface()) {
             return true;
         }
 
-        if ($classReflection->isSubclassOf(\Throwable::class)) {
+        if ($reflectionClass->isSubclassOf(\Throwable::class)) {
             return true;
         }
 
-        if ($classReflection->isEnum()) {
+        if ($reflectionClass->isEnum()) {
             return true;
         }
 
         // no parent class/interface, nothing to register
-        if ($classReflection->getParentClass() === false && $classReflection->getInterfaceNames() === []) {
+        if ($reflectionClass->getParentClass() === false && $reflectionClass->getInterfaceNames() === []) {
             return true;
         }
 
         // has all parameter with typed class dependencies
-        return ! $this->hasAllParametersWithTypedClasses($classReflection);
+        return ! $this->hasAllParametersWithTypedClasses($reflectionClass);
     }
 }

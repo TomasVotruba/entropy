@@ -34,7 +34,7 @@ final readonly class OutputPrinter
 
         fwrite(STDOUT, $text . PHP_EOL);
 
-        if ($newlineCount) {
+        if ($newlineCount !== 0) {
             $this->newline($newlineCount);
         }
     }

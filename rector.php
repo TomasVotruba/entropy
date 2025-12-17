@@ -17,6 +17,7 @@ return RectorConfig::configure()
         deadCode: true,
         codeQuality: true,
         typeDeclarations: true,
+        naming: true,
     )
     ->withSkip([
         // false-positive validation

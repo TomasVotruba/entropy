@@ -13,7 +13,7 @@ use ReflectionType;
 use Webmozart\Assert\Assert;
 
 #[RelatedTest(\Entropy\Tests\Console\Mapper\CommandOptionsMapperTest::class)]
-final class CommandOptionsMapper
+final class CLIRequestMapper
 {
     /**
      * @return mixed[]
@@ -21,7 +21,7 @@ final class CommandOptionsMapper
     public function resolveArguments(CommandInterface $command, CLIRequest $cliRequest): array
     {
         Assert::methodExists($command, 'run');
-        $runMethodReflection = new \ReflectionMethod($command, 'run');
+        $reflectionMethod = new \ReflectionMethod($command, 'run');
 
         $args = [];
 
@@ -33,9 +33,9 @@ final class CommandOptionsMapper
         /** @var array<string, true> */
         $consumedOptionNames = [];
 
-        foreach ($runMethodReflection->getParameters() as $parameterReflection) {
-            $name = $parameterReflection->getName();
-            $type = $parameterReflection->getType();
+        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
+            $name = $reflectionParameter->getName();
+            $type = $reflectionParameter->getType();
 
             $isBool = $type instanceof ReflectionNamedType && $type->getName() === 'bool';
 
@@ -47,8 +47,8 @@ final class CommandOptionsMapper
                 $consumedOptionNames[$optionName] = true;
             } elseif (! $isBool && isset($positionals[$positionIndex])) {
                 $value = $positionals[$positionIndex++];
-            } elseif ($parameterReflection->isDefaultValueAvailable()) {
-                $value = $parameterReflection->getDefaultValue();
+            } elseif ($reflectionParameter->isDefaultValueAvailable()) {
+                $value = $reflectionParameter->getDefaultValue();
             } elseif ($isBool) {
                 // bool flag missing => false (not required)
                 $value = false;

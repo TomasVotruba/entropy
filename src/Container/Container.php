@@ -40,7 +40,7 @@ final class Container
         }
 
         // setup default console service
-        $this->service(CommandRegistry::class, function (Container $container) {
+        $this->service(CommandRegistry::class, function (Container $container): \Entropy\Console\CommandRegistry {
             $commands = $container->findByContract(CommandInterface::class);
             return new CommandRegistry($commands);
         });
@@ -86,10 +86,10 @@ final class Container
             return $instance;
         }
 
-        $classReflection = new ReflectionClass($class);
+        $reflectionClass = new ReflectionClass($class);
 
-        if ($classReflection->isInstantiable()) {
-            $instance = $this->createInstance($classReflection);
+        if ($reflectionClass->isInstantiable()) {
+            $instance = $this->createInstance($reflectionClass);
             $this->instances[$class] = $instance;
 
             return $instance;
@@ -162,20 +162,20 @@ final class Container
         }
     }
 
-    private function createInstance(ReflectionClass $classReflection): mixed
+    private function createInstance(ReflectionClass $reflectionClass): mixed
     {
         // try to create instance without reflectionParameters
-        $constructor = $classReflection->getConstructor();
+        $constructor = $reflectionClass->getConstructor();
         if ($constructor === null || $constructor->getNumberOfParameters() === 0) {
-            $className = $classReflection->getName();
+            $className = $reflectionClass->getName();
             return new $className();
         }
 
         // try to resolve dependencies
         $parameters = $constructor->getParameters();
-        $dependencies = $this->resolveDependenciesFromParameterReflections($parameters, $classReflection->getName());
+        $dependencies = $this->resolveDependenciesFromParameterReflections($parameters, $reflectionClass->getName());
 
         // create instance with resolved dependencies
-        return $classReflection->newInstanceArgs($dependencies);
+        return $reflectionClass->newInstanceArgs($dependencies);
     }
 }

@@ -18,19 +18,19 @@ final class ParameterTypesResolver
     {
         $parameterTypes = [];
 
-        foreach ($reflectionParameters as $parameter) {
-            $parameterType = $parameter->getType();
+        foreach ($reflectionParameters as $reflectionParameter) {
+            $parameterType = $reflectionParameter->getType();
 
             if ($parameterType instanceof \ReflectionNamedType && ! $parameterType->isBuiltin()) {
                 $parameterTypes[] = $parameterType->getName();
                 // skip default value as not required
-            } elseif ($parameter->isDefaultValueAvailable()) {
+            } elseif ($reflectionParameter->isDefaultValueAvailable()) {
                 continue;
             } else {
                 // cannot resolve non-class parameter
                 throw new CreateServiceException(sprintf(
                     'Cannot resolve parameter "%s" for class "%s"',
-                    $parameter->getName(),
+                    $reflectionParameter->getName(),
                     $class
                 ));
             }

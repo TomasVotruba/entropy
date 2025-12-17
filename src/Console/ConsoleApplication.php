@@ -7,7 +7,7 @@ namespace Entropy\Console;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Enum\ExitCode;
 use Entropy\Console\Input\InputParser;
-use Entropy\Console\Mapper\CommandOptionsMapper;
+use Entropy\Console\Mapper\CLIRequestMapper;
 use Entropy\Console\Output\CommandHelpPrinter;
 use Entropy\Console\Output\HelpPrinter;
 use Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
@@ -16,11 +16,11 @@ use Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
 final readonly class ConsoleApplication
 {
     public function __construct(
-        private HelpPrinter $helpPrinter,
+        private HelpPrinter        $helpPrinter,
         private CommandHelpPrinter $commandHelpPrinter,
-        private InputParser $inputParser,
-        private CommandRegistry $commandRegistry,
-        private CommandOptionsMapper $commandOptionsMapper,
+        private InputParser        $inputParser,
+        private CommandRegistry    $commandRegistry,
+        private CLIRequestMapper   $cliRequestMapper,
     ) {
     }
 
@@ -30,16 +30,16 @@ final readonly class ConsoleApplication
      */
     public function run(array $argv): int
     {
-        $argumentsAndOptions = $this->inputParser->parse($argv);
+        $cliRequest = $this->inputParser->parse($argv);
 
         // global help
-        if ($argumentsAndOptions->isHelp()) {
+        if ($cliRequest->isHelp()) {
             $this->helpPrinter->print();
             return ExitCode::SUCCESS;
         }
 
         /** @var string $commandName */
-        $commandName = $argumentsAndOptions->getCommandName();
+        $commandName = $cliRequest->getCommandName();
 
         if (! $this->commandRegistry->has($commandName)) {
             fwrite(STDERR, sprintf("Unknown command: %s\n\n", $commandName));
@@ -52,13 +52,13 @@ final readonly class ConsoleApplication
         try {
             $command = $this->commandRegistry->get($commandName);
 
-            if ($argumentsAndOptions->isCommandHelp()) {
+            if ($cliRequest->isCommandHelp()) {
                 // print command help here :)
                 $this->commandHelpPrinter->print($command);
                 return ExitCode::SUCCESS;
             }
 
-            $arguments = $this->commandOptionsMapper->resolveArguments($command, $argumentsAndOptions);
+            $arguments = $this->cliRequestMapper->resolveArguments($command, $cliRequest);
             return $command->run(...$arguments);
 
         } catch (\Throwable $throwable) {

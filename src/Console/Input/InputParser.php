@@ -22,7 +22,7 @@ final class InputParser
         }
 
         $command = array_shift($argv);
-        if (str_starts_with($command, '-')) {
+        if (str_starts_with((string) $command, '-')) {
             // most likely an option
             $command = null;
             $options[ltrim((string) $command, '-')] = true;
