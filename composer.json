@@ -17,7 +17,8 @@
         "phpstan/extension-installer": "^1.4",
         "tomasvotruba/type-coverage": "^2.1",
         "shipmonk/composer-dependency-analyser": "^1.8",
-        "rector/rector": "^2.2"
+        "rector/rector": "^2.2",
+        "rector/swiss-knife": "^2.3"
     },
     "autoload": {
         "psr-4": {

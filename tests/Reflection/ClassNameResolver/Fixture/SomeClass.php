@@ -2,6 +2,6 @@
 
 namespace App\SomeNamespace;
 
-class SomeClass
+final class SomeClass
 {
 }
