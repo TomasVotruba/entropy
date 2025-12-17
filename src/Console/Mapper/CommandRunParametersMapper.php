@@ -9,6 +9,7 @@ use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Console\ValueObject\Argument;
 use Entropy\Console\ValueObject\ArgumentsAndOptions;
 use Entropy\Console\ValueObject\Option;
+use Entropy\Reflection\ParameterDescriptionResolver;
 
 final class CommandRunParametersMapper
 {
@@ -16,7 +17,7 @@ final class CommandRunParametersMapper
     {
         $runReflectionMethod = new \ReflectionMethod($command, 'run');
 
-        $paramDescriptions = $this->resolveParamDescriptions($runReflectionMethod);
+        $paramDescriptions = ParameterDescriptionResolver::resolve($runReflectionMethod);
 
         $arguments = [];
         $options = [];
@@ -44,38 +45,5 @@ final class CommandRunParametersMapper
         }
 
         return new ArgumentsAndOptions($arguments, $options);
-    }
-
-    /**
-     * @return array<string, string> map: paramName => description
-     */
-    private function resolveParamDescriptions(\ReflectionMethod $method): array
-    {
-        $doc = $method->getDocComment();
-        if ($doc === false || $doc === '') {
-            return [];
-        }
-
-        // Match lines like:
-        // @param string $name Description...
-        // @param int $level
-        $pattern = '/@param\s+[^\s]+\s+\$([A-Za-z_][A-Za-z0-9_]*)\s*(.*)$/m';
-
-        if (preg_match_all($pattern, $doc, $matches, PREG_SET_ORDER) !== 1 && $matches === []) {
-            return [];
-        }
-
-        $descriptions = [];
-
-        foreach ($matches as $match) {
-            $paramName = $match[1];
-            $desc = trim($match[2]);
-
-            if ($desc !== '') {
-                $descriptions[$paramName] = $desc;
-            }
-        }
-
-        return $descriptions;
     }
 }
