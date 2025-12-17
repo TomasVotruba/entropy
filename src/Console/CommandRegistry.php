@@ -93,8 +93,6 @@ final class CommandRegistry
         //            dump($command);
         //        }
 
-        die;
-
         return isset($this->commands[$commandName]);
     }
 

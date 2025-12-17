@@ -19,7 +19,7 @@ final class FuzzyMatcherTest extends TestCase
         $this->assertSame($expected, FuzzyMatcher::match($input, $candidates));
     }
 
-    public static function provideMatchCases(): iterable
+    public static function provideMatchCases(): \Iterator
     {
         yield ['', ['test'], null];
         yield ['test', [], null];
