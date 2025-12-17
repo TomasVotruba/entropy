@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Entropy\Tests\Console\ConsoleApplication;
 
-use Entropy\Console\CommandRegistry;
 use Entropy\Console\ConsoleApplication;
 use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Container\Container;
@@ -16,9 +15,9 @@ final class ConsoleApplicationTest extends TestCase
 {
     public function testProvideAtLeastOneCommand(): void
     {
-        $container = new Container();
-        //        $container->service(CommandRegistry::class, fn (): \Entropy\Console\CommandRegistry => new CommandRegistry([]));
+        $container = new Container(__DIR__);
 
+        // no command found
         $this->expectException(InvalidCommandException::class);
         $container->make(ConsoleApplication::class);
     }
@@ -26,13 +25,9 @@ final class ConsoleApplicationTest extends TestCase
     #[DoesNotPerformAssertions]
     public function testValidCommandRegistry(): void
     {
-        $container = new Container();
-        $container->service(CommandRegistry::class, function (Container $container): \Entropy\Console\CommandRegistry {
-            $simpleCommand = $container->make(SimpleCommand::class);
+        $container = new Container(__DIR__);
 
-            return new CommandRegistry([$simpleCommand]);
-        });
-
+        $container->service(SimpleCommand::class, fn () => new SimpleCommand());
         $container->make(ConsoleApplication::class);
     }
 }
