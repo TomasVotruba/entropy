@@ -63,12 +63,14 @@ final readonly class CommandHelpPrinter
             if ($key === 0) {
                 $arguments[] = new Argument(
                     $reflectionParameter->getName(),
-                    $reflectionParameter->getType()->getName()
+                    $reflectionParameter->getType()
+                        ->getName()
                 );
             } else {
                 $options[] = new Option(
                     $reflectionParameter->getName(),
-                    $reflectionParameter->getType()->getName()
+                    $reflectionParameter->getType()
+                        ->getName()
                 );
             }
         }
