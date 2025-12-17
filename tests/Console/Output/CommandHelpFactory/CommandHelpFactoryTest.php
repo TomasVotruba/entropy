@@ -26,6 +26,7 @@ final class CommandHelpFactoryTest extends TestCase
 
 <fg=yellow>Usage:</>
   some-name [arguments] [options]
+
 HELP
             , $helpDescription);
     }
