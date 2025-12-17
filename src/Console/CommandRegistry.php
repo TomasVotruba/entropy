@@ -31,7 +31,6 @@ final class CommandRegistry
             }
 
             $existingNames[] = $command->getName();
-
             $this->validateCommand($command);
         }
     }
@@ -75,25 +74,8 @@ final class CommandRegistry
             }
         }
 
-        $availalbleNames = [];
-        foreach ($this->commands as $command) {
-            $availalbleNames[] = $command->getName();
-        }
-
-        $matchedCommand = FuzzyMatcher::match($commandName, $availalbleNames);
-        dump($matchedCommand);
-        die;
-
-        //        $nearestName = null;
-        //        if (isset($this->commands[$commandName])) {
-        //            return true;
-        //        }
-        //
-        //        foreach ($this->commands as $command) {
-        //            dump($command);
-        //        }
-
-        return isset($this->commands[$commandName]);
+        $matchedCommand = FuzzyMatcher::match($commandName, $this->getCommandsNames());
+        return $matchedCommand !== null;
     }
 
     private function validateCommand(CommandInterface $command): void
