@@ -9,8 +9,11 @@ use Entropy\Container\Container;
 
 $container = new Container();
 
-$container->service(\Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand::class, fn (): \Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand
-=> new \Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand());
+$container->service(
+    \Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand::class,
+    fn (): \Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand
+=> new \Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand()
+);
 
 //// @todo this should not be need, as another useless manual labour
 //$container->service(CommandRegistry::class, function (Container $container): CommandRegistry {

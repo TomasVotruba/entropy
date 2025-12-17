@@ -27,7 +27,10 @@ final class ConsoleApplicationTest extends TestCase
     {
         $container = new Container(__DIR__);
 
-        $container->service(SimpleCommand::class, fn (): \Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand => new SimpleCommand());
+        $container->service(
+            SimpleCommand::class,
+            fn (): \Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand => new SimpleCommand()
+        );
         $container->make(ConsoleApplication::class);
     }
 }
