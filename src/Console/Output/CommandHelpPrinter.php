@@ -6,21 +6,19 @@ namespace Entropy\Console\Output;
 
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
-use Entropy\Console\Exception\InvalidCommandException;
-use Entropy\Console\ValueObject\Argument;
-use Entropy\Console\ValueObject\Option;
+use Entropy\Console\Mapper\CommandRunParametersMapper;
 use Entropy\Tests\Console\Output\CommandHelpPrinter\CommandHelpPrinterTest;
-use ReflectionMethod;
 
 #[RelatedTest(CommandHelpPrinterTest::class)]
 final readonly class CommandHelpPrinter
 {
     public function __construct(
-        private OutputPrinter $outputPrinter
+        private OutputPrinter $outputPrinter,
+        private CommandRunParametersMapper $commandRunParametersMapper,
     ) {
     }
 
-    public function print(CommandInterface $command): string
+    public function build(CommandInterface $command): string
     {
         $command->getName();
 
@@ -32,30 +30,19 @@ final readonly class CommandHelpPrinter
             $help[] = '';
         }
 
+        $argumentsAndOptions = $this->commandRunParametersMapper->map($command);
+
         // has arguments?
-        //        $help[] = $this->formatSection('Usage:');
-        //        $help[] = sprintf('  %s [options]', $name);
-        //        $help[] = '';
+        $help[] = '<fg=yellow>Usage:</>';
 
-        // Optional: print args/options if your CommandInterface provides them.
-        // Keep it safe: only call when the method exists.
-        if (method_exists($command, 'getArguments')) {
-            /** @var array<string, string> $arguments */
-            $arguments = (array) $command->getArguments();
-            if ($arguments !== []) {
-                $help[] = '<fg=yellow>Arguments:</>' . PHP_EOL;
-                foreach ($arguments as $argName => $argDesc) {
-                    $help[] = sprintf('  %-18s %s', $argName, $argDesc);
-                }
-                $help[] = '';
-            }
-        }
+        $help[] = sprintf(
+            '  %s%s%s',
+            $command->getName(),
+            $argumentsAndOptions->getArguments() !== [] ? ' [arguments]' : '',
+            $argumentsAndOptions->getOptions() !== [] ? ' [options]' : ''
+        );
+        $help[] = '';
 
-        // get options from the refletion!
-        // @todo
-
-
-
-        die;
+        return implode(PHP_EOL, $help);
     }
 }

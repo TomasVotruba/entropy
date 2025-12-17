@@ -16,6 +16,8 @@ final class CommandRunParametersMapper
     {
         $runReflectionMethod = new \ReflectionMethod($command, 'run');
 
+        $paramDescriptions = $this->resolveParamDescriptions($runReflectionMethod);
+
         $arguments = [];
         $options = [];
 
@@ -29,16 +31,51 @@ final class CommandRunParametersMapper
                 ));
             }
 
-            // resolve comment from a method docblock
+            $name = $reflectionParameter->getName();
+            $type = $parameterType->getName();
+            $description = $paramDescriptions[$name] ?? null;
 
             // 1st param is argument by convention
             if ($key === 0) {
-                $arguments[] = new Argument($reflectionParameter->getName(), $parameterType->getName());
+                $arguments[] = new Argument($name, $type, $description);
             } else {
-                $options[] = new Option($reflectionParameter->getName(), $parameterType->getName());
+                $options[] = new Option($name, $type, $description);
             }
         }
 
         return new ArgumentsAndOptions($arguments, $options);
+    }
+
+    /**
+     * @return array<string, string> map: paramName => description
+     */
+    private function resolveParamDescriptions(\ReflectionMethod $method): array
+    {
+        $doc = $method->getDocComment();
+        if ($doc === false || $doc === '') {
+            return [];
+        }
+
+        // Match lines like:
+        // @param string $name Description...
+        // @param int $level
+        $pattern = '/@param\s+[^\s]+\s+\$([A-Za-z_][A-Za-z0-9_]*)\s*(.*)$/m';
+
+        if (preg_match_all($pattern, $doc, $matches, PREG_SET_ORDER) !== 1 && $matches === []) {
+            return [];
+        }
+
+        $descriptions = [];
+
+        foreach ($matches as $match) {
+            $paramName = $match[1];
+            $desc = trim($match[2] ?? '');
+
+            if ($desc !== '') {
+                $descriptions[$paramName] = $desc;
+            }
+        }
+
+        return $descriptions;
     }
 }

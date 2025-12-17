@@ -16,7 +16,7 @@ final class CommandHelpPrinterTest extends TestCase
         $container = new Container();
         $commandHelpPrinter = $container->make(CommandHelpPrinter::class);
 
-        $helpDescription = $commandHelpPrinter->print(new SomeCommand());
+        $helpDescription = $commandHelpPrinter->build(new SomeCommand());
 
         // show description of options
 
@@ -24,6 +24,8 @@ final class CommandHelpPrinterTest extends TestCase
 <fg=yellow>Description:</>
   Command description
 
+<fg=yellow>Usage:</>
+  some-name [arguments] [options]
 HELP
             , $helpDescription);
     }

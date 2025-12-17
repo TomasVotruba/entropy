@@ -53,8 +53,8 @@ final readonly class ConsoleApplication
             $command = $this->commandRegistry->get($commandName);
 
             if ($cliRequest->isCommandHelp()) {
-                // print command help here :)
-                $this->commandHelpPrinter->print($command);
+                // build command help here :)
+                $this->commandHelpPrinter->build($command);
                 return ExitCode::SUCCESS;
             }
 
