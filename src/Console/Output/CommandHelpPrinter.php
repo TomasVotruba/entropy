@@ -7,6 +7,7 @@ namespace Entropy\Console\Output;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Tests\Console\Output\CommandHelpPrinter\CommandHelpPrinterTest;
+use ReflectionMethod;
 
 #[RelatedTest(CommandHelpPrinterTest::class)]
 final readonly class CommandHelpPrinter
@@ -49,6 +50,14 @@ final readonly class CommandHelpPrinter
 
         // get options from the refletion!
         // @todo
+
+        $runReflectionMethod = new ReflectionMethod($command, 'run');
+
+        foreach  ($runReflectionMethod->getParameters() as $reflectionParameter) {
+            // 1st param is argument by convention
+            dump($reflectionParameter);
+        }
+        die;
 
         if (method_exists($command, 'getOptions')) {
             /** @var array<string, string> $options */
