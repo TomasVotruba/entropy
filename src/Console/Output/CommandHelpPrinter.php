@@ -59,8 +59,6 @@ final readonly class CommandHelpPrinter
         $arguments = [];
         $options = [];
 
-
-
         foreach ($runReflectionMethod->getParameters() as $key => $reflectionParameter) {
             $parameterType = $reflectionParameter->getType();
             if (! $parameterType instanceof \ReflectionNamedType) {
