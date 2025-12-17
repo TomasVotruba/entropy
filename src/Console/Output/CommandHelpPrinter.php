@@ -24,7 +24,7 @@ final readonly class CommandHelpPrinter
         $help = [];
 
         if ($command->getDescription() !== '') {
-            $help[] = '<fg=yellow>Description:</>'  ;
+            $help[] = '<fg=yellow>Description:</>';
             $help[] = '  ' . $command->getDescription();
             $help[] = '';
         }
@@ -56,7 +56,7 @@ final readonly class CommandHelpPrinter
         $argumentMetadata = [];
         $optionsMetadata = [];
 
-        foreach  ($runReflectionMethod->getParameters() as $reflectionParameter) {
+        foreach ($runReflectionMethod->getParameters() as $reflectionParameter) {
             // 1st param is argument by convention
             dump($reflectionParameter);
         }

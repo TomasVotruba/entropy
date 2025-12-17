@@ -16,10 +16,10 @@ use Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
 final readonly class ConsoleApplication
 {
     public function __construct(
-        private HelpPrinter          $helpPrinter,
-        private CommandHelpPrinter   $commandHelpPrinter,
-        private InputParser          $inputParser,
-        private CommandRegistry      $commandRegistry,
+        private HelpPrinter $helpPrinter,
+        private CommandHelpPrinter $commandHelpPrinter,
+        private InputParser $inputParser,
+        private CommandRegistry $commandRegistry,
         private CommandOptionsMapper $commandOptionsMapper,
     ) {
     }
@@ -40,7 +40,6 @@ final readonly class ConsoleApplication
 
         /** @var string $commandName */
         $commandName = $argumentsAndOptions->getCommandName();
-
 
         if (! $this->commandRegistry->has($commandName)) {
             fwrite(STDERR, sprintf("Unknown command: %s\n\n", $commandName));
