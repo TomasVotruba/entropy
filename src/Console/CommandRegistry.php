@@ -84,14 +84,14 @@ final class CommandRegistry
         dump($matchedCommand);
         die;
 
-//        $nearestName = null;
-//        if (isset($this->commands[$commandName])) {
-//            return true;
-//        }
-//
-//        foreach ($this->commands as $command) {
-//            dump($command);
-//        }
+        //        $nearestName = null;
+        //        if (isset($this->commands[$commandName])) {
+        //            return true;
+        //        }
+        //
+        //        foreach ($this->commands as $command) {
+        //            dump($command);
+        //        }
 
         die;
 

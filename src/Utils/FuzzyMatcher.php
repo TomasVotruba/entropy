@@ -11,7 +11,6 @@ use Entropy\Tests\Utils\FuzzyMatcherTest;
 final class FuzzyMatcher
 {
     /**
-     * @param string $input
      * @param string[] $candidates
      */
     public static function match(string $input, array $candidates): ?string
@@ -29,7 +28,7 @@ final class FuzzyMatcher
         if (strlen($input) === 1) {
             $prefixMatches = array_values(array_filter(
                 $candidates,
-                static fn(string $candidate): bool => str_starts_with($candidate, $input)
+                static fn (string $candidate): bool => str_starts_with($candidate, $input)
             ));
 
             return count($prefixMatches) === 1
@@ -40,7 +39,7 @@ final class FuzzyMatcher
         // 2. prefix match (multi-letter)
         $prefixMatches = array_values(array_filter(
             $candidates,
-            static fn(string $candidate): bool => str_starts_with($candidate, $input)
+            static fn (string $candidate): bool => str_starts_with($candidate, $input)
         ));
 
         if (count($prefixMatches) === 1) {
@@ -59,7 +58,7 @@ final class FuzzyMatcher
         $bestDistance = $distances[$best];
 
         // conservative threshold
-        $maxAllowed = max(1, (int)floor(strlen($best) / 3));
+        $maxAllowed = max(1, (int) floor(strlen($best) / 3));
 
         return $bestDistance <= $maxAllowed
             ? $best
@@ -67,7 +66,6 @@ final class FuzzyMatcher
     }
 
     /**
-     * @param string $input
      * @param string[] $candidates
      * @return string[]
      */
@@ -80,7 +78,7 @@ final class FuzzyMatcher
         if (strlen($input) === 1) {
             return array_values(array_filter(
                 $candidates,
-                static fn(string $candidate): bool => str_starts_with($candidate, $input)
+                static fn (string $candidate): bool => str_starts_with($candidate, $input)
             ));
         }
 
