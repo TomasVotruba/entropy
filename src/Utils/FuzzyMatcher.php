@@ -73,6 +73,39 @@ final class FuzzyMatcher
     }
 
     /**
+     * @param string[] $candidates
+     * @return string[]
+     */
+    public static function suggest(string $input, array $candidates): array
+    {
+        if ($input === '' || $candidates === []) {
+            return [];
+        }
+
+        if (strlen($input) === 1) {
+            return array_values(array_filter(
+                $candidates,
+                static fn (string $candidate): bool => str_starts_with($candidate, $input)
+            ));
+        }
+
+        $scores = [];
+        foreach ($candidates as $candidate) {
+            $distance = levenshtein($input, $candidate);
+
+            if ($distance === 2 && self::isSingleAdjacentSwap($input, $candidate)) {
+                $distance = 1;
+            }
+
+            $scores[$candidate] = $distance;
+        }
+
+        asort($scores);
+
+        return array_keys($scores);
+    }
+
+    /**
      * Returns true if $a can become $b by swapping exactly one adjacent pair.
      */
     private static function isSingleAdjacentSwap(string $a, string $b): bool
@@ -107,38 +140,5 @@ final class FuzzyMatcher
         }
 
         return true;
-    }
-
-    /**
-     * @param string[] $candidates
-     * @return string[]
-     */
-    public static function suggest(string $input, array $candidates): array
-    {
-        if ($input === '' || $candidates === []) {
-            return [];
-        }
-
-        if (strlen($input) === 1) {
-            return array_values(array_filter(
-                $candidates,
-                static fn (string $candidate): bool => str_starts_with($candidate, $input)
-            ));
-        }
-
-        $scores = [];
-        foreach ($candidates as $candidate) {
-            $distance = levenshtein($input, $candidate);
-
-            if ($distance === 2 && self::isSingleAdjacentSwap($input, $candidate)) {
-                $distance = 1;
-            }
-
-            $scores[$candidate] = $distance;
-        }
-
-        asort($scores);
-
-        return array_keys($scores);
     }
 }
