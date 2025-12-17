@@ -69,7 +69,7 @@ final class CommandRunParametersMapper
 
         foreach ($matches as $match) {
             $paramName = $match[1];
-            $desc = trim($match[2] ?? '');
+            $desc = trim($match[2]);
 
             if ($desc !== '') {
                 $descriptions[$paramName] = $desc;

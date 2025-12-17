@@ -7,7 +7,7 @@ namespace Entropy\Console\Output;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Mapper\CommandRunParametersMapper;
-use Entropy\Tests\Console\Output\CommandHelpPrinter\CommandHelpFactoryTest;
+use Entropy\Tests\Console\Output\CommandHelpFactory\CommandHelpFactoryTest;
 
 #[RelatedTest(CommandHelpFactoryTest::class)]
 final readonly class CommandHelpFactory
