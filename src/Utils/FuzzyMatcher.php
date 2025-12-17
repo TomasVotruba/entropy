@@ -46,10 +46,17 @@ final class FuzzyMatcher
             return $prefixMatches[0];
         }
 
-        // 3. levenshtein typo match
+        // 3. levenshtein typo match (+ allow one adjacent swap)
         $distances = [];
         foreach ($candidates as $candidate) {
-            $distances[$candidate] = levenshtein($input, $candidate);
+            $distance = levenshtein($input, $candidate);
+
+            // Treat "tset" vs "test" (single adjacent transposition) as 1 edit
+            if ($distance === 2 && self::isSingleAdjacentSwap($input, $candidate)) {
+                $distance = 1;
+            }
+
+            $distances[$candidate] = $distance;
         }
 
         asort($distances);
@@ -63,6 +70,43 @@ final class FuzzyMatcher
         return $bestDistance <= $maxAllowed
             ? $best
             : null;
+    }
+
+    /**
+     * Returns true if $a can become $b by swapping exactly one adjacent pair.
+     */
+    private static function isSingleAdjacentSwap(string $a, string $b): bool
+    {
+        if (strlen($a) !== strlen($b) || strlen($a) < 2) {
+            return false;
+        }
+
+        $len = strlen($a);
+
+        // find first mismatch
+        $i = 0;
+        while ($i < $len && $a[$i] === $b[$i]) {
+            $i++;
+        }
+
+        // no mismatch
+        if ($i >= $len - 1) {
+            return false;
+        }
+
+        // must be a swap at i and i+1
+        if ($a[$i] !== $b[$i + 1] || $a[$i + 1] !== $b[$i]) {
+            return false;
+        }
+
+        // rest must match
+        for ($j = $i + 2; $j < $len; $j++) {
+            if ($a[$j] !== $b[$j]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -84,7 +128,13 @@ final class FuzzyMatcher
 
         $scores = [];
         foreach ($candidates as $candidate) {
-            $scores[$candidate] = levenshtein($input, $candidate);
+            $distance = levenshtein($input, $candidate);
+
+            if ($distance === 2 && self::isSingleAdjacentSwap($input, $candidate)) {
+                $distance = 1;
+            }
+
+            $scores[$candidate] = $distance;
         }
 
         asort($scores);
