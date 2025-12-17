@@ -39,7 +39,7 @@ final readonly class CommandHelpPrinter
             /** @var array<string, string> $arguments */
             $arguments = (array) $command->getArguments();
             if ($arguments !== []) {
-                $help[] = '<fg=yellow>Arguments:</>' .  PHP_EOL;
+                $help[] = '<fg=yellow>Arguments:</>' . PHP_EOL;
                 foreach ($arguments as $argName => $argDesc) {
                     $help[] = sprintf('  %-18s %s', $argName, $argDesc);
                 }
