@@ -6,8 +6,9 @@ namespace Entropy\Console\Output;
 
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
+use Entropy\Tests\Console\Output\CommandHelpPrinter\CommandHelpPrinterTest;
 
-#[RelatedTest(\Entropy\Tests\Console\Output\CommandHelpPrinter\CommandHelpPrinterTest::class)]
+#[RelatedTest(CommandHelpPrinterTest::class)]
 final readonly class CommandHelpPrinter
 {
     public function __construct(
