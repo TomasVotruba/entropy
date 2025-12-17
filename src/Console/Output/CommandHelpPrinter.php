@@ -71,15 +71,9 @@ final readonly class CommandHelpPrinter
 
             // 1st param is argument by convention
             if ($key === 0) {
-                $arguments[] = new Argument(
-                    $reflectionParameter->getName(),
-                    $parameterType->getName()
-                );
+                $arguments[] = new Argument($reflectionParameter->getName(), $parameterType->getName());
             } else {
-                $options[] = new Option(
-                    $reflectionParameter->getName(),
-                    $parameterType->getName()
-                );
+                $options[] = new Option($reflectionParameter->getName(), $parameterType->getName());
             }
         }
 
