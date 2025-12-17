@@ -6,6 +6,8 @@ namespace Entropy\Console\Output;
 
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
+use Entropy\Console\ValueObject\Argument;
+use Entropy\Console\ValueObject\Option;
 use Entropy\Tests\Console\Output\CommandHelpPrinter\CommandHelpPrinterTest;
 use ReflectionMethod;
 
@@ -53,21 +55,26 @@ final readonly class CommandHelpPrinter
 
         $runReflectionMethod = new ReflectionMethod($command, 'run');
 
-        $argumentMetadata = [];
-        $optionsMetadata = [];
+        $arguments = [];
+        $options = [];
 
         foreach ($runReflectionMethod->getParameters() as $key => $reflectionParameter) {
             // 1st param is argument by convention
             if ($key === 0) {
-                $argumentMetadata[] = dump($reflectionParameter->getName());
-                dump($reflectionParameter->getType()->getName());
+                $arguments[] = new Argument(
+                    $reflectionParameter->getName(),
+                    $reflectionParameter->getType()->getName()
+                );
             } else {
-                $optionsMetadata[] = $reflectionParameter;
+                $options[] = new Option(
+                    $reflectionParameter->getName(),
+                    $reflectionParameter->getType()->getName()
+                );
             }
         }
 
-        dump($argumentMetadata);
-        dump($optionsMetadata);
+        dump($arguments);
+        dump($options);
 
         die;
 

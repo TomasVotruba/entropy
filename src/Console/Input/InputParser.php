@@ -3,7 +3,7 @@
 namespace Entropy\Console\Input;
 
 use Entropy\Attributes\RelatedTest;
-use Entropy\Console\ValueObject\ArgumentsAndOptions;
+use Entropy\Console\ValueObject\CLIRequest;
 
 #[RelatedTest(\Entropy\Tests\Console\Input\InputParserTest::class)]
 final class InputParser
@@ -11,14 +11,14 @@ final class InputParser
     /**
      * @param mixed[] $argv
      */
-    public function parse(array $argv): ArgumentsAndOptions
+    public function parse(array $argv): CLIRequest
     {
         // remove script name
         array_shift($argv);
 
         if ($argv === []) {
             // fallback to show all commands
-            return new ArgumentsAndOptions(null);
+            return new CLIRequest(null);
         }
 
         $command = array_shift($argv);
@@ -51,7 +51,7 @@ final class InputParser
             $args[] = $item;
         }
 
-        return new ArgumentsAndOptions($command, $args, $options);
+        return new CLIRequest($command, $args, $options);
     }
 
     /**

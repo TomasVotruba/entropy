@@ -7,7 +7,7 @@ namespace Entropy\Console\Mapper;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Exception\ConsoleInputMappingException;
-use Entropy\Console\ValueObject\ArgumentsAndOptions;
+use Entropy\Console\ValueObject\CLIRequest;
 use ReflectionNamedType;
 use ReflectionType;
 use Webmozart\Assert\Assert;
@@ -18,15 +18,15 @@ final class CommandOptionsMapper
     /**
      * @return mixed[]
      */
-    public function resolveArguments(CommandInterface $command, ArgumentsAndOptions $argumentsAndOptions): array
+    public function resolveArguments(CommandInterface $command, CLIRequest $cliRequest): array
     {
         Assert::methodExists($command, 'run');
         $runMethodReflection = new \ReflectionMethod($command, 'run');
 
         $args = [];
 
-        $positionals = $argumentsAndOptions->getArguments();
-        $options = $argumentsAndOptions->getOptions();
+        $positionals = $cliRequest->getArguments();
+        $options = $cliRequest->getOptions();
 
         $positionIndex = 0;
 
@@ -43,7 +43,7 @@ final class CommandOptionsMapper
             $optionName = $this->camelToKebab($name);
 
             if (array_key_exists($optionName, $options)) {
-                $value = $argumentsAndOptions->option($optionName);
+                $value = $cliRequest->option($optionName);
                 $consumedOptionNames[$optionName] = true;
             } elseif (! $isBool && isset($positionals[$positionIndex])) {
                 $value = $positionals[$positionIndex++];

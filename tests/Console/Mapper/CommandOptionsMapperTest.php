@@ -6,7 +6,7 @@ namespace Entropy\Tests\Console\Mapper;
 
 use Entropy\Console\Exception\ConsoleInputMappingException;
 use Entropy\Console\Mapper\CommandOptionsMapper;
-use Entropy\Console\ValueObject\ArgumentsAndOptions;
+use Entropy\Console\ValueObject\CLIRequest;
 use Entropy\Tests\Console\Mapper\Fixture\SomeCommand;
 use PHPUnit\Framework\TestCase;
 
@@ -24,7 +24,7 @@ final class CommandOptionsMapperTest extends TestCase
 
     public function testMapping(): void
     {
-        $argumentsAndOptions = new ArgumentsAndOptions(
+        $argumentsAndOptions = new CLIRequest(
             'some',
             arguments: ['/some/path'],
             options: [
@@ -39,7 +39,7 @@ final class CommandOptionsMapperTest extends TestCase
 
     public function testExtraOption(): void
     {
-        $argumentsAndOptions = new ArgumentsAndOptions(
+        $argumentsAndOptions = new CLIRequest(
             'some',
             arguments: ['/some/path'],
             options: [
@@ -57,7 +57,7 @@ final class CommandOptionsMapperTest extends TestCase
 
     public function testMissingOption(): void
     {
-        $argumentsAndOptions = new ArgumentsAndOptions(
+        $argumentsAndOptions = new CLIRequest(
             'some',
             arguments: ['/some/path'],
             options: [
