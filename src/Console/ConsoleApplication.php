@@ -16,11 +16,11 @@ use Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
 final readonly class ConsoleApplication
 {
     public function __construct(
-        private HelpPrinter        $helpPrinter,
+        private HelpPrinter $helpPrinter,
         private CommandHelpFactory $commandHelpPrinter,
-        private InputParser        $inputParser,
-        private CommandRegistry    $commandRegistry,
-        private CLIRequestMapper   $cliRequestMapper,
+        private InputParser $inputParser,
+        private CommandRegistry $commandRegistry,
+        private CLIRequestMapper $cliRequestMapper,
     ) {
     }
 
