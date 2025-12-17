@@ -21,7 +21,7 @@ final class CommandHelpPrinterTest extends TestCase
         // show description of options
 
         $this->assertSame(<<<HELP
-Description:
+<fg=yellow>Description:</>
   Command description
 
 HELP
