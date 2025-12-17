@@ -54,31 +54,7 @@ final readonly class CommandHelpPrinter
         // get options from the refletion!
         // @todo
 
-        $runReflectionMethod = new ReflectionMethod($command, 'run');
 
-        $arguments = [];
-        $options = [];
-
-        foreach ($runReflectionMethod->getParameters() as $key => $reflectionParameter) {
-            $parameterType = $reflectionParameter->getType();
-            if (! $parameterType instanceof \ReflectionNamedType) {
-                throw new InvalidCommandException(sprintf(
-                    'Parameter "%s" of command "%s" must have a type declaration',
-                    $reflectionParameter->getName(),
-                    $command->getName()
-                ));
-            }
-
-            // 1st param is argument by convention
-            if ($key === 0) {
-                $arguments[] = new Argument($reflectionParameter->getName(), $parameterType->getName());
-            } else {
-                $options[] = new Option($reflectionParameter->getName(), $parameterType->getName());
-            }
-        }
-
-        dump($arguments);
-        dump($options);
 
         die;
     }
