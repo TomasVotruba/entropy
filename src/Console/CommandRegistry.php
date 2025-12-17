@@ -25,27 +25,14 @@ final class CommandRegistry
 
         $existingNames = [];
         foreach ($commands as $command) {
-            // make sure the name is registered just once
+            // make sure the commandName is registered just once
             if (in_array($command->getName(), $existingNames, true)) {
-                throw new InvalidCommandException(sprintf('Duplicate command name: "%s"', $command->getName()));
+                throw new InvalidCommandException(sprintf('Duplicate command commandName: "%s"', $command->getName()));
             }
 
             $existingNames[] = $command->getName();
             $this->validateCommand($command);
         }
-    }
-
-    public function get(string $name): CommandInterface
-    {
-        if (! $this->has($name)) {
-            throw new InvalidCommandException(sprintf(
-                'Command not found: "%s". Try one of "%s"',
-                $name,
-                implode('", "', $this->getCommandsNames())
-            ));
-        }
-
-        return $this->commands[$name];
     }
 
     public function getCommandNameMaxLength(): int
@@ -74,15 +61,31 @@ final class CommandRegistry
             }
         }
 
-        $matchedCommand = FuzzyMatcher::match($commandName, $this->getCommandsNames());
-        return $matchedCommand !== null;
+        $matchedCommandName = FuzzyMatcher::match($commandName, $this->getCommandsNames());
+        return $matchedCommandName !== null;
+    }
+
+    public function get(string $commandName): CommandInterface
+    {
+        $matchedCommandName = FuzzyMatcher::match($commandName, $this->getCommandsNames());
+        foreach ($this->commands as $command) {
+            if ($command->getName() === $matchedCommandName) {
+                return $command;
+            }
+        }
+
+        throw new InvalidCommandException(sprintf(
+            'Command not found: "%s". Try one of "%s"',
+            $commandName,
+            implode('", "', $this->getCommandsNames())
+        ));
     }
 
     private function validateCommand(CommandInterface $command): void
     {
         $name = $command->getName();
         if ($name === '') {
-            throw new InvalidCommandException('Command name cannot be empty');
+            throw new InvalidCommandException('Command commandName cannot be empty');
         }
 
         if ($command->getDescription() === '') {
