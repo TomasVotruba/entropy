@@ -7,6 +7,8 @@ namespace Entropy\Console\Output;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Mapper\CommandRunParametersMapper;
+use Entropy\Console\ValueObject\Argument;
+use Entropy\Console\ValueObject\Option;
 use Entropy\Tests\Console\Output\CommandHelpFactory\CommandHelpFactoryTest;
 
 #[RelatedTest(CommandHelpFactoryTest::class)]
@@ -19,8 +21,6 @@ final readonly class CommandHelpFactory
 
     public function build(CommandInterface $command): string
     {
-        $command->getName();
-
         $help = [];
 
         if ($command->getDescription() !== '') {
@@ -31,9 +31,7 @@ final readonly class CommandHelpFactory
 
         $argumentsAndOptions = $this->commandRunParametersMapper->map($command);
 
-        // has arguments?
         $help[] = '<fg=yellow>Usage:</>';
-
         $help[] = sprintf(
             '  %s%s%s',
             $command->getName(),
@@ -42,6 +40,42 @@ final readonly class CommandHelpFactory
         );
         $help[] = '';
 
+        // Arguments
+        if ($argumentsAndOptions->getArguments() !== []) {
+            $help[] = '<fg=yellow>Arguments:</>';
+            foreach ($argumentsAndOptions->getArguments() as $argument) {
+                $help[] = $this->formatParameterLine($argument);
+            }
+            $help[] = '';
+        }
+
+        // Options
+        if ($argumentsAndOptions->getOptions() !== []) {
+            $help[] = '<fg=yellow>Options:</>';
+            foreach ($argumentsAndOptions->getOptions() as $option) {
+                $help[] = $this->formatParameterLine($option);
+            }
+            $help[] = '';
+        }
+
         return implode(PHP_EOL, $help);
+    }
+
+    /**
+     * Symfony-ish: "  name   [type]  description"
+     */
+    private function formatParameterLine(Argument|Option $argumentOrOption): string
+    {
+        $name = $argumentOrOption->getName();
+        $desc = trim((string) $argumentOrOption->getDescription());
+
+        $parameterLine = sprintf(
+            '  <fg=green>%s%-22s</>  %s',
+            $argumentOrOption instanceof Option ? '--' : '',
+            $name,
+            $desc
+        );
+
+        return rtrim($parameterLine);
     }
 }
