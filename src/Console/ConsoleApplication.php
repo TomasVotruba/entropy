@@ -8,7 +8,7 @@ use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Enum\ExitCode;
 use Entropy\Console\Input\InputParser;
 use Entropy\Console\Mapper\CLIRequestMapper;
-use Entropy\Console\Output\CommandHelpPrinter;
+use Entropy\Console\Output\CommandHelpFactory;
 use Entropy\Console\Output\HelpPrinter;
 use Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
 
@@ -16,11 +16,11 @@ use Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
 final readonly class ConsoleApplication
 {
     public function __construct(
-        private HelpPrinter $helpPrinter,
-        private CommandHelpPrinter $commandHelpPrinter,
-        private InputParser $inputParser,
-        private CommandRegistry $commandRegistry,
-        private CLIRequestMapper $cliRequestMapper,
+        private HelpPrinter        $helpPrinter,
+        private CommandHelpFactory $commandHelpPrinter,
+        private InputParser        $inputParser,
+        private CommandRegistry    $commandRegistry,
+        private CLIRequestMapper   $cliRequestMapper,
     ) {
     }
 

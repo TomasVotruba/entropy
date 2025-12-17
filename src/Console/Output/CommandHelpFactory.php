@@ -7,13 +7,12 @@ namespace Entropy\Console\Output;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Mapper\CommandRunParametersMapper;
-use Entropy\Tests\Console\Output\CommandHelpPrinter\CommandHelpPrinterTest;
+use Entropy\Tests\Console\Output\CommandHelpPrinter\CommandHelpFactoryTest;
 
-#[RelatedTest(CommandHelpPrinterTest::class)]
-final readonly class CommandHelpPrinter
+#[RelatedTest(CommandHelpFactoryTest::class)]
+final readonly class CommandHelpFactory
 {
     public function __construct(
-        private OutputPrinter $outputPrinter,
         private CommandRunParametersMapper $commandRunParametersMapper,
     ) {
     }
