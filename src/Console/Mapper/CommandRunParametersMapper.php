@@ -37,7 +37,8 @@ final class CommandRunParametersMapper
             $description = $paramDescriptions[$name] ?? null;
 
             // 1st param is argument by convention
-            if ($key === 0) {
+            if ($key === 0 && in_array($type, ['string', 'array'], true)) {
+                // only string and array are allowed args
                 $arguments[] = new Argument($name, $type, $description);
             } else {
                 $options[] = new Option($name, $type, $description);

@@ -51,10 +51,10 @@ HELP
   Command description
 
 <fg=yellow>Usage:</>
-  some-name [arguments]
+  some-name [options]
 
 <fg=yellow>Options:</>
-  <fg=green>--flag                </>  Enable extra features, this is a required option
+  <fg=green>--flag                  </>  Enable extra features, this is a required option
 
 HELP
             , $helpDescription);
