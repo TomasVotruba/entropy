@@ -15,7 +15,8 @@ final class ParameterDescriptionResolverTest extends TestCase
         $parameterDescriptions = ParameterDescriptionResolver::resolve($someMethodReflection);
 
         $this->assertSame([
-            'isEnabled' => 'Description of the option'
+            'isEnabled' => 'Description of the option',
+            'showChanges' => 'Show changes, do not apply them.',
         ], $parameterDescriptions);
     }
 }
