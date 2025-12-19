@@ -22,12 +22,8 @@ final readonly class CommandHelpFactory
     public function build(CommandInterface $command): string
     {
         $help = [];
-
-        if ($command->getDescription() !== '') {
-            $help[] = '<fg=yellow>Description:</>';
-            $help[] = '  ' . $command->getDescription();
-            $help[] = '';
-        }
+        $help[] = '  ' . $command->getDescription();
+        $help[] = '';
 
         $argumentsAndOptions = $this->commandRunParametersMapper->map($command);
 
