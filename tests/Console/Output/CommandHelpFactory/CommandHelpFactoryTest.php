@@ -25,9 +25,6 @@ final class CommandHelpFactoryTest extends TestCase
 <fg=yellow>Description:</>
   Command description
 
-<fg=yellow>Usage:</>
-  some-name [arguments] [options]
-
 <fg=yellow>Arguments:</>
   <fg=green>path                  </>
 

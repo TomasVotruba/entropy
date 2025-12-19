@@ -31,15 +31,6 @@ final readonly class CommandHelpFactory
 
         $argumentsAndOptions = $this->commandRunParametersMapper->map($command);
 
-        $help[] = '<fg=yellow>Usage:</>';
-        $help[] = sprintf(
-            '  %s%s%s',
-            $command->getName(),
-            $argumentsAndOptions->getArguments() !== [] ? ' [arguments]' : '',
-            $argumentsAndOptions->getOptions() !== [] ? ' [options]' : ''
-        );
-        $help[] = '';
-
         // Arguments
         if ($argumentsAndOptions->getArguments() !== []) {
             $help[] = '<fg=yellow>Arguments:</>';

@@ -10,6 +10,7 @@ use Entropy\Console\Input\InputParser;
 use Entropy\Console\Mapper\CLIRequestMapper;
 use Entropy\Console\Output\CommandHelpFactory;
 use Entropy\Console\Output\HelpPrinter;
+use Entropy\Console\Output\OutputPrinter;
 use Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
 
 #[RelatedTest(ConsoleApplicationTest::class)]
@@ -17,6 +18,7 @@ final readonly class ConsoleApplication
 {
     public function __construct(
         private HelpPrinter $helpPrinter,
+        private OutputPrinter $outputPrinter,
         private CommandHelpFactory $commandHelpPrinter,
         private InputParser $inputParser,
         private CommandRegistry $commandRegistry,
@@ -54,7 +56,9 @@ final readonly class ConsoleApplication
 
             if ($cliRequest->isCommandHelp()) {
                 // build command help here :)
-                $this->commandHelpPrinter->build($command);
+                $commandHelp = $this->commandHelpPrinter->build($command);
+                $this->outputPrinter->writeln($commandHelp);
+
                 return ExitCode::SUCCESS;
             }
 
