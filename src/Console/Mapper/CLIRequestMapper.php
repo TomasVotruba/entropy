@@ -73,11 +73,7 @@ final class CLIRequestMapper
         }
 
         // 2) Extra options (unknown to run() signature) - ignore global ones
-        $unknownOptions = array_diff_key(
-            $options,
-            $consumedOptionNames,
-            self::IGNORED_OPTIONS
-        );
+        $unknownOptions = array_diff_key($options, $consumedOptionNames, self::IGNORED_OPTIONS);
 
         if ($unknownOptions !== []) {
             throw new ConsoleInputMappingException(sprintf(
