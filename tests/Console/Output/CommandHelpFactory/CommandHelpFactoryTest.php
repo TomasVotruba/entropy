@@ -47,9 +47,6 @@ HELP
 <fg=yellow>Description:</>
   Command description
 
-<fg=yellow>Usage:</>
-  some-name [options]
-
 <fg=yellow>Options:</>
   <fg=green>--flag                  </>  Enable extra features, this is a required option
 
