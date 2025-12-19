@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Entropy\Reflection;
 
+use Entropy\Attributes\RelatedTest;
 use Entropy\Container\Exception\CreateServiceException;
+use Entropy\Tests\Reflection\ParameterTypesResolver\ParameterTypesResolverTest;
+use ReflectionParameter;
 
+#[RelatedTest(ParameterTypesResolverTest::class)]
 final class ParameterTypesResolver
 {
     /**
-     * @param \ReflectionParameter[] $reflectionParameters
+     * @param ReflectionParameter[] $reflectionParameters
      * @param class-string $class
      *
      * @return class-string[]
