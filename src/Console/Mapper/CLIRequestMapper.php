@@ -16,7 +16,7 @@ use Webmozart\Assert\Assert;
 final class CLIRequestMapper
 {
     /**
-     * @param array<string, bool>
+     * @var array<string, bool>
      */
     private const array IGNORED_OPTIONS = [
         'help' => true,
