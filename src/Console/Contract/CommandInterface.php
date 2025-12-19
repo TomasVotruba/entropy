@@ -15,4 +15,7 @@ interface CommandInterface
      * @return non-empty-string
      */
     public function getDescription(): string;
+
+    // public function run(...)
+    // with many arguments
 }
