@@ -49,14 +49,19 @@ final readonly class OutputPrinter
         $this->writeln($this->color($text, 'yellow'));
     }
 
-    public function success(string $text): void
+    public function orangeBackground(string $text): void
+    {
+        $this->writeln($this->color($text, 'orange'));
+    }
+
+    public function greenBackground(string $text): void
     {
         $this->writeln($this->color('✔ ' . $text, 'green'));
     }
 
-    public function error(string $text): void
+    public function redBackground(string $text): void
     {
-        fwrite(STDERR, $this->color('✘ ' . $text, 'red') . PHP_EOL);
+        $this->writeln($this->color('✘ ' . $text, 'red'));
     }
 
     public function newline(int $count = 1): void

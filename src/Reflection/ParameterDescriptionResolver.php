@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Entropy\Reflection;
 
 use Entropy\Attributes\RelatedTest;
-use Entropy\Tests\Reflection\ParameterDescriptionResolver\ParameterDescriptionResolverTest;
 use ReflectionMethod;
 
-#[RelatedTest(ParameterDescriptionResolverTest::class)]
+#[RelatedTest(\Entropy\Tests\Reflection\ParameterDescriptionResolver\ParameterDescriptionResolverTest::class)]
 final class ParameterDescriptionResolver
 {
     /**
@@ -21,19 +20,24 @@ final class ParameterDescriptionResolver
             return [];
         }
 
-        // Match lines like:
-        // @param string $name Description...
-        $pattern = '/@param\s+[^\s]+\s+\$([A-Za-z_][A-Za-z0-9_]*)\s*(.*)$/m';
-
-        if (preg_match_all($pattern, $doc, $matches, PREG_SET_ORDER) !== 1 && $matches === []) {
-            return [];
-        }
-
         $descriptions = [];
 
-        foreach ($matches as $match) {
-            $paramName = $match[1];
-            $desc = trim($match[2]);
+        // Parse line-by-line to avoid accidentally spanning/joining multiple @param lines
+        $lines = preg_split('/\R/u', $doc) ?: [];
+        foreach ($lines as $line) {
+            // normalize typical docblock formatting: " * @param ..."
+            $line = ltrim($line);
+            $line = preg_replace('#^\*\s?#', '', $line) ?? $line;
+
+            // Match a single @param line only
+            // Supports: @param Type $name Description...
+            // Also tolerates: @param Type &$name ..., @param Type ...$name ...
+            if (!preg_match('/^@param\s+\S+\s+(?:&?\.\.\.)?\$([A-Za-z_][A-Za-z0-9_]*)\s*(.*)$/', $line, $m)) {
+                continue;
+            }
+
+            $paramName = $m[1];
+            $desc = trim($m[2]);
 
             if ($desc !== '') {
                 $descriptions[$paramName] = $desc;
