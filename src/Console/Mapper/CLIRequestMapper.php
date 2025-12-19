@@ -16,6 +16,14 @@ use Webmozart\Assert\Assert;
 final class CLIRequestMapper
 {
     /**
+     * @param array<string, bool>
+     */
+    private const array IGNORED_OPTIONS = [
+        'help' => true,
+        'h' => true,
+    ];
+
+    /**
      * @return mixed[]
      */
     public function resolveArguments(CommandInterface $command, CLIRequest $cliRequest): array
@@ -64,23 +72,12 @@ final class CLIRequestMapper
             $args[] = $this->castValueByParameterType($value, $type);
         }
 
-        // 1) Extra positional args
-        if (count($positionals) > $positionIndex) {
-            $extra = array_slice($positionals, $positionIndex);
-
-            throw new ConsoleInputMappingException(sprintf(
-                'Too many arguments. Unexpected: %s',
-                implode(', ', $extra)
-            ));
-        }
-
         // 2) Extra options (unknown to run() signature) - ignore global ones
-        $ignoredOptions = [
-            'help' => true,
-            'h' => true,
-        ];
-
-        $unknownOptions = array_diff_key($options, $consumedOptionNames, $ignoredOptions);
+        $unknownOptions = array_diff_key(
+            $options,
+            $consumedOptionNames,
+            self::IGNORED_OPTIONS
+        );
 
         if ($unknownOptions !== []) {
             throw new ConsoleInputMappingException(sprintf(
