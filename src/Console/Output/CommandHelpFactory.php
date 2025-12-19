@@ -52,9 +52,6 @@ final readonly class CommandHelpFactory
         return implode(PHP_EOL, $help);
     }
 
-    /**
-     * Symfony-ish: "  name   [type]  description"
-     */
     private function formatParameterLine(Argument|Option $argumentOrOption): string
     {
         $name = $argumentOrOption->getName();

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Entropy\Reflection;
 
+use Entropy\Attributes\RelatedTest;
 use ReflectionMethod;
 
+#[RelatedTest(\Entropy\Tests\Reflection\ParameterDescriptionResolver\ParameterDescriptionResolverTest::class)]
 final class ParameterDescriptionResolver
 {
     /**
@@ -20,7 +22,6 @@ final class ParameterDescriptionResolver
 
         // Match lines like:
         // @param string $name Description...
-        // @param int $level
         $pattern = '/@param\s+[^\s]+\s+\$([A-Za-z_][A-Za-z0-9_]*)\s*(.*)$/m';
 
         if (preg_match_all($pattern, $doc, $matches, PREG_SET_ORDER) !== 1 && $matches === []) {
