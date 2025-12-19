@@ -16,10 +16,11 @@ final class ParameterTypesResolverTest extends TestCase
     {
         $runMethodReflection = new ReflectionMethod(SomeMethodWithTypes::class, 'run');
 
-        $parameterObjectTypes = ParameterTypesResolver::resolve($runMethodReflection->getParameters(), SomeMethodWithTypes::class);
+        $parameterObjectTypes = ParameterTypesResolver::resolve(
+            $runMethodReflection->getParameters(),
+            SomeMethodWithTypes::class
+        );
 
-        $this->assertSame([
-            AnotherClass::class,
-        ], $parameterObjectTypes);
+        $this->assertSame([AnotherClass::class], $parameterObjectTypes);
     }
 }
