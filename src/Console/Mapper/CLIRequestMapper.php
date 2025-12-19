@@ -112,6 +112,7 @@ final class CLIRequestMapper
             'int' => (int) $value,
             'float' => (float) $value,
             'string' => (string) $value,
+            'array' => (array) $value,
             default => $value,
         };
     }
