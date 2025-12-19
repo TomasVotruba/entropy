@@ -37,6 +37,21 @@ final class CLIRequestMapperTest extends TestCase
         $this->assertSame(['/some/path', true, 5], $arguments);
     }
 
+    public function testMultipleArgs(): void
+    {
+        $cliRequest = new CLIRequest(
+            'some',
+            arguments: ['/some/path', '/another/path'],
+            options: [
+                'flag' => true,
+                'count' => '5',
+            ]
+        );
+
+        $arguments = $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
+        $this->assertSame(['/some/path', true, 5], $arguments);
+    }
+
     public function testExtraOption(): void
     {
         $cliRequest = new CLIRequest(

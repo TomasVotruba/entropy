@@ -62,8 +62,9 @@ final readonly class ConsoleApplication
                 return ExitCode::SUCCESS;
             }
 
-            $arguments = $this->cliRequestMapper->resolveArguments($command, $cliRequest);
-            return $command->run(...$arguments);
+            $runArguments = $this->cliRequestMapper->resolveArguments($command, $cliRequest);
+
+            return $command->run(...$runArguments);
 
         } catch (\Throwable $throwable) {
             fwrite(STDERR, "Unhandled error: {$throwable->getMessage()}\n");
