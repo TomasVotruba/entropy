@@ -22,7 +22,6 @@ final class CommandHelpFactoryTest extends TestCase
         // show description of options
 
         $this->assertSame(<<<HELP
-<fg=yellow>Description:</>
   Command description
 
 <fg=yellow>Arguments:</>
@@ -44,7 +43,6 @@ HELP
         $helpDescription = $commandHelpPrinter->build(new AnotherCommand());
 
         $this->assertSame(<<<HELP
-<fg=yellow>Description:</>
   Command description
 
 <fg=yellow>Options:</>
