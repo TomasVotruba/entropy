@@ -9,6 +9,7 @@ final readonly class OutputPrinter
     private const LABEL_WIDTH = 7;
 
     private bool $useColors;
+
     private bool $isSilent;
 
     public function __construct(?bool $useColors = null)
@@ -32,22 +33,14 @@ final readonly class OutputPrinter
         // foreground colors: <fg=green>text</>
         if (preg_match_all('/<fg=(green|yellow|red|cyan)>(.*?)<\/>/', $text, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
-                $text = str_replace(
-                    $match[0],
-                    $this->color($match[2], $match[1]),
-                    $text
-                );
+                $text = str_replace($match[0], $this->color($match[2], $match[1]), $text);
             }
         }
 
         // background colors: <bg=green>text</>
         if (preg_match_all('/<bg=(green|yellow|red|cyan|orange)>(.*?)<\/>/', $text, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
-                $text = str_replace(
-                    $match[0],
-                    $this->background($match[2], $match[1]),
-                    $text
-                );
+                $text = str_replace($match[0], $this->background($match[2], $match[1]), $text);
             }
         }
 
@@ -122,11 +115,7 @@ final readonly class OutputPrinter
     {
         $label = str_pad($label, self::LABEL_WIDTH, ' ', STR_PAD_RIGHT);
 
-        return sprintf(
-            '%s %s',
-            $this->background($label, $color),
-            $message
-        );
+        return sprintf('%s %s', $this->background($label, $color), $message);
     }
 
     private function color(string $text, string $type): string
