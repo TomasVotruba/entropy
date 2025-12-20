@@ -4,6 +4,8 @@ parameters:
     level: 8
 
     paths:
+        - ecs.php
+        - rector.php
         - src
         - tests
 
