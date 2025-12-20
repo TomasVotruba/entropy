@@ -34,8 +34,8 @@ final class CommandHelpFactoryTest extends TestCase
   <fg=green>path                  </>
 
 <fg=yellow>Options:</>
-  <fg=green>--flag                  </>  Enable extra features
-  <fg=green>--count                 </>
+  <fg=green>--flag                </>  Enable extra features
+  <fg=green>--count               </>
 
 HELP
             , $helpDescription);
