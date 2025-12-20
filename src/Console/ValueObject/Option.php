@@ -6,17 +6,17 @@ namespace Entropy\Console\ValueObject;
 
 final readonly class Option
 {
-    private string $cliName;
+    private string $name;
 
     public function __construct(
-        private string $name,
+        string $name,
         private string $type,
         private ?string $description = null,
         private bool $acceptsMultipleValues = false,
         private string|bool|int|null $defaultValue = null,
     ) {
-        // handle camelCase to kebab-case conversion
-        $this->cliName = strtolower((string) preg_replace('/([a-z])([A-Z])/', '$1-$2', $name));
+        // rename parameter name to -- option name, camelCase to kebab-case conversion
+        $this->name = strtolower((string) preg_replace('/([a-z])([A-Z])/', '$1-$2', $name));
     }
 
     public function getName(): string
@@ -27,11 +27,6 @@ final readonly class Option
     public function getType(): string
     {
         return $this->type;
-    }
-
-    public function getCliName(): string
-    {
-        return $this->cliName;
     }
 
     public function getDescription(): ?string

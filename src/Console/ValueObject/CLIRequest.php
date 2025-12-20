@@ -41,11 +41,6 @@ final class CLIRequest
         return $this->options;
     }
 
-    public function arg(int $index, mixed $default = null): mixed
-    {
-        return $this->arguments[$index] ?? $default;
-    }
-
     public function option(string $name, mixed $default = null): mixed
     {
         return $this->options[$name] ?? $default;

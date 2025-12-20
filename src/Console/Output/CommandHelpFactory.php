@@ -64,7 +64,7 @@ final readonly class CommandHelpFactory
     private function nameWithDefaultValue(Option|Argument $argumentOrOption): string
     {
         if ($argumentOrOption instanceof Option) {
-            $contents = '--' . $argumentOrOption->getCliName();
+            $contents = '--' . $argumentOrOption->getName();
 
             $defaultValue = $argumentOrOption->getDefaultValue();
             if ($defaultValue !== null) {
