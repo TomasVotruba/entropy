@@ -7,6 +7,7 @@ namespace Entropy\Console\Output;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Mapper\CommandRunParametersMapper;
+use Entropy\Console\Terminal\Terminal;
 use Entropy\Console\ValueObject\Argument;
 use Entropy\Console\ValueObject\Option;
 use Entropy\Tests\Console\Output\CommandHelpFactory\CommandHelpFactoryTest;
@@ -52,14 +53,18 @@ final readonly class CommandHelpFactory
     {
         $description = trim((string) $argumentOrOption->getDescription());
 
+        $nameWithDefaultValue = $this->nameWithDefaultValue($argumentOrOption);
+
         $parameterLine = sprintf(
-            '  <fg=green>%-22s</>  %s',
-            $this->nameWithDefaultValue($argumentOrOption),
+            '  <fg=green>%s</>  %s',
+            Terminal::padVisibleRight($nameWithDefaultValue, 17),
             $description
         );
 
         return rtrim($parameterLine);
     }
+
+
 
     private function nameWithDefaultValue(Option|Argument $argumentOrOption): string
     {
@@ -68,6 +73,11 @@ final readonly class CommandHelpFactory
 
             $defaultValue = $argumentOrOption->getDefaultValue();
             if ($defaultValue !== null && $defaultValue !== false) {
+                if ($defaultValue === true) {
+                    // avoid casting boolean true to "1"
+                    $defaultValue = 'true';
+                }
+
                 $contents .= sprintf('</><fg=yellow>=[%s]', $defaultValue);
             }
 
