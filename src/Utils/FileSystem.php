@@ -20,4 +20,17 @@ final class FileSystem
 
         return $fileContents;
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function loadFileToJson(string $filePath): array
+    {
+        Assert::fileExists($filePath);
+
+        $fileContents = self::read($filePath);
+
+        return json_decode($fileContents, true, 512, JSON_THROW_ON_ERROR);
+    }
 }
+
