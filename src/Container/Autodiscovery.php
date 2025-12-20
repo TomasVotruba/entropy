@@ -11,9 +11,10 @@ use Entropy\Tests\Container\Autodiscovery\AutodiscoveryTest;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
+use Webmozart\Assert\Assert;
 
 /**
- * Load project classes to services automatically
+ * Registers project classes to services automatically
  */
 #[RelatedTest(AutodiscoveryTest::class)]
 final class Autodiscovery
@@ -21,27 +22,20 @@ final class Autodiscovery
     /**
      * @return array<class-string>
      */
-    public function autodiscoverClasses(string $projectDirectory): array
+    public function autodiscoverDirectory(string $directory): array
+    {
+        $phpFiles = FileFinder::findPhpFiles($directory);
+        return $this->resolveClassNames($phpFiles);
+    }
+
+    /**
+     * @return array<class-string>
+     */
+    public function autodiscoverProjectClasses(string $projectDirectory): array
     {
         // find alfindByContractl *.php files in given directory using recursive iterator
         $phpFiles = FileFinder::findSourcePhpFiles($projectDirectory);
-
-        $classNames = [];
-
-        foreach ($phpFiles as $phpFile) {
-            $className = ClassNameResolver::resolveFromFilePath($phpFile);
-            if ($className === null) {
-                continue;
-            }
-
-            if ($this->shouldSkipClass($className)) {
-                continue;
-            }
-
-            $classNames[] = $className;
-        }
-
-        return $classNames;
+        return $this->resolveClassNames($phpFiles);
     }
 
     /**
@@ -98,5 +92,32 @@ final class Autodiscovery
 
         // has all parameter with typed class dependencies
         return ! $this->hasAllParametersWithTypedClasses($reflectionClass);
+    }
+
+    /**
+     * @param string[] $phpFiles
+     *
+     * @return string[]
+     */
+    private function resolveClassNames(array $phpFiles): array
+    {
+        Assert::allString($phpFiles);
+
+        $classNames = [];
+
+        foreach ($phpFiles as $phpFile) {
+            $className = ClassNameResolver::resolveFromFilePath($phpFile);
+            if ($className === null) {
+                continue;
+            }
+
+            if ($this->shouldSkipClass($className)) {
+                continue;
+            }
+
+            $classNames[] = $className;
+        }
+
+        return $classNames;
     }
 }

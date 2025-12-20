@@ -59,11 +59,15 @@ final class Container
     }
 
     /**
-     * Register service from directory
+     * Register service from provided directory
      */
-    public function autodiscover(): void
+    public function autodiscover(string $directory): void
     {
-        // @todo
+        $autodiscovery = new Autodiscovery();
+        $classNames = $autodiscovery->autodiscoverDirectory($directory);
+
+        dump($classNames);
+        die;
     }
 
     /**
@@ -150,7 +154,7 @@ final class Container
         if (! $this->isAutodisovered) {
             $autodiscovery = new Autodiscovery();
 
-            $autodiscoveredClasses = $autodiscovery->autodiscoverClasses($this->projectDirectory);
+            $autodiscoveredClasses = $autodiscovery->autodiscoverProjectClasses($this->projectDirectory);
 
             $this->isAutodisovered = true;
 
