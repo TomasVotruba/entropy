@@ -19,7 +19,7 @@ final readonly class ConsoleApplication
     public function __construct(
         private HelpPrinter $helpPrinter,
         private OutputPrinter $outputPrinter,
-        private CommandHelpFactory $commandHelpPrinter,
+        private CommandHelpFactory $commandHelpFactory,
         private InputParser $inputParser,
         private CommandRegistry $commandRegistry,
         private CLIRequestMapper $cliRequestMapper,
@@ -56,7 +56,7 @@ final readonly class ConsoleApplication
 
             if ($cliRequest->isCommandHelp()) {
                 // build command help here :)
-                $commandHelp = $this->commandHelpPrinter->build($command);
+                $commandHelp = $this->commandHelpFactory->build($command);
                 $this->outputPrinter->writeln($commandHelp);
 
                 return ExitCode::SUCCESS;

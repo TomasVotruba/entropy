@@ -30,9 +30,7 @@ final class ConsoleApplicationTest extends TestCase
 
         $container->service(
             SimpleCommand::class,
-            function (Container $container): SimpleCommand {
-                return new SimpleCommand($container->make(OutputPrinter::class));
-            }
+            fn (Container $container): SimpleCommand => new SimpleCommand($container->make(OutputPrinter::class))
         );
 
         $container->make(ConsoleApplication::class);

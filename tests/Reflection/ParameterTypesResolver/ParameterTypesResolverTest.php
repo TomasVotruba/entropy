@@ -14,10 +14,10 @@ final class ParameterTypesResolverTest extends TestCase
 {
     public function test(): void
     {
-        $runMethodReflection = new ReflectionMethod(SomeMethodWithTypes::class, 'run');
+        $reflectionMethod = new ReflectionMethod(SomeMethodWithTypes::class, 'run');
 
         $parameterObjectTypes = ParameterTypesResolver::resolve(
-            $runMethodReflection->getParameters(),
+            $reflectionMethod->getParameters(),
             SomeMethodWithTypes::class
         );
 

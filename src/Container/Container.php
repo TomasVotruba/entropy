@@ -61,7 +61,7 @@ final class Container
     /**
      * Register service from directory
      */
-    public function autodiscover(string $directory): void
+    public function autodiscover(): void
     {
         // @todo
     }

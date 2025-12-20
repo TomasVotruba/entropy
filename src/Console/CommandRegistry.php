@@ -9,7 +9,7 @@ use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Utils\FuzzyMatcher;
 use Webmozart\Assert\Assert;
 
-final class CommandRegistry
+final readonly class CommandRegistry
 {
     /**
      * @param CommandInterface[] $commands

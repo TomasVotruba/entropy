@@ -14,7 +14,7 @@ final class CLIRequest
      */
     public function __construct(
         private readonly ?string $commandName,
-        private array $arguments = [],
+        private readonly array $arguments = [],
         private array $options = []
     ) {
         Assert::allString(array_keys($options));

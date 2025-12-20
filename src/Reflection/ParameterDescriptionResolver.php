@@ -32,7 +32,7 @@ final class ParameterDescriptionResolver
             // Match a single @param line only
             // Supports: @param Type $name Description...
             // Also tolerates: @param Type $name ..., @param Type ...$name ...
-            if (! preg_match('/^@param\s+\S+\s+(?:&?\.\.\.)?\$([A-Za-z_][A-Za-z0-9_]*)\s*(.*)$/', $line, $m)) {
+            if (! preg_match('/^@param\s+\S+\s+(?:&?\.\.\.)?\$([A-Za-z_]\w*)\s*(.*)$/', $line, $m)) {
                 continue;
             }
 

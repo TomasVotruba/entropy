@@ -6,7 +6,7 @@ namespace Entropy\Console\ValueObject;
 
 use Webmozart\Assert\Assert;
 
-final class ArgumentsAndOptions
+final readonly class ArgumentsAndOptions
 {
     /**
      * @param Argument[] $arguments

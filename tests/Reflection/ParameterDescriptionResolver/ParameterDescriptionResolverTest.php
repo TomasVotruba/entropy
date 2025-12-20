@@ -12,9 +12,9 @@ final class ParameterDescriptionResolverTest extends TestCase
 {
     public function test(): void
     {
-        $someMethodReflection = new \ReflectionMethod(SomeClassWithMethod::class, 'someMethod');
+        $reflectionMethod = new \ReflectionMethod(SomeClassWithMethod::class, 'someMethod');
 
-        $parameterDescriptions = ParameterDescriptionResolver::resolve($someMethodReflection);
+        $parameterDescriptions = ParameterDescriptionResolver::resolve($reflectionMethod);
 
         $this->assertSame([
             'isEnabled' => 'Description of the option',
