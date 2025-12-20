@@ -40,7 +40,6 @@ final readonly class SimpleCommand implements CommandInterface
         $this->outputPrinter->orangeBackground('Warning');
         $this->outputPrinter->redBackground('Failure');
 
-
         return ExitCode::SUCCESS;
     }
 }
