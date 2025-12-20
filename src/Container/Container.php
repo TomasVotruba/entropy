@@ -93,10 +93,7 @@ final class Container
                 ? array_merge($this->makingStack, [$class])
                 : array_merge(array_slice($this->makingStack, $cycleStartIndex), [$class]);
 
-            throw new CreateServiceException(sprintf(
-                'Circular dependency detected: %s',
-                implode(' -> ', $cycle)
-            ));
+            throw new CreateServiceException(sprintf('Circular dependency detected: %s', implode(' -> ', $cycle)));
         }
 
         // mark as "currently being created"

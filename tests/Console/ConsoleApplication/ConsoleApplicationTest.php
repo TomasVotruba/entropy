@@ -29,9 +29,11 @@ final class ConsoleApplicationTest extends TestCase
         $container = new Container(__DIR__);
 
         $container->service(
-            SimpleCommand::class, function (Container $container): SimpleCommand {
-            return new SimpleCommand($container->make(OutputPrinter::class));
-        });
+            SimpleCommand::class,
+            function (Container $container): SimpleCommand {
+                return new SimpleCommand($container->make(OutputPrinter::class));
+            }
+        );
 
         $container->make(ConsoleApplication::class);
     }
