@@ -24,11 +24,6 @@ final readonly class Option
         return $this->name;
     }
 
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
     public function getDescription(): ?string
     {
         return $this->description;
