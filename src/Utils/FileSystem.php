@@ -33,4 +33,3 @@ final class FileSystem
         return json_decode($fileContents, true, 512, JSON_THROW_ON_ERROR);
     }
 }
-
