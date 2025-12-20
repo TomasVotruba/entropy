@@ -6,8 +6,6 @@ namespace Entropy\Console\Output;
 
 final readonly class OutputPrinter
 {
-    private const int LABEL_WIDTH = 10;
-
     private bool $useColors;
 
     private bool $isSilent;
@@ -44,7 +42,7 @@ final readonly class OutputPrinter
         $this->writeln($this->color($text, 'yellow'));
     }
 
-    public function green(string $string)
+    public function green(string $string): void
     {
         $this->writeln($this->color($string, 'green'));
     }
