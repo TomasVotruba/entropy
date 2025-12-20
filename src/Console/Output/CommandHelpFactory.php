@@ -53,9 +53,8 @@ final readonly class CommandHelpFactory
         $description = trim((string) $argumentOrOption->getDescription());
 
         $parameterLine = sprintf(
-            '  <fg=green>%s%-22s</>  %s',
+            '  <fg=green>%-22s</>  %s',
             $this->nameWithDefaultValue($argumentOrOption),
-            $argumentOrOption instanceof Option ? $argumentOrOption->getCliName() : $argumentOrOption->getName(),
             $description
         );
 
@@ -67,7 +66,7 @@ final readonly class CommandHelpFactory
         if ($argumentOrOption instanceof Option) {
             $defaultValue = $argumentOrOption->getDefaultValue();
             if ($defaultValue !== null) {
-                return sprintf('%s </><fg=yellow>=[%s]</>', '--' . $argumentOrOption->getCliName(), $defaultValue);
+                return sprintf('%s </><fg=yellow>=[%s]', '--' . $argumentOrOption->getCliName(), $defaultValue);
             }
             return '--' . $argumentOrOption->getCliName();
 
