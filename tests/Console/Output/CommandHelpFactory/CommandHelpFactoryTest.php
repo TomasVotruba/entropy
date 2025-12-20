@@ -31,11 +31,11 @@ final class CommandHelpFactoryTest extends TestCase
   Command description
 
 <fg=yellow>Arguments:</>
-  <fg=green>path</> <fg=yellow>(many)</>  Paths to analyse
+  <fg=green>path</> <fg=yellow>(many)      </>  Paths to analyse
 
 <fg=yellow>Options:</>
-  <fg=green>--flag            </>  Enable extra features
-  <fg=green>--count           </>
+  <fg=green>--flag           </>  Enable extra features
+  <fg=green>--count          </>
 
 HELP
             , $helpDescription);
