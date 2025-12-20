@@ -71,13 +71,14 @@ final readonly class CommandHelpFactory
                 $contents .= sprintf('</><fg=yellow>=[%s]', $defaultValue);
             }
 
-            if ($argumentOrOption->doesAcceptMultipleValues()) {
-                $contents .= '</> <fg=yellow>(many)';
-            }
-
-            return $contents;
+        } else {
+            $contents = $argumentOrOption->getName();
         }
 
-        return $argumentOrOption->getName();
+        if ($argumentOrOption->doesAcceptMultipleValues()) {
+            $contents .= '</> <fg=yellow>(many)';
+        }
+
+        return $contents;
     }
 }
