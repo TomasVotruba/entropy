@@ -5,14 +5,17 @@ declare(strict_types=1);
 require __DIR__ . '/../../../vendor/autoload.php';
 
 use Entropy\Console\ConsoleApplication;
+use Entropy\Console\Output\OutputPrinter;
 use Entropy\Container\Container;
+use Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand;
 
 $container = new Container();
 
 $container->service(
-    \Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand::class,
-    fn (): \Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand
-=> new \Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand()
+    SimpleCommand::class,
+    function (Container $container): SimpleCommand {
+        return new SimpleCommand($container->make(OutputPrinter::class));
+    }
 );
 
 //// @todo this should not be need, as another useless manual labour

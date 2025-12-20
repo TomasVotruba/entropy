@@ -26,6 +26,16 @@ final class Container
      */
     private array $instances = [];
 
+    /**
+     * @var array<class-string, true>
+     */
+    private array $making = [];
+
+    /**
+     * @var list<class-string>
+     */
+    private array $makingStack = [];
+
     private string $projectDirectory;
 
     private bool $isAutodisovered = false;
@@ -75,27 +85,52 @@ final class Container
             return $this->instances[$class];
         }
 
-        if (isset($this->services[$class])) {
-            // create service here
-            $factory = $this->services[$class];
+        // circular dependency detection
+        if (isset($this->making[$class])) {
+            // Build a helpful cycle message: A -> B -> C -> A
+            $cycleStartIndex = array_search($class, $this->makingStack, true);
+            $cycle = $cycleStartIndex === false
+                ? array_merge($this->makingStack, [$class])
+                : array_merge(array_slice($this->makingStack, $cycleStartIndex), [$class]);
 
-            // pass container itself to factory
-            $instance = $factory($this);
-            $this->instances[$class] = $instance;
-
-            return $instance;
+            throw new CreateServiceException(sprintf(
+                'Circular dependency detected:%s"%s"',
+                PHP_EOL,
+                implode('" -> "', $cycle)
+            ));
         }
 
-        $reflectionClass = new ReflectionClass($class);
+        // mark as "currently being created"
+        $this->making[$class] = true;
+        $this->makingStack[] = $class;
 
-        if ($reflectionClass->isInstantiable()) {
-            $instance = $this->createInstance($reflectionClass);
-            $this->instances[$class] = $instance;
+        try {
+            // factories / registered services
+            if (isset($this->services[$class])) {
+                $factory = $this->services[$class];
 
-            return $instance;
+                $instance = $factory($this);
+                $this->instances[$class] = $instance;
+
+                return $instance;
+            }
+
+            // autowire via reflection
+            $reflectionClass = new ReflectionClass($class);
+
+            if ($reflectionClass->isInstantiable()) {
+                $instance = $this->createInstance($reflectionClass);
+                $this->instances[$class] = $instance;
+
+                return $instance;
+            }
+
+            throw new CreateServiceException(sprintf('No service found for "%s" class', $class));
+        } finally {
+            // always unmark, even if construction throws
+            array_pop($this->makingStack);
+            unset($this->making[$class]);
         }
-
-        throw new CreateServiceException(sprintf('No service found for "%s" class', $class));
     }
 
     /**

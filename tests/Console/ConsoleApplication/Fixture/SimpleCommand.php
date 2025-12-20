@@ -6,9 +6,15 @@ namespace Entropy\Tests\Console\ConsoleApplication\Fixture;
 
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
+use Entropy\Console\Output\OutputPrinter;
 
-final class SimpleCommand implements CommandInterface
+final readonly class SimpleCommand implements CommandInterface
 {
+    public function __construct(
+        private OutputPrinter $outputPrinter
+    ) {
+    }
+
     public function getName(): string
     {
         return 'test-me';
@@ -29,7 +35,11 @@ final class SimpleCommand implements CommandInterface
     {
         dump($paths);
         dump($dryRun);
-        die;
+
+        $this->outputPrinter->greenBackground('Success');
+        $this->outputPrinter->orangeBackground('Warning');
+        $this->outputPrinter->redBackground('Failure');
+
 
         return ExitCode::SUCCESS;
     }
