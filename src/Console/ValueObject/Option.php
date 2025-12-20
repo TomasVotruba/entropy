@@ -13,7 +13,7 @@ final readonly class Option
         private string $type,
         private ?string $description = null,
         private bool $acceptsMultipleValues = false,
-        private ?string $defaultValue = null,
+        private string|bool|int|null $defaultValue = null,
     ) {
         // handle camelCase to kebab-case conversion
         $this->cliName = strtolower((string) preg_replace('/([a-z])([A-Z])/', '$1-$2', $name));

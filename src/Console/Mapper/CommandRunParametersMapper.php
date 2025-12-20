@@ -40,11 +40,21 @@ final class CommandRunParametersMapper
             // 1st param is argument by convention
             $acceptsMultipleValue = $parameterType === 'array';
 
+            $defaultValue = null;
+            if ($reflectionParameter->isDefaultValueAvailable()) {
+                $defaultValue = $reflectionParameter->getDefaultValue();
+
+                // not relevant default value
+                if ($defaultValue === []) {
+                    $defaultValue = null;
+                }
+            }
+
             // first param can be an arg by convention, only "string" and "array" are allowed types
             if ($key === 0 && in_array($parameterType, ['string', 'array'], true)) {
                 $arguments[] = new Argument($parameterName, $parameterType, $description, $acceptsMultipleValue);
             } else {
-                $options[] = new Option($parameterName, $parameterType, $description, $acceptsMultipleValue);
+                $options[] = new Option($parameterName, $parameterType, $description, $acceptsMultipleValue, $defaultValue);
             }
         }
 
