@@ -28,10 +28,11 @@ final readonly class SimpleCommand implements CommandInterface
     /**
      * @param string[] $paths
      * @param bool $dryRun Show changes, but do not apply them.
+     * @param string[] $skip List paths to skip.
      *
      * @return ExitCode::*
      */
-    public function run(array $paths, bool $dryRun = false): int
+    public function run(array $paths, bool $dryRun = false, array $skip = []): int
     {
         dump($paths);
         dump($dryRun);

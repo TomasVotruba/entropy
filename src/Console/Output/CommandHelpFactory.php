@@ -67,7 +67,7 @@ final readonly class CommandHelpFactory
             $contents = '--' . $argumentOrOption->getName();
 
             $defaultValue = $argumentOrOption->getDefaultValue();
-            if ($defaultValue !== null) {
+            if ($defaultValue !== null && $defaultValue !== false) {
                 $contents .= sprintf('</><fg=yellow>=[%s]', $defaultValue);
             }
 
