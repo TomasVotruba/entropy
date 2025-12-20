@@ -193,7 +193,9 @@ final class Container
 
         $dependencies = [];
         foreach ($parameterTypes as $parameterType) {
-            $dependencies[] = is_array($parameterType) ? $this->findByContract($parameterType[0]) : $this->make($parameterType);
+            $dependencies[] = is_array($parameterType) ? $this->findByContract($parameterType[0]) : $this->make(
+                $parameterType
+            );
         }
 
         return $dependencies;
