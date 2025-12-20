@@ -67,14 +67,10 @@ final readonly class CommandHelpFactory
         if ($argumentOrOption instanceof Option) {
             $defaultValue = $argumentOrOption->getDefaultValue();
             if ($defaultValue !== null) {
-                return sprintf(
-                    '%s </><fg=yellow>=[%s]</>',
-                    '--' . $argumentOrOption->getCliName(),
-                    $defaultValue
-                );
-            } else {
-                return '--' . $argumentOrOption->getCliName();
+                return sprintf('%s </><fg=yellow>=[%s]</>', '--' . $argumentOrOption->getCliName(), $defaultValue);
             }
+            return '--' . $argumentOrOption->getCliName();
+
         }
 
         return $argumentOrOption->getName();
