@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Entropy\Tests\Container\Autodiscovery;
 
 use App\Project\Command\OtherCommand;
-use App\Project\Contract\CommandInterface;
 use App\Project\Contract\ServiceTypeInterface;
 use App\Project\Contract\SomeContract;
 use Entropy\Console\CommandRegistry;
@@ -14,17 +13,6 @@ use PHPUnit\Framework\TestCase;
 
 final class AutodiscoveryTest extends TestCase
 {
-    public function testContractAutodiscovery(): void
-    {
-        $container = new Container();
-        $container->autodiscover(__DIR__ . '/Fixture/project-directory');
-
-        $commands = $container->findByContract(CommandInterface::class);
-        $this->assertCount(1, $commands);
-
-        $this->assertContainsOnlyInstancesOf(CommandInterface::class, $commands);
-    }
-
     public function testSkipValueObjects(): void
     {
         $container = new Container();

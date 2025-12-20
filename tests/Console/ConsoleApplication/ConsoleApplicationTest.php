@@ -6,9 +6,7 @@ namespace Entropy\Tests\Console\ConsoleApplication;
 
 use Entropy\Console\ConsoleApplication;
 use Entropy\Console\Exception\InvalidCommandException;
-use Entropy\Console\Output\OutputPrinter;
 use Entropy\Container\Container;
-use Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +14,7 @@ final class ConsoleApplicationTest extends TestCase
 {
     public function testProvideAtLeastOneCommand(): void
     {
-        $container = new Container(__DIR__);
+        $container = new Container();
 
         // no command found
         $this->expectException(InvalidCommandException::class);
@@ -26,13 +24,10 @@ final class ConsoleApplicationTest extends TestCase
     #[DoesNotPerformAssertions]
     public function testValidCommandRegistry(): void
     {
-        $container = new Container(__DIR__);
+        $container = new Container();
 
-        $container->service(
-            SimpleCommand::class,
-            fn (Container $container): SimpleCommand => new SimpleCommand($container->make(OutputPrinter::class))
-        );
-
+        // load command service from this directory
+        $container->autodiscover(__DIR__ . '/Fixture/');
         $container->make(ConsoleApplication::class);
     }
 }
