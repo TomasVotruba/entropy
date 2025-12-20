@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Entropy\FileSystem;
 
 use Entropy\Attributes\RelatedTest;
+use Entropy\Tests\FileSystem\FileFinder\FileFinderTest;
 
-#[RelatedTest(\Entropy\Tests\FileSystem\FileFinder\FileFinderTest::class)]
+#[RelatedTest(FileFinderTest::class)]
 final class FileFinder
 {
     /**
@@ -32,7 +33,7 @@ final class FileFinder
     /**
      * @return string[]
      */
-    public static function findSourceDirectories(string $directory): array
+    private static function findSourceDirectories(string $directory): array
     {
         $sourceDirectories = [];
 
@@ -57,6 +58,7 @@ final class FileFinder
     }
 
     /**
+     * @api used in tests
      * @return string[]
      */
     public static function findPhpFiles(string $directory): array

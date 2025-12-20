@@ -32,17 +32,18 @@ final class CommandRunParametersMapper
                 ));
             }
 
-            $name = $reflectionParameter->getName();
-            $type = $parameterType->getName();
+            $parameterName = $reflectionParameter->getName();
+            $parameterType = $parameterType->getName();
 
-            $description = $paramDescriptions[$name] ?? null;
+            $description = $paramDescriptions[$parameterName] ?? null;
 
             // 1st param is argument by convention
-            if ($key === 0 && in_array($type, ['string', 'array'], true)) {
+            $acceptsMultipleValue = $parameterType === 'array';
+            if ($key === 0 && in_array($parameterType, ['string', 'array'], true)) {
                 // only string and array are allowed args
-                $arguments[] = new Argument($name, $type, $description);
+                $arguments[] = new Argument($parameterName, $parameterType, $description, $acceptsMultipleValue);
             } else {
-                $options[] = new Option($name, $type, $description);
+                $options[] = new Option($parameterName, $parameterType, $description, $acceptsMultipleValue);
             }
         }
 
