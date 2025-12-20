@@ -6,6 +6,7 @@ namespace Entropy\Tests\Console\ConsoleApplication;
 
 use Entropy\Console\ConsoleApplication;
 use Entropy\Console\Exception\InvalidCommandException;
+use Entropy\Console\Output\OutputPrinter;
 use Entropy\Container\Container;
 use Entropy\Tests\Console\ConsoleApplication\Fixture\SimpleCommand;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
@@ -27,7 +28,10 @@ final class ConsoleApplicationTest extends TestCase
     {
         $container = new Container(__DIR__);
 
-        $container->service(SimpleCommand::class, fn (): SimpleCommand => new SimpleCommand());
+        $container->service(
+            SimpleCommand::class, function (Container $container): SimpleCommand {
+            return new SimpleCommand($container->make(OutputPrinter::class));
+        });
 
         $container->make(ConsoleApplication::class);
     }

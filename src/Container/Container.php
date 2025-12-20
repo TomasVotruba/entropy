@@ -94,9 +94,8 @@ final class Container
                 : array_merge(array_slice($this->makingStack, $cycleStartIndex), [$class]);
 
             throw new CreateServiceException(sprintf(
-                'Circular dependency detected:%s"%s"',
-                PHP_EOL,
-                implode('" -> "', $cycle)
+                'Circular dependency detected: %s',
+                implode(' -> ', $cycle)
             ));
         }
 
