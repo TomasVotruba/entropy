@@ -11,11 +11,6 @@ use Entropy\Tests\FileSystem\FileFinder\FileFinderTest;
 final class FileFinder
 {
     /**
-     * @var string[]
-     */
-    private const array SOURCE_DIRECTORIES = ['app', 'src'];
-
-    /**
      * @api used in tests
      * @return string[]
      */
@@ -46,32 +41,5 @@ final class FileFinder
         }
 
         return $files;
-    }
-
-    /**
-     * @return string[]
-     */
-    private static function findSourceDirectories(string $directory): array
-    {
-        $sourceDirectories = [];
-
-        foreach (new \DirectoryIterator($directory) as $fileInfo) {
-            /** @var \DirectoryIterator $fileInfo */
-            if ($fileInfo->isDot()) {
-                continue;
-            }
-
-            if (! $fileInfo->isDir()) {
-                continue;
-            }
-
-            if (! in_array($fileInfo->getBasename(), self::SOURCE_DIRECTORIES, true)) {
-                continue;
-            }
-
-            $sourceDirectories[] = $fileInfo->getPathname();
-        }
-
-        return $sourceDirectories;
     }
 }

@@ -182,7 +182,7 @@ final class Container
     /**
      * @param \ReflectionParameter[] $reflectionParameters
      * @param class-string $class
-     * @return array<object>
+     * @return array<object|object[]>
      */
     private function resolveDependenciesFromParameterReflections(
         \ReflectionMethod $reflectionMethod,
@@ -207,15 +207,9 @@ final class Container
     {
         // warm up instances with registered service of contract
         foreach (array_keys($this->serviceFactories) as $class) {
-            dump($class);
-            dump($contractClass);
-            dump(is_a($class, $contractClass, true));
-
             if (! is_a($class, $contractClass, true)) {
                 continue;
             }
-
-            dump('match');
 
             if (isset($this->instances[$class])) {
                 continue;

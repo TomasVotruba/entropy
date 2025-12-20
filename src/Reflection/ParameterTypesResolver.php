@@ -29,13 +29,15 @@ final class ParameterTypesResolver
             $parameterType = $reflectionParameter->getType();
 
             if ($parameterType instanceof \ReflectionNamedType && ! $parameterType->isBuiltin()) {
-                $parameterTypes[] = $parameterType->getName();
+                /** @var class-string $parameterTypeClass */
+                $parameterTypeClass = $parameterType->getName();
+                $parameterTypes[] = $parameterTypeClass;
                 // skip default value as not required
             } elseif ($reflectionParameter->isDefaultValueAvailable()) {
                 continue;
             } else {
                 // try resolving array of class types via docblock
-                if ($reflectionParameter->getType()->getName() === 'array') {
+                if ($parameterType instanceof \ReflectionNamedType && (string) $reflectionParameter->getType() === 'array') {
                     $docComment = $reflectionMethod->getDocComment();
                     if ($docComment !== false) {
                         $pattern = sprintf('/@param\s+%s\[\]\s+\$%s/', '([\\\\\w]+)', $reflectionParameter->getName());
@@ -44,7 +46,7 @@ final class ParameterTypesResolver
                             $shortName = $matches[1];
                             $classReflection = $reflectionMethod->getDeclaringClass();
                             // match with "use ..." statements
-                            $uses = UseStatementsResolver::resolve($classReflection->getFileName());
+                            $uses = UseStatementsResolver::resolve((string) $classReflection->getFileName());
                             if (array_key_exists($shortName, $uses)) {
                                 $fullClassName = $uses[$shortName];
                             } else {
@@ -52,6 +54,7 @@ final class ParameterTypesResolver
                                 $fullClassName = $classReflection->getNamespaceName() . '\\' . $shortName;
                             }
 
+                            /** @var class-string $fullClassName */
                             $parameterTypes[] = [$fullClassName];
                             continue;
                         }
