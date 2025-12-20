@@ -42,7 +42,7 @@ final class CLIRequestMapper
         /** @var array<string, true> */
         $consumedOptionNames = [];
 
-        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
+        foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
             $name = $reflectionParameter->getName();
             $type = $reflectionParameter->getType();
 

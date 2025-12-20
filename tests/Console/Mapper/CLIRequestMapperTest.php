@@ -26,7 +26,7 @@ final class CLIRequestMapperTest extends TestCase
     {
         $cliRequest = new CLIRequest(
             'some',
-            arguments: ['/some/path'],
+            arguments: ['/some/path', '/another-path'],
             options: [
                 'flag' => true,
                 'count' => '5',
@@ -34,7 +34,7 @@ final class CLIRequestMapperTest extends TestCase
         );
 
         $arguments = $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
-        $this->assertSame([['/some/path'], true, 5], $arguments);
+        $this->assertSame([['/some/path', '/another-path'], true, 5], $arguments);
     }
 
     public function testMultipleArgs(): void
