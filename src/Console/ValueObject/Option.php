@@ -13,8 +13,10 @@ final readonly class Option
         private string $type,
         private ?string $description = null,
     ) {
-        $this->cliName = (string) preg_replace('/([a-z])([A-Z])/', '$1-$2', $name);
+        // handle camelCase to kebab-case conversion
+        $this->cliName = strtolower(preg_replace('/([a-z])([A-Z])/', '$1-$2', $name));
     }
+
 
     public function getName(): string
     {

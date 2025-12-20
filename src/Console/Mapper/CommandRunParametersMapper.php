@@ -34,6 +34,7 @@ final class CommandRunParametersMapper
 
             $name = $reflectionParameter->getName();
             $type = $parameterType->getName();
+
             $description = $paramDescriptions[$name] ?? null;
 
             // 1st param is argument by convention

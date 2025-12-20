@@ -50,14 +50,13 @@ final readonly class CommandHelpFactory
 
     private function formatParameterLine(Argument|Option $argumentOrOption): string
     {
-        $name = $argumentOrOption->getName();
-        $desc = trim((string) $argumentOrOption->getDescription());
+        $description = trim((string) $argumentOrOption->getDescription());
 
         $parameterLine = sprintf(
             '  <fg=green>%s%-22s</>  %s',
             $argumentOrOption instanceof Option ? '--' : '',
-            $name,
-            $desc
+            $argumentOrOption instanceof Option ? $argumentOrOption->getCliName() : '',
+            $description
         );
 
         return rtrim($parameterLine);

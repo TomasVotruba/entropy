@@ -19,9 +19,10 @@ final class AnotherCommand implements CommandInterface
     }
 
     /**
-     * @param bool $flag Enable extra features, this is a required option
+     * @param bool $hasFlag Enable extra features, this is a required option
+     * @param string[] $skip
      */
-    public function run(bool $flag): void
+    public function run(bool $hasFlag, array $skip = [], int $limit = 10): void
     {
     }
 }
