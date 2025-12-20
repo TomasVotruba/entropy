@@ -18,12 +18,5 @@ $container->service(
     }
 );
 
-//// @todo this should not be need, as another useless manual labour
-//$container->service(CommandRegistry::class, function (Container $container): CommandRegistry {
-//    $someCommand = $container->make(SimpleCommand::class);
-//
-//    return new CommandRegistry([$someCommand]);
-//});
-
 $consoleApplication = $container->make(ConsoleApplication::class);
 $consoleApplication->run($argv);

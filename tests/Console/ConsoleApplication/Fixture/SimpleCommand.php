@@ -26,7 +26,7 @@ final readonly class SimpleCommand implements CommandInterface
     }
 
     /**
-     * @param string[] $paths
+     * @param string[] $paths Paths to analyse.
      * @param bool $dryRun Show changes, but do not apply them.
      * @param string[] $skip List paths to skip.
      *
