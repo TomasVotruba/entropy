@@ -59,6 +59,14 @@ final class Container
     }
 
     /**
+     * Register service from directory
+     */
+    public function autodiscover(string $directory): void
+    {
+        // @todo
+    }
+
+    /**
      * @template TType as object
      *
      * @param class-string<TType> $class
@@ -117,7 +125,7 @@ final class Container
             $reflectionClass = new ReflectionClass($class);
 
             if ($reflectionClass->isInstantiable()) {
-                $instance = $this->createInstance($reflectionClass);
+                $instance = $this->createInstanceFromReflection($reflectionClass);
                 $this->instances[$class] = $instance;
 
                 return $instance;
@@ -195,7 +203,7 @@ final class Container
         }
     }
 
-    private function createInstance(ReflectionClass $reflectionClass): mixed
+    private function createInstanceFromReflection(ReflectionClass $reflectionClass): object
     {
         // try to create instance without reflectionParameters
         $constructor = $reflectionClass->getConstructor();

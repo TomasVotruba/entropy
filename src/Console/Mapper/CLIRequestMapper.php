@@ -8,11 +8,12 @@ use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Exception\ConsoleInputMappingException;
 use Entropy\Console\ValueObject\CLIRequest;
+use Entropy\Tests\Console\Mapper\CLIRequestMapperTest;
 use ReflectionNamedType;
 use ReflectionType;
 use Webmozart\Assert\Assert;
 
-#[RelatedTest(\Entropy\Tests\Console\Mapper\CLIRequestMapperTest::class)]
+#[RelatedTest(CLIRequestMapperTest::class)]
 final class CLIRequestMapper
 {
     /**
