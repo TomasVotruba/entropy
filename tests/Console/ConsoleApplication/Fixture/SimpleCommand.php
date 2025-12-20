@@ -36,6 +36,9 @@ final readonly class SimpleCommand implements CommandInterface
         dump($paths);
         dump($dryRun);
 
+        $this->outputPrinter->yellow('Yellow');
+        $this->outputPrinter->green('Green');
+
         $this->outputPrinter->greenBackground('Success');
         $this->outputPrinter->orangeBackground('Warning');
         $this->outputPrinter->redBackground('Failure');
