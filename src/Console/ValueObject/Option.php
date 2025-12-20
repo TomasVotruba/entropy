@@ -17,7 +17,6 @@ final readonly class Option
         $this->cliName = strtolower(preg_replace('/([a-z])([A-Z])/', '$1-$2', $name));
     }
 
-
     public function getName(): string
     {
         return $this->name;
