@@ -23,7 +23,6 @@ final class Terminal
         $stripped = preg_replace('#</?>|<(?:fg|bg)=(?:green|yellow|red|cyan|orange)>#', '', $text);
         $stripped ??= $text;
 
-        // if you might output UTF-8 (✔ etc.), prefer mb_strlen
-        return function_exists('mb_strlen') ? mb_strlen($stripped) : strlen($stripped);
+        return strlen($stripped);
     }
 }
