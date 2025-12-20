@@ -17,6 +17,7 @@ final class ParameterTypesResolverTest extends TestCase
         $reflectionMethod = new ReflectionMethod(SomeMethodWithTypes::class, 'run');
 
         $parameterObjectTypes = ParameterTypesResolver::resolve(
+            $reflectionMethod,
             $reflectionMethod->getParameters(),
             SomeMethodWithTypes::class
         );

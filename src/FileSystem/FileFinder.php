@@ -16,21 +16,6 @@ final class FileFinder
     private const array SOURCE_DIRECTORIES = ['app', 'src'];
 
     /**
-     * @return string[]
-     */
-    public static function findSourcePhpFiles(string $directory): array
-    {
-        $sourceDirectories = self::findSourceDirectories($directory);
-
-        $phpFiles = [];
-        foreach ($sourceDirectories as $sourceDirectory) {
-            $phpFiles = array_merge($phpFiles, self::findPhpFiles($sourceDirectory));
-        }
-
-        return $phpFiles;
-    }
-
-    /**
      * @api used in tests
      * @return string[]
      */
@@ -50,6 +35,10 @@ final class FileFinder
 
             /** @var \SplFileInfo $fileInfo */
             if (str_contains($fileInfo->getPathname(), 'vendor')) {
+                continue;
+            }
+
+            if (str_contains($fileInfo->getPathname(), '/ValueObject/')) {
                 continue;
             }
 

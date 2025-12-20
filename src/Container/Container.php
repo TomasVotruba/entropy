@@ -12,6 +12,7 @@ use Entropy\Container\Exception\RegisterServiceException;
 use Entropy\Reflection\ParameterTypesResolver;
 use Entropy\Tests\Container\Container\ContainerTest;
 use ReflectionClass;
+use Webmozart\Assert\Assert;
 
 #[RelatedTest(ContainerTest::class)]
 final class Container
@@ -19,7 +20,7 @@ final class Container
     /**
      * @var array<class-string, callable(Container): object>
      */
-    private array $services = [];
+    private array $serviceFactories = [];
 
     /**
      * @var array<class-string, object>
@@ -38,20 +39,17 @@ final class Container
      */
     private array $makingStack = [];
 
-    private string $projectDirectory;
-
     private bool $isAutodisovered = false;
 
-    public function __construct(?string $projectDirectory = null)
-    {
-        if ($projectDirectory === null) {
-            $currentDirectory = getcwd();
-            $this->projectDirectory = $currentDirectory;
-        } else {
-            $this->projectDirectory = $projectDirectory;
-        }
+    /**
+     * @var string[]
+     */
+    private array $autodiscoveryDirectories = [];
 
+    public function __construct()
+    {
         // setup default console service
+
         $this->service(CommandRegistry::class, function (Container $container): \Entropy\Console\CommandRegistry {
             $commands = $container->findByContract(CommandInterface::class);
             return new CommandRegistry($commands);
@@ -63,11 +61,28 @@ final class Container
      */
     public function autodiscover(string $directory): void
     {
-        $autodiscovery = new Autodiscovery();
-        $classNames = $autodiscovery->autodiscoverDirectory($directory);
+        // must be trigged on lazy call of findByContract, to make sure all services are registered
+        $this->autodiscoveryDirectories[] = $directory;
+    }
 
-        dump($classNames);
-        die;
+    private function autodiscoverDirectory(string $directory): void
+    {
+        Assert::directory($directory);
+
+        $autodiscovery = new Autodiscovery();
+        $serviceClassNames = $autodiscovery->autodiscoverDirectory($directory);
+
+        foreach ($serviceClassNames as $className) {
+            if (isset($this->instances[$className])) {
+                continue;
+            }
+
+            if (isset($this->serviceFactories[$className])) {
+                continue;
+            }
+
+            $this->instances[$className] = $this->make($className);
+        }
     }
 
     /**
@@ -78,12 +93,12 @@ final class Container
      */
     public function service(string $class, callable $factory): void
     {
-        if (isset($this->services[$class])) {
+        if (isset($this->serviceFactories[$class])) {
             // avoid service override
             throw new RegisterServiceException(sprintf('Service for "%s" class is already registered', $class));
         }
 
-        $this->services[$class] = $factory;
+        $this->serviceFactories[$class] = $factory;
     }
 
     /**
@@ -116,8 +131,8 @@ final class Container
 
         try {
             // factories / registered services
-            if (isset($this->services[$class])) {
-                $factory = $this->services[$class];
+            if (isset($this->serviceFactories[$class])) {
+                $factory = $this->serviceFactories[$class];
 
                 $instance = $factory($this);
                 $this->instances[$class] = $instance;
@@ -152,20 +167,11 @@ final class Container
     public function findByContract(string $contractClass): array
     {
         if (! $this->isAutodisovered) {
-            $autodiscovery = new Autodiscovery();
-
-            $autodiscoveredClasses = $autodiscovery->autodiscoverProjectClasses($this->projectDirectory);
+            foreach ($this->autodiscoveryDirectories as $autodiscoveryDirectory) {
+                $this->autodiscoverDirectory($autodiscoveryDirectory);
+            }
 
             $this->isAutodisovered = true;
-
-            foreach ($autodiscoveredClasses as $autodiscoveredClass) {
-                if (isset($this->instances[$autodiscoveredClass])) {
-                    continue;
-                }
-
-                // register if not yet
-                $this->instances[$autodiscoveredClass] = $this->make($autodiscoveredClass);
-            }
         }
 
         $this->warmUpInstanceServices($contractClass);
@@ -178,13 +184,17 @@ final class Container
      * @param class-string $class
      * @return array<object>
      */
-    private function resolveDependenciesFromParameterReflections(array $reflectionParameters, string $class): array
+    private function resolveDependenciesFromParameterReflections(\ReflectionMethod $reflectionMethod, array $reflectionParameters, string $class): array
     {
-        $parameterTypes = ParameterTypesResolver::resolve($reflectionParameters, $class);
+        $parameterTypes = ParameterTypesResolver::resolve($reflectionMethod, $reflectionParameters, $class);
 
         $dependencies = [];
         foreach ($parameterTypes as $parameterType) {
-            $dependencies[] = $this->make($parameterType);
+            if (is_array($parameterType)) {
+                $dependencies[] = $this->findByContract($parameterType[0]);
+            } else {
+                $dependencies[] = $this->make($parameterType);
+            }
         }
 
         return $dependencies;
@@ -193,32 +203,38 @@ final class Container
     private function warmUpInstanceServices(string $contractClass): void
     {
         // warm up instances with registered service of contract
-        foreach (array_keys($this->services) as $class) {
+        foreach (array_keys($this->serviceFactories) as $class) {
+            dump($class);
+            dump($contractClass);
+            dump(is_a($class, $contractClass, true));
+
             if (! is_a($class, $contractClass, true)) {
                 continue;
             }
+
+            dump('match');
 
             if (isset($this->instances[$class])) {
                 continue;
             }
 
             // warm up cache if not yet
-            $this->make($class);
+            $this->instances[$class] = $this->make($class);
         }
     }
 
     private function createInstanceFromReflection(ReflectionClass $reflectionClass): object
     {
         // try to create instance without reflectionParameters
-        $constructor = $reflectionClass->getConstructor();
-        if ($constructor === null || $constructor->getNumberOfParameters() === 0) {
+        $constructorReflection = $reflectionClass->getConstructor();
+        if ($constructorReflection === null || $constructorReflection->getNumberOfParameters() === 0) {
             $className = $reflectionClass->getName();
             return new $className();
         }
 
         // try to resolve dependencies
-        $parameters = $constructor->getParameters();
-        $dependencies = $this->resolveDependenciesFromParameterReflections($parameters, $reflectionClass->getName());
+        $parameters = $constructorReflection->getParameters();
+        $dependencies = $this->resolveDependenciesFromParameterReflections($constructorReflection, $parameters, $reflectionClass->getName());
 
         // create instance with resolved dependencies
         return $reflectionClass->newInstanceArgs($dependencies);

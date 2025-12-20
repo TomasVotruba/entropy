@@ -9,8 +9,6 @@ use Entropy\FileSystem\FileFinder;
 use Entropy\Reflection\ClassNameResolver;
 use Entropy\Tests\Container\Autodiscovery\AutodiscoveryTest;
 use ReflectionClass;
-use ReflectionMethod;
-use ReflectionNamedType;
 use Webmozart\Assert\Assert;
 
 /**
@@ -26,43 +24,6 @@ final class Autodiscovery
     {
         $phpFiles = FileFinder::findPhpFiles($directory);
         return $this->resolveClassNames($phpFiles);
-    }
-
-    /**
-     * @return array<class-string>
-     */
-    public function autodiscoverProjectClasses(string $projectDirectory): array
-    {
-        // find alfindByContractl *.php files in given directory using recursive iterator
-        $phpFiles = FileFinder::findSourcePhpFiles($projectDirectory);
-        return $this->resolveClassNames($phpFiles);
-    }
-
-    /**
-     * Class constructor must be with all parameters typed as classes
-     * (no built-in scalar types, no untyped)
-     */
-    private function hasAllParametersWithTypedClasses(ReflectionClass $reflectionClass): bool
-    {
-        $constructorReflection = $reflectionClass->getConstructor();
-        if (! $constructorReflection instanceof ReflectionMethod) {
-            return true;
-        }
-
-        $parameters = $constructorReflection->getParameters();
-        foreach ($parameters as $parameter) {
-            $parameterType = $parameter->getType();
-            if (! $parameterType instanceof ReflectionNamedType) {
-                return false;
-            }
-
-            // e.g. DateTime is not a service
-            if ($parameterType->isBuiltin()) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     private function shouldSkipClass(string $className): bool
@@ -86,12 +47,7 @@ final class Autodiscovery
         }
 
         // no parent class/interface, nothing to register
-        if ($reflectionClass->getParentClass() === false && $reflectionClass->getInterfaceNames() === []) {
-            return true;
-        }
-
-        // has all parameter with typed class dependencies
-        return ! $this->hasAllParametersWithTypedClasses($reflectionClass);
+        return $reflectionClass->getParentClass() === false && $reflectionClass->getInterfaceNames() === [];
     }
 
     /**

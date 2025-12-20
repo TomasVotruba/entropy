@@ -8,7 +8,7 @@ use App\Project\Command\OtherCommand;
 use App\Project\Contract\CommandInterface;
 use App\Project\Contract\ServiceTypeInterface;
 use App\Project\Contract\SomeContract;
-use App\Project\SomeApplication;
+use Entropy\Console\CommandRegistry;
 use Entropy\Container\Container;
 use PHPUnit\Framework\TestCase;
 
@@ -16,11 +16,8 @@ final class AutodiscoveryTest extends TestCase
 {
     public function testContractAutodiscovery(): void
     {
-        // find all by types without registration
-        // trigger on findAllByType() ...
-        // scan through src/app directories and register services automatically :)
-
-        $container = new Container(__DIR__ . '/Fixture/project-directory');
+        $container = new Container();
+        $container->autodiscover(__DIR__ . '/Fixture/project-directory');
 
         $commands = $container->findByContract(CommandInterface::class);
         $this->assertCount(1, $commands);
@@ -30,7 +27,7 @@ final class AutodiscoveryTest extends TestCase
 
     public function testSkipValueObjects(): void
     {
-        $container = new Container(__DIR__ . '/Fixture/project-with-value-objects');
+        $container = new Container();
         $someContracts = $container->findByContract(SomeContract::class);
 
         $this->assertCount(0, $someContracts);
@@ -38,20 +35,18 @@ final class AutodiscoveryTest extends TestCase
 
     public function testUseRegisteredService(): void
     {
-        $container = new Container(__DIR__ . '/Fixture/project-with-value-objects');
+        $container = new Container();
+        $container->autodiscover(__DIR__ . '/Fixture/project-with-value-objects/src/ServiceType');
+        $container->autodiscover(__DIR__ . '/Fixture/project-with-value-objects/src/Command');
 
+        // @todo enable autowire of param by type[] docblock
         $container->service(OtherCommand::class, function (Container $container): OtherCommand {
             $serviceTypes = $container->findByContract(ServiceTypeInterface::class);
             return new OtherCommand($serviceTypes);
         });
 
-        $container->service(SomeApplication::class, function (Container $container): SomeApplication {
-            $commands = $container->findByContract(CommandInterface::class);
-            return new SomeApplication($commands);
-        });
-
         // here the command should be present, as we registered it above
-        $someApplication = $container->make(SomeApplication::class);
-        $this->assertCount(1, $someApplication->getCommands());
+        $commandRegistry = $container->make(CommandRegistry::class);
+        $this->assertCount(1, $commandRegistry->all());
     }
 }
