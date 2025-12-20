@@ -97,7 +97,7 @@ final class Autodiscovery
     /**
      * @param string[] $phpFiles
      *
-     * @return string[]
+     * @return array<class-string>
      */
     private function resolveClassNames(array $phpFiles): array
     {
