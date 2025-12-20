@@ -52,7 +52,7 @@ final class CommandRunParametersMapper
 
             // first param can be an arg by convention, only "string" and "array" are allowed types
             if ($key === 0 && in_array($parameterType, ['string', 'array'], true)) {
-                $arguments[] = new Argument($parameterName, $parameterType, $description, $acceptsMultipleValue);
+                $arguments[] = new Argument($parameterName, $description, $acceptsMultipleValue);
             } else {
                 $options[] = new Option(
                     $parameterName,

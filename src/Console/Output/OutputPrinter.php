@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Entropy\Console\Output;
 
+/**
+ * @api used in many ways
+ */
 final readonly class OutputPrinter
 {
     private bool $useColors;
