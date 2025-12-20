@@ -64,12 +64,19 @@ final readonly class CommandHelpFactory
     private function nameWithDefaultValue(Option|Argument $argumentOrOption): string
     {
         if ($argumentOrOption instanceof Option) {
+            $contents = '--' . $argumentOrOption->getCliName();
+
+
             $defaultValue = $argumentOrOption->getDefaultValue();
             if ($defaultValue !== null) {
-                return sprintf('%s </><fg=yellow>=[%s]', '--' . $argumentOrOption->getCliName(), $defaultValue);
+                $contents .= sprintf('</><fg=yellow>=[%s]', $defaultValue);
             }
-            return '--' . $argumentOrOption->getCliName();
 
+            if ($argumentOrOption->doesAcceptMultipleValues()) {
+                $contents .= ' </><fg=yellow>(many)</>';
+            }
+
+            return $contents;
         }
 
         return $argumentOrOption->getName();
