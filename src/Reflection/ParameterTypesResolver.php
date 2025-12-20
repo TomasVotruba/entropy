@@ -8,7 +8,6 @@ use Entropy\Attributes\RelatedTest;
 use Entropy\Container\Exception\CreateServiceException;
 use Entropy\Tests\Reflection\ParameterTypesResolver\ParameterTypesResolverTest;
 use ReflectionParameter;
-use Webmozart\Assert\Assert;
 
 #[RelatedTest(ParameterTypesResolverTest::class)]
 final class ParameterTypesResolver
@@ -19,8 +18,11 @@ final class ParameterTypesResolver
      *
      * @return array<class-string|class-string[]>
      */
-    public static function resolve(\ReflectionMethod $reflectionMethod, array $reflectionParameters, string $class): array
-    {
+    public static function resolve(
+        \ReflectionMethod $reflectionMethod,
+        array $reflectionParameters,
+        string $class
+    ): array {
         $parameterTypes = [];
 
         foreach ($reflectionParameters as $reflectionParameter) {
@@ -40,7 +42,7 @@ final class ParameterTypesResolver
                         if (preg_match($pattern, $docComment, $matches) === 1) {
                             // nested parameter types
                             $shortName = $matches[1];
-                            $classReflection =$reflectionMethod->getDeclaringClass();
+                            $classReflection = $reflectionMethod->getDeclaringClass();
                             // match with "use ..." statements
                             $uses = UseStatementsResolver::resolve($classReflection->getFileName());
                             if (array_key_exists($shortName, $uses)) {

@@ -65,26 +65,6 @@ final class Container
         $this->autodiscoveryDirectories[] = $directory;
     }
 
-    private function autodiscoverDirectory(string $directory): void
-    {
-        Assert::directory($directory);
-
-        $autodiscovery = new Autodiscovery();
-        $serviceClassNames = $autodiscovery->autodiscoverDirectory($directory);
-
-        foreach ($serviceClassNames as $className) {
-            if (isset($this->instances[$className])) {
-                continue;
-            }
-
-            if (isset($this->serviceFactories[$className])) {
-                continue;
-            }
-
-            $this->instances[$className] = $this->make($className);
-        }
-    }
-
     /**
      * @template TType as object
      *
@@ -179,13 +159,36 @@ final class Container
         return array_filter($this->instances, fn (object $instance): bool => $instance instanceof $contractClass);
     }
 
+    private function autodiscoverDirectory(string $directory): void
+    {
+        Assert::directory($directory);
+
+        $autodiscovery = new Autodiscovery();
+        $serviceClassNames = $autodiscovery->autodiscoverDirectory($directory);
+
+        foreach ($serviceClassNames as $className) {
+            if (isset($this->instances[$className])) {
+                continue;
+            }
+
+            if (isset($this->serviceFactories[$className])) {
+                continue;
+            }
+
+            $this->instances[$className] = $this->make($className);
+        }
+    }
+
     /**
      * @param \ReflectionParameter[] $reflectionParameters
      * @param class-string $class
      * @return array<object>
      */
-    private function resolveDependenciesFromParameterReflections(\ReflectionMethod $reflectionMethod, array $reflectionParameters, string $class): array
-    {
+    private function resolveDependenciesFromParameterReflections(
+        \ReflectionMethod $reflectionMethod,
+        array $reflectionParameters,
+        string $class
+    ): array {
         $parameterTypes = ParameterTypesResolver::resolve($reflectionMethod, $reflectionParameters, $class);
 
         $dependencies = [];
@@ -234,7 +237,11 @@ final class Container
 
         // try to resolve dependencies
         $parameters = $constructorReflection->getParameters();
-        $dependencies = $this->resolveDependenciesFromParameterReflections($constructorReflection, $parameters, $reflectionClass->getName());
+        $dependencies = $this->resolveDependenciesFromParameterReflections(
+            $constructorReflection,
+            $parameters,
+            $reflectionClass->getName()
+        );
 
         // create instance with resolved dependencies
         return $reflectionClass->newInstanceArgs($dependencies);
