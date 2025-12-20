@@ -10,6 +10,7 @@ use Entropy\Console\Exception\ConsoleInputMappingException;
 use Entropy\Console\ValueObject\CLIRequest;
 use Entropy\Tests\Console\Mapper\CLIRequestMapperTest;
 use ReflectionNamedType;
+use ReflectionParameter;
 use ReflectionType;
 use Webmozart\Assert\Assert;
 
@@ -42,7 +43,7 @@ final class CLIRequestMapper
         /** @var array<string, true> */
         $consumedOptionNames = [];
 
-        foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
+        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
             $name = $reflectionParameter->getName();
             $type = $reflectionParameter->getType();
 
@@ -51,26 +52,72 @@ final class CLIRequestMapper
             // option name: dryRun → dry-run
             $optionName = $this->camelToKebab($name);
 
+            // 1) Options always win (if present)
             if (array_key_exists($optionName, $options)) {
                 $value = $cliRequest->option($optionName);
                 $consumedOptionNames[$optionName] = true;
-            } elseif (! $isBool && isset($positionals[$positionIndex])) {
-                $value = $positionals[$positionIndex++];
-            } elseif ($reflectionParameter->isDefaultValueAvailable()) {
-                $value = $reflectionParameter->getDefaultValue();
-            } elseif ($isBool) {
-                // bool flag missing => false (not required)
-                $value = false;
-            } else {
-                // Required parameter missing: tell user the expected option name too
-                throw new ConsoleInputMappingException(sprintf(
-                    'Missing required value for "%s" (use "--%s" to provide it)',
-                    $name,
-                    $optionName,
-                ));
+
+                $args[] = $this->castValueByParameterType($value, $type);
+                continue;
             }
 
-            $args[] = $this->castValueByParameterType($value, $type);
+            // 2) Variadic param: consume all remaining positionals as separate arguments
+            if ($reflectionParameter->isVariadic()) {
+                $remaining = array_slice($positionals, $positionIndex);
+                $positionIndex = count($positionals);
+
+                foreach ($remaining as $remainingValue) {
+                    $args[] = $this->castValueByParameterType($remainingValue, $type);
+                }
+
+                continue;
+            }
+
+            // 3) array-typed param: consume all remaining positionals into a single array argument
+            if ($this->isArrayType($reflectionParameter, $type)) {
+                $remaining = array_slice($positionals, $positionIndex);
+                $positionIndex = count($positionals);
+
+                // keep as array, but still run through cast for consistency
+                $args[] = $this->castValueByParameterType($remaining, $type);
+                continue;
+            }
+
+            // 4) Single positional
+            if (! $isBool && isset($positionals[$positionIndex])) {
+                $value = $positionals[$positionIndex++];
+                $args[] = $this->castValueByParameterType($value, $type);
+                continue;
+            }
+
+            // 5) Default / bool fallback / required missing
+            if ($reflectionParameter->isDefaultValueAvailable()) {
+                $value = $reflectionParameter->getDefaultValue();
+                $args[] = $this->castValueByParameterType($value, $type);
+                continue;
+            }
+
+            if ($isBool) {
+                $args[] = false;
+                continue;
+            }
+
+            throw new ConsoleInputMappingException(sprintf(
+                'Missing required value for "%s" (use "--%s" to provide it)',
+                $name,
+                $optionName,
+            ));
+        }
+
+        // 1b) If user passed extra positionals and there was no array/variadic param to collect them, fail loudly
+        if ($positionIndex < count($positionals)) {
+            $extra = array_slice($positionals, $positionIndex);
+
+            throw new ConsoleInputMappingException(sprintf(
+                'Unknown argument%s: %s (tip: use a trailing "array $values" or a variadic "...$values" parameter to collect multiple values)',
+                count($extra) > 1 ? 's' : '',
+                implode(', ', array_map(static fn (string $v): string => '"' . $v . '"', $extra)),
+            ));
         }
 
         // 2) Extra options (unknown to run() signature) - ignore global ones
@@ -93,6 +140,16 @@ final class CLIRequestMapper
     private function camelToKebab(string $name): string
     {
         return strtolower((string) preg_replace('/[A-Z]/', '-$0', $name));
+    }
+
+    private function isArrayType(ReflectionParameter $reflectionParameter, ?ReflectionType $reflectionType): bool
+    {
+        // variadic is handled separately; here we only mean "one param that receives many values"
+        if ($reflectionParameter->isVariadic()) {
+            return false;
+        }
+
+        return $reflectionType instanceof ReflectionNamedType && $reflectionType->getName() === 'array';
     }
 
     private function castValueByParameterType(mixed $value, ?ReflectionType $reflectionType): mixed
