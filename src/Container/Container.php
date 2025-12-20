@@ -27,11 +27,13 @@ final class Container
     private array $instances = [];
 
     /**
+     * Detects circular dependencies
      * @var array<class-string, true>
      */
     private array $making = [];
 
     /**
+     * Detects circular dependencies
      * @var list<class-string>
      */
     private array $makingStack = [];
