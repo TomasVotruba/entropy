@@ -50,8 +50,8 @@ HELP
 
 <fg=yellow>Options:</>
   <fg=green>--has-flag            </>  Enable extra features, this is a required option
-  <fg=green>--skip (many)         </>
-  <fg=green>--limit </><fg=yellow>=[10]</>
+  <fg=green>--skip</> <fg=yellow>(many)</>
+  <fg=green>--limit</><fg=yellow>=[10]</>
 
 HELP
             , $helpDescription);

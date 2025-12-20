@@ -73,7 +73,7 @@ final readonly class CommandHelpFactory
             }
 
             if ($argumentOrOption->doesAcceptMultipleValues()) {
-                $contents .= ' </><fg=yellow>(many)</>';
+                $contents .= '</> <fg=yellow>(many)';
             }
 
             return $contents;
