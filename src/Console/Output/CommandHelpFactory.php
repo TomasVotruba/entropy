@@ -64,8 +64,6 @@ final readonly class CommandHelpFactory
         return rtrim($parameterLine);
     }
 
-
-
     private function nameWithDefaultValue(Option|Argument $argumentOrOption): string
     {
         if ($argumentOrOption instanceof Option) {
