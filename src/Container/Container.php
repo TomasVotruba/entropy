@@ -166,16 +166,16 @@ final class Container
         $autodiscovery = new Autodiscovery();
         $serviceClassNames = $autodiscovery->autodiscoverDirectory($directory);
 
-        foreach ($serviceClassNames as $className) {
-            if (isset($this->instances[$className])) {
+        foreach ($serviceClassNames as $serviceClassName) {
+            if (isset($this->instances[$serviceClassName])) {
                 continue;
             }
 
-            if (isset($this->serviceFactories[$className])) {
+            if (isset($this->serviceFactories[$serviceClassName])) {
                 continue;
             }
 
-            $this->instances[$className] = $this->make($className);
+            $this->instances[$serviceClassName] = $this->make($serviceClassName);
         }
     }
 
@@ -193,11 +193,7 @@ final class Container
 
         $dependencies = [];
         foreach ($parameterTypes as $parameterType) {
-            if (is_array($parameterType)) {
-                $dependencies[] = $this->findByContract($parameterType[0]);
-            } else {
-                $dependencies[] = $this->make($parameterType);
-            }
+            $dependencies[] = is_array($parameterType) ? $this->findByContract($parameterType[0]) : $this->make($parameterType);
         }
 
         return $dependencies;
