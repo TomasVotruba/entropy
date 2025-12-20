@@ -12,12 +12,18 @@ use PHPUnit\Framework\TestCase;
 
 final class CommandHelpFactoryTest extends TestCase
 {
-    public function testBasic(): void
+    private CommandHelpFactory $commandHelpFactory;
+
+    protected function setUp(): void
     {
         $container = new Container();
-        $commandHelpPrinter = $container->make(CommandHelpFactory::class);
 
-        $helpDescription = $commandHelpPrinter->build(new SomeCommand());
+        $this->commandHelpFactory = $container->make(CommandHelpFactory::class);
+    }
+
+    public function testBasic(): void
+    {
+        $helpDescription = $this->commandHelpFactory->build(new SomeCommand());
 
         // show description of options
 
@@ -37,10 +43,7 @@ HELP
 
     public function testOptions(): void
     {
-        $container = new Container();
-        $commandHelpPrinter = $container->make(CommandHelpFactory::class);
-
-        $helpDescription = $commandHelpPrinter->build(new AnotherCommand());
+        $helpDescription = $this-> commandHelpFactory->build(new AnotherCommand());
 
         $this->assertSame(<<<HELP
   Command description
@@ -52,6 +55,5 @@ HELP
 
 HELP
             , $helpDescription);
-
     }
 }
