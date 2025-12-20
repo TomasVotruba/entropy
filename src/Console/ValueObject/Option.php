@@ -10,7 +10,6 @@ final readonly class Option
 
     public function __construct(
         string $name,
-        private string $type,
         private ?string $description = null,
         private bool $acceptsMultipleValues = false,
         private string|bool|int|null $defaultValue = null,

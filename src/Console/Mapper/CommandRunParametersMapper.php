@@ -56,7 +56,6 @@ final class CommandRunParametersMapper
             } else {
                 $options[] = new Option(
                     $parameterName,
-                    $parameterType,
                     $description,
                     $acceptsMultipleValue,
                     $defaultValue
