@@ -25,8 +25,8 @@ final readonly class HelpPrinter
         $firstColumnWith = max(self::MIN_WIDTH, $maxCommandNameLength) + 3;
 
         foreach ($this->commandRegistry->all() as $command) {
-            $name = str_pad($command->getName(), $firstColumnWith);
-            $this->outputPrinter->writeln(sprintf('  <fg=green>%s</>  %s', $name, $command->getDescription()));
+            $commandName = str_pad($command->getName(), $firstColumnWith);
+            $this->outputPrinter->writeln(sprintf('  <fg=green>%s</>  %s', $commandName, $command->getDescription()));
         }
 
         $this->outputPrinter->newline();

@@ -39,7 +39,7 @@ final readonly class Option
         return $this->description;
     }
 
-    public function getDefaultValue(): ?string
+    public function getDefaultValue(): int|string|bool|null
     {
         return $this->defaultValue;
     }
