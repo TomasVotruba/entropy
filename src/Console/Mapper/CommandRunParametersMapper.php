@@ -54,7 +54,13 @@ final class CommandRunParametersMapper
             if ($key === 0 && in_array($parameterType, ['string', 'array'], true)) {
                 $arguments[] = new Argument($parameterName, $description, $acceptsMultipleValue);
             } else {
-                $options[] = new Option($parameterName, $parameterType, $description, $acceptsMultipleValue, $defaultValue);
+                $options[] = new Option(
+                    $parameterName,
+                    $parameterType,
+                    $description,
+                    $acceptsMultipleValue,
+                    $defaultValue
+                );
             }
         }
 
