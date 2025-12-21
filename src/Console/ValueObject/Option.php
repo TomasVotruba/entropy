@@ -10,6 +10,7 @@ final readonly class Option
 
     public function __construct(
         string $name,
+        private string $type,
         private ?string $description = null,
         private bool $acceptsMultipleValues = false,
         private string|bool|int|null $defaultValue = null,
@@ -36,5 +37,10 @@ final readonly class Option
     public function doesAcceptMultipleValues(): bool
     {
         return $this->acceptsMultipleValues;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
     }
 }

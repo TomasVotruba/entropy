@@ -77,6 +77,8 @@ final readonly class CommandHelpFactory
                 }
 
                 $contents .= sprintf('</><fg=yellow>=[%s]', $defaultValue);
+            } elseif ($argumentOrOption->getType() === 'array') {
+                $contents .= '</><fg=yellow>=""';
             }
 
         } else {
