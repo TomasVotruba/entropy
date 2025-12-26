@@ -84,7 +84,7 @@ final class CLIRequestMapperTest extends TestCase
         );
 
         $this->expectException(ConsoleInputMappingException::class);
-        $this->expectExceptionMessage('Missing argument for "path"');
+        $this->expectExceptionMessage('Missing required "path" argument');
 
         $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
 
