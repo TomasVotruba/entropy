@@ -75,6 +75,10 @@ final class CLIRequestMapper
 
             // 3) array-typed param: consume all remaining positionals into a single array argument
             if ($this->isArrayType($reflectionParameter, $type)) {
+                if ($key === 0 && in_array($reflectionParameter->getType()->getName(), ['string', 'array'])) {
+                    throw new ConsoleInputMappingException(sprintf('Missing required %s argument', $name));
+                }
+
                 $remaining = array_slice($positionals, $positionIndex);
                 $positionIndex = count($positionals);
 
@@ -100,11 +104,6 @@ final class CLIRequestMapper
             if ($isBool) {
                 $args[] = false;
                 continue;
-            }
-
-            if ($key === 0 && in_array($reflectionParameter->getType()->getName(), ['string', 'array'])) {
-                dump('missing arg');
-                die;
             }
 
             throw new ConsoleInputMappingException(sprintf(

@@ -76,8 +76,7 @@ final class CLIRequestMapperTest extends TestCase
     {
         $cliRequest = new CLIRequest(
             'some',
-            arguments: [
-            ],
+            arguments: [],
             options: [
                 'count' => '10',
                 'flag' => true,
