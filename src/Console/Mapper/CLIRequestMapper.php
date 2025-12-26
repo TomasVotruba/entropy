@@ -43,7 +43,7 @@ final class CLIRequestMapper
         /** @var array<string, true> */
         $consumedOptionNames = [];
 
-        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
+        foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
             $name = $reflectionParameter->getName();
             $type = $reflectionParameter->getType();
 
@@ -100,6 +100,11 @@ final class CLIRequestMapper
             if ($isBool) {
                 $args[] = false;
                 continue;
+            }
+
+            if ($key === 0 && in_array($reflectionParameter->getType()->getName(), ['string', 'array'])) {
+                dump('missing arg');
+                die;
             }
 
             throw new ConsoleInputMappingException(sprintf(
