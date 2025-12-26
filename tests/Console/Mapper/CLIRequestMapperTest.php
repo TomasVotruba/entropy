@@ -71,4 +71,23 @@ final class CLIRequestMapperTest extends TestCase
         $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
 
     }
+
+    public function testMissingArgument(): void
+    {
+        $cliRequest = new CLIRequest(
+            'some',
+            arguments: [
+            ],
+            options: [
+                'count' => '10',
+                'flag' => true,
+            ]
+        );
+
+        $this->expectException(ConsoleInputMappingException::class);
+        $this->expectExceptionMessage('Missing argument for "path"');
+
+        $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
+
+    }
 }
