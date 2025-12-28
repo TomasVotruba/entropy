@@ -147,13 +147,13 @@ final class Container
      */
     public function findByContract(string $contractClass): array
     {
-//        if (! $this->isAutodisovered) {
-//            foreach ($this->autodiscoveryDirectories as $autodiscoveryDirectory) {
-//                $this->autodiscoverDirectory($autodiscoveryDirectory);
-//            }
-//
-//            $this->isAutodisovered = true;
-//        }
+        //        if (! $this->isAutodisovered) {
+        //            foreach ($this->autodiscoveryDirectories as $autodiscoveryDirectory) {
+        //                $this->autodiscoverDirectory($autodiscoveryDirectory);
+        //            }
+        //
+        //            $this->isAutodisovered = true;
+        //        }
 
         $this->warmUpInstanceServices($contractClass);
 
@@ -179,7 +179,9 @@ final class Container
             }
 
             // lazy factory
-            $this->serviceFactories[$serviceClassName] = function (Container $container) use ($serviceClassName): object {
+            $this->serviceFactories[$serviceClassName] = function (Container $container) use (
+                $serviceClassName
+            ): object {
                 $classReflection = new ReflectionClass($serviceClassName);
                 return $this->createInstanceFromReflection($classReflection);
             };
