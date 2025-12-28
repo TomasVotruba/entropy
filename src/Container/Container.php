@@ -49,7 +49,6 @@ final class Container
     public function __construct()
     {
         // setup default console service
-
         $this->service(CommandRegistry::class, function (Container $container): \Entropy\Console\CommandRegistry {
             $commands = $container->findByContract(CommandInterface::class);
             return new CommandRegistry($commands);
@@ -63,6 +62,8 @@ final class Container
     {
         // must be trigged on lazy call of findByContract, to make sure all services are registered
         $this->autodiscoveryDirectories[] = $directory;
+
+        $this->autodiscoverDirectory($directory);
     }
 
     /**
@@ -146,13 +147,13 @@ final class Container
      */
     public function findByContract(string $contractClass): array
     {
-        if (! $this->isAutodisovered) {
-            foreach ($this->autodiscoveryDirectories as $autodiscoveryDirectory) {
-                $this->autodiscoverDirectory($autodiscoveryDirectory);
-            }
-
-            $this->isAutodisovered = true;
-        }
+//        if (! $this->isAutodisovered) {
+//            foreach ($this->autodiscoveryDirectories as $autodiscoveryDirectory) {
+//                $this->autodiscoverDirectory($autodiscoveryDirectory);
+//            }
+//
+//            $this->isAutodisovered = true;
+//        }
 
         $this->warmUpInstanceServices($contractClass);
 
@@ -167,15 +168,21 @@ final class Container
         $serviceClassNames = $autodiscovery->autodiscoverDirectory($directory);
 
         foreach ($serviceClassNames as $serviceClassName) {
+            // already instantiated
             if (isset($this->instances[$serviceClassName])) {
                 continue;
             }
 
+            // already registered as service
             if (isset($this->serviceFactories[$serviceClassName])) {
                 continue;
             }
 
-            $this->instances[$serviceClassName] = $this->make($serviceClassName);
+            // lazy factory
+            $this->serviceFactories[$serviceClassName] = function (Container $container) use ($serviceClassName): object {
+                $classReflection = new ReflectionClass($serviceClassName);
+                return $this->createInstanceFromReflection($classReflection);
+            };
         }
     }
 

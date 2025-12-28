@@ -25,7 +25,6 @@ final class AutodiscoveryTest extends TestCase
     {
         $container = new Container();
         $container->autodiscover(__DIR__ . '/Fixture/project-with-value-objects/src/ServiceType');
-        $container->autodiscover(__DIR__ . '/Fixture/project-with-value-objects/src/Command');
 
         // @todo enable autowire of param by type[] docblock
         $container->service(OtherCommand::class, function (Container $container): OtherCommand {
