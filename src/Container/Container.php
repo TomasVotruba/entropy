@@ -39,13 +39,6 @@ final class Container
      */
     private array $makingStack = [];
 
-    private bool $isAutodisovered = false;
-
-    /**
-     * @var string[]
-     */
-    private array $autodiscoveryDirectories = [];
-
     public function __construct()
     {
         // setup default console service
@@ -60,10 +53,30 @@ final class Container
      */
     public function autodiscover(string $directory): void
     {
-        // must be trigged on lazy call of findByContract, to make sure all services are registered
-        $this->autodiscoveryDirectories[] = $directory;
+        Assert::directory($directory);
 
-        $this->autodiscoverDirectory($directory);
+        $autodiscovery = new Autodiscovery();
+        $serviceClassNames = $autodiscovery->autodiscoverDirectory($directory);
+
+        foreach ($serviceClassNames as $serviceClassName) {
+            // already instantiated
+            if (isset($this->instances[$serviceClassName])) {
+                continue;
+            }
+
+            // already registered as service
+            if (isset($this->serviceFactories[$serviceClassName])) {
+                continue;
+            }
+
+            // lazy factory
+            $this->serviceFactories[$serviceClassName] = function (Container $container) use (
+                $serviceClassName
+            ): object {
+                $classReflection = new ReflectionClass($serviceClassName);
+                return $this->createInstanceFromReflection($classReflection);
+            };
+        }
     }
 
     /**
@@ -147,45 +160,9 @@ final class Container
      */
     public function findByContract(string $contractClass): array
     {
-        //        if (! $this->isAutodisovered) {
-        //            foreach ($this->autodiscoveryDirectories as $autodiscoveryDirectory) {
-        //                $this->autodiscoverDirectory($autodiscoveryDirectory);
-        //            }
-        //
-        //            $this->isAutodisovered = true;
-        //        }
-
         $this->warmUpInstanceServices($contractClass);
 
         return array_filter($this->instances, fn (object $instance): bool => $instance instanceof $contractClass);
-    }
-
-    private function autodiscoverDirectory(string $directory): void
-    {
-        Assert::directory($directory);
-
-        $autodiscovery = new Autodiscovery();
-        $serviceClassNames = $autodiscovery->autodiscoverDirectory($directory);
-
-        foreach ($serviceClassNames as $serviceClassName) {
-            // already instantiated
-            if (isset($this->instances[$serviceClassName])) {
-                continue;
-            }
-
-            // already registered as service
-            if (isset($this->serviceFactories[$serviceClassName])) {
-                continue;
-            }
-
-            // lazy factory
-            $this->serviceFactories[$serviceClassName] = function (Container $container) use (
-                $serviceClassName
-            ): object {
-                $classReflection = new ReflectionClass($serviceClassName);
-                return $this->createInstanceFromReflection($classReflection);
-            };
-        }
     }
 
     /**
