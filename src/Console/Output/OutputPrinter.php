@@ -125,7 +125,7 @@ final readonly class OutputPrinter
         $matches = [];
 
         // foreground colors: <fg=green>text</>
-        if (preg_match_all('/<fg=(green|yellow|red|cyan)>(.*?)<\/>/', $text, $matches, PREG_SET_ORDER)) {
+        if (preg_match_all('~<fg=(green|yellow|red|cyan)>(.*?)</>~su', $text, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 $text = str_replace($match[0], $this->color($match[2], $match[1]), $text);
             }
