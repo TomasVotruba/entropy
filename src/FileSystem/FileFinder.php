@@ -6,6 +6,7 @@ namespace Entropy\FileSystem;
 
 use Entropy\Attributes\RelatedTest;
 use Entropy\Tests\FileSystem\FileFinder\FileFinderTest;
+use SplFileInfo;
 
 #[RelatedTest(FileFinderTest::class)]
 final class FileFinder
@@ -28,12 +29,7 @@ final class FileFinder
                 continue;
             }
 
-            /** @var \SplFileInfo $fileInfo */
-            if (str_contains($fileInfo->getPathname(), 'vendor')) {
-                continue;
-            }
-
-            if (str_contains($fileInfo->getPathname(), '/ValueObject/')) {
+            if (self::isNonService($fileInfo)) {
                 continue;
             }
 
@@ -41,5 +37,14 @@ final class FileFinder
         }
 
         return $files;
+    }
+
+    private static function isNonService(SplFileInfo $fileInfo): bool
+    {
+        if (str_contains($fileInfo->getPathname(), '/ValueObject/')) {
+            return true;
+        }
+
+        return str_contains($fileInfo->getPathname(), '/Enum/');
     }
 }
