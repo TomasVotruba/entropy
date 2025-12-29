@@ -12,6 +12,6 @@ final class FileFinderTest extends TestCase
     public function test(): void
     {
         $phpFiles = FileFinder::findPhpFiles(__DIR__ . '/Fixture/some-dir');
-        $this->assertCount(1, $phpFiles);
+        $this->assertCount(2, $phpFiles);
     }
 }
