@@ -21,6 +21,19 @@ final class FileSystem
         return $fileContents;
     }
 
+    public static function delete(string $fileOrDirectory): void
+    {
+        if (is_dir($fileOrDirectory)) {
+            $files = array_diff(scandir($fileOrDirectory, SCANDIR_SORT_NONE) ?? [], ['.', '..']);
+            foreach ($files as $file) {
+                self::delete($fileOrDirectory . DIRECTORY_SEPARATOR . $file);
+            }
+            rmdir($fileOrDirectory);
+        } elseif (is_file($fileOrDirectory)) {
+            unlink($fileOrDirectory);
+        }
+    }
+
     /**
      * @return array<string, mixed>
      */
