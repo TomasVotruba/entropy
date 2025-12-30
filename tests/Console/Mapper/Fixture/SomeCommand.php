@@ -22,7 +22,7 @@ final class SomeCommand implements CommandInterface
      * @param string[] $path Paths to analyse
      * @param bool $flag Enable extra features
      */
-    public function run(array $path, bool $flag, int $count): void
+    public function run(array $path, bool $flag, int $count, ?string $version = null): void
     {
     }
 }

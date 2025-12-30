@@ -34,7 +34,7 @@ final class CLIRequestMapperTest extends TestCase
         );
 
         $arguments = $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
-        $this->assertSame([['/some/path', '/another-path'], true, 5], $arguments);
+        $this->assertSame([['/some/path', '/another-path'], true, 5, null], $arguments);
     }
 
     public function testExtraOption(): void

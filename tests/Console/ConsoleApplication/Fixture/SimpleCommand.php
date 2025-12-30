@@ -7,6 +7,7 @@ namespace Entropy\Tests\Console\ConsoleApplication\Fixture;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
 use Entropy\Console\Output\OutputPrinter;
+use Webmozart\Assert\Assert;
 
 final readonly class SimpleCommand implements CommandInterface
 {
@@ -32,10 +33,14 @@ final readonly class SimpleCommand implements CommandInterface
      *
      * @return ExitCode::*
      */
-    public function run(array $paths, bool $dryRun = false, array $skip = []): int
+    public function run(array $paths, bool $dryRun = false, ?string $version = null, array $skip = []): int
     {
         dump($paths);
         dump($dryRun);
+        dump($version);
+
+        // default value should remain null
+        Assert::null($version, 'Default value for "--"version" should be null');
 
         $this->outputPrinter->yellow('Yellow');
         $this->outputPrinter->green('Green');

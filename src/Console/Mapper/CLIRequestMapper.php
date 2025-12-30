@@ -98,7 +98,7 @@ final class CLIRequestMapper
             // 5) Default / bool fallback / required missing
             if ($reflectionParameter->isDefaultValueAvailable()) {
                 $value = $reflectionParameter->getDefaultValue();
-                $args[] = $this->castValueByParameterType($value, $type);
+                $args[] = $this->castValueByParameterType($value, $type, $reflectionParameter->getDefaultValue());
                 continue;
             }
 
@@ -157,10 +157,18 @@ final class CLIRequestMapper
         return $reflectionType instanceof ReflectionNamedType && $reflectionType->getName() === 'array';
     }
 
-    private function castValueByParameterType(mixed $value, ?ReflectionType $reflectionType): mixed
-    {
+    private function castValueByParameterType(
+        mixed $value,
+        ?ReflectionType $reflectionType,
+        mixed $defaultValue = 'unknown'
+    ): mixed {
         if (! $reflectionType instanceof ReflectionNamedType) {
             return $value;
+        }
+
+        // fallback to default value if empty
+        if ($defaultValue !== 'unknown' && empty($value)) {
+            return $defaultValue;
         }
 
         return match ($reflectionType->getName()) {
