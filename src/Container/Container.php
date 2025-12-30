@@ -73,8 +73,8 @@ final class Container
             $this->serviceFactories[$serviceClassName] = function (Container $container) use (
                 $serviceClassName
             ): object {
-                $classReflection = new ReflectionClass($serviceClassName);
-                return $this->createInstanceFromReflection($classReflection);
+                $reflectionClass = new ReflectionClass($serviceClassName);
+                return $this->createInstanceFromReflection($reflectionClass);
             };
         }
     }
