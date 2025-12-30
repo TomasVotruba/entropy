@@ -31,8 +31,3 @@ parameters:
 
         # dynamic CommentInterface contract
         - '#Call to an undefined method Entropy\\Console\\Contract\\CommandInterface\:\:run\(\)#'
-
-        # handle next
-        -
-             identifier: public.method.unused
-             path: src/Container/Container.php
