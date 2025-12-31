@@ -24,7 +24,7 @@ final class FileSystem
     public static function delete(string $fileOrDirectory): void
     {
         if (is_dir($fileOrDirectory)) {
-            $files = array_diff(scandir($fileOrDirectory, SCANDIR_SORT_NONE) ?? [], ['.', '..']);
+            $files = array_diff(scandir($fileOrDirectory, SCANDIR_SORT_NONE), ['.', '..']);
             foreach ($files as $file) {
                 self::delete($fileOrDirectory . DIRECTORY_SEPARATOR . $file);
             }
