@@ -84,6 +84,7 @@ final readonly class OutputPrinter
             'green' => "\033[32m{$text}\033[0m",
             'yellow' => "\033[33m{$text}\033[0m",
             'red' => "\033[31m{$text}\033[0m",
+            'cyan' => "\033[36m{$text}\033[0m",
             default => $text,
         };
     }
