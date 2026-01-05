@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Entropy\Tests\Utils;
 
 use Entropy\Utils\Regex;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class RegexTest extends TestCase
@@ -26,5 +27,27 @@ final class RegexTest extends TestCase
 
         $result = Regex::replace($subject, $pattern, $replacement);
         $this->assertSame('The quick red fox', $result);
+    }
+
+    #[DataProvider('replacementDataProvider')]
+    public function testReplaceWithClosure(string $subject, string $expectedResult): void
+    {
+        $pattern = '/brown (?<animal>\w+)/';
+
+        $result = Regex::replace($subject, $pattern, function (array $matches) {
+            if (isset($matches['animal']) && $matches['animal'] === 'fox') {
+                return 'white dog';
+            }
+
+            return 'black cat';
+        });
+
+        $this->assertSame($expectedResult, $result);
+    }
+
+    public static function replacementDataProvider(): iterable
+    {
+        yield ['The brown fox', 'The white dog'];
+        yield ['The brown bird', 'The black cat'];
     }
 }

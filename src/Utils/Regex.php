@@ -24,8 +24,12 @@ final class Regex
         return $matches;
     }
 
-    public static function replace(string $subject, string $pattern, string $replacement): string
+    public static function replace(string $subject, string $pattern, string|callable $replacement): string
     {
+        if (is_callable($replacement)) {
+            return preg_replace_callback($pattern, $replacement, $subject);
+        }
+
         return preg_replace($pattern, $replacement, $subject) ?? $subject;
     }
 }
