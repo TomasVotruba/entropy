@@ -12,6 +12,7 @@ use Entropy\Console\Output\CommandHelpFactory;
 use Entropy\Console\Output\HelpPrinter;
 use Entropy\Console\Output\OutputPrinter;
 use Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
+use Throwable;
 
 #[RelatedTest(ConsoleApplicationTest::class)]
 final readonly class ConsoleApplication
@@ -66,8 +67,8 @@ final readonly class ConsoleApplication
 
             return $command->run(...$runArguments);
 
-        } catch (\Throwable $throwable) {
-            fwrite(STDERR, "Unhandled error: {$throwable->getMessage()}\n");
+        } catch (Throwable $throwable) {
+            fwrite(STDERR, sprintf('Unhandled error: %s%s', $throwable->getMessage(), PHP_EOL));
             return ExitCode::ERROR;
         }
     }

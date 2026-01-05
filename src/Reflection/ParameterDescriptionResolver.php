@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Entropy\Reflection;
 
 use Entropy\Attributes\RelatedTest;
+use Entropy\Tests\Reflection\ParameterDescriptionResolver\ParameterDescriptionResolverTest;
 use ReflectionMethod;
 
-#[RelatedTest(\Entropy\Tests\Reflection\ParameterDescriptionResolver\ParameterDescriptionResolverTest::class)]
+#[RelatedTest(ParameterDescriptionResolverTest::class)]
 final class ParameterDescriptionResolver
 {
     /**

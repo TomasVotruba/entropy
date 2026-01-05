@@ -10,12 +10,14 @@ use Entropy\Console\ValueObject\Argument;
 use Entropy\Console\ValueObject\ArgumentsAndOptions;
 use Entropy\Console\ValueObject\Option;
 use Entropy\Reflection\ParameterDescriptionResolver;
+use ReflectionMethod;
+use ReflectionNamedType;
 
 final class CommandRunParametersMapper
 {
     public function map(CommandInterface $command): ArgumentsAndOptions
     {
-        $runReflectionMethod = new \ReflectionMethod($command, 'run');
+        $runReflectionMethod = new ReflectionMethod($command, 'run');
 
         $paramDescriptions = ParameterDescriptionResolver::resolve($runReflectionMethod);
 
@@ -24,7 +26,7 @@ final class CommandRunParametersMapper
 
         foreach ($runReflectionMethod->getParameters() as $key => $reflectionParameter) {
             $parameterType = $reflectionParameter->getType();
-            if (! $parameterType instanceof \ReflectionNamedType) {
+            if (! $parameterType instanceof ReflectionNamedType) {
                 throw new InvalidCommandException(sprintf(
                     'Parameter "%s" of command "%s" must have explicit type declaration',
                     $reflectionParameter->getName(),

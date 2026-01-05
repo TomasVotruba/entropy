@@ -34,6 +34,7 @@ final readonly class CommandHelpFactory
             foreach ($argumentsAndOptions->getArguments() as $argument) {
                 $help[] = $this->formatParameterLine($argument);
             }
+
             $help[] = '';
         }
 
@@ -43,6 +44,7 @@ final readonly class CommandHelpFactory
             foreach ($argumentsAndOptions->getOptions() as $option) {
                 $help[] = $this->formatParameterLine($option);
             }
+
             $help[] = '';
         }
 

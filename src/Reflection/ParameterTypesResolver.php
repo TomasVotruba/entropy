@@ -7,6 +7,8 @@ namespace Entropy\Reflection;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Container\Exception\CreateServiceException;
 use Entropy\Tests\Reflection\ParameterTypesResolver\ParameterTypesResolverTest;
+use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionParameter;
 
 #[RelatedTest(ParameterTypesResolverTest::class)]
@@ -19,7 +21,7 @@ final class ParameterTypesResolver
      * @return array<class-string|class-string[]>
      */
     public static function resolve(
-        \ReflectionMethod $reflectionMethod,
+        ReflectionMethod $reflectionMethod,
         array $reflectionParameters,
         string $class
     ): array {
@@ -28,7 +30,7 @@ final class ParameterTypesResolver
         foreach ($reflectionParameters as $reflectionParameter) {
             $parameterType = $reflectionParameter->getType();
 
-            if ($parameterType instanceof \ReflectionNamedType && ! $parameterType->isBuiltin()) {
+            if ($parameterType instanceof ReflectionNamedType && ! $parameterType->isBuiltin()) {
                 /** @var class-string $parameterTypeClass */
                 $parameterTypeClass = $parameterType->getName();
                 $parameterTypes[] = $parameterTypeClass;
@@ -37,7 +39,7 @@ final class ParameterTypesResolver
                 continue;
             } else {
                 // try resolving array of class types via docblock
-                if ($parameterType instanceof \ReflectionNamedType && (string) $reflectionParameter->getType() === 'array') {
+                if ($parameterType instanceof ReflectionNamedType && (string) $reflectionParameter->getType() === 'array') {
                     $docComment = $reflectionMethod->getDocComment();
                     if ($docComment !== false) {
                         $pattern = sprintf('/@param\s+%s\[\]\s+\$%s/', '([\\\\\w]+)', $reflectionParameter->getName());

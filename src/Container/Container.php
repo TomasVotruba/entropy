@@ -12,6 +12,8 @@ use Entropy\Container\Exception\RegisterServiceException;
 use Entropy\Reflection\ParameterTypesResolver;
 use Entropy\Tests\Container\Container\ContainerTest;
 use ReflectionClass;
+use ReflectionMethod;
+use ReflectionParameter;
 use Webmozart\Assert\Assert;
 
 #[RelatedTest(ContainerTest::class)]
@@ -42,7 +44,7 @@ final class Container
     public function __construct()
     {
         // setup default console service
-        $this->service(CommandRegistry::class, function (Container $container): \Entropy\Console\CommandRegistry {
+        $this->service(CommandRegistry::class, function (Container $container): CommandRegistry {
             $commands = $container->findByContract(CommandInterface::class);
             return new CommandRegistry($commands);
         });
@@ -166,12 +168,12 @@ final class Container
     }
 
     /**
-     * @param \ReflectionParameter[] $reflectionParameters
+     * @param ReflectionParameter[] $reflectionParameters
      * @param class-string $class
      * @return array<object|object[]>
      */
     private function resolveDependenciesFromParameterReflections(
-        \ReflectionMethod $reflectionMethod,
+        ReflectionMethod $reflectionMethod,
         array $reflectionParameters,
         string $class
     ): array {

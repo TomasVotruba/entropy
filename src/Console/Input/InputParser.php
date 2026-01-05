@@ -4,8 +4,9 @@ namespace Entropy\Console\Input;
 
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\ValueObject\CLIRequest;
+use Entropy\Tests\Console\Input\InputParserTest;
 
-#[RelatedTest(\Entropy\Tests\Console\Input\InputParserTest::class)]
+#[RelatedTest(InputParserTest::class)]
 final class InputParser
 {
     /**

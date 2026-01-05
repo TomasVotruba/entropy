@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Entropy\Tests\Utils;
 
 use Entropy\Utils\FuzzyMatcher;
+use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +20,7 @@ final class FuzzyMatcherTest extends TestCase
         $this->assertSame($expected, FuzzyMatcher::match($input, $candidates));
     }
 
-    public static function provideMatchCases(): \Iterator
+    public static function provideMatchCases(): Iterator
     {
         yield ['', ['test'], null];
         yield ['test', [], null];

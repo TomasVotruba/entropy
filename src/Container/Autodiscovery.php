@@ -9,6 +9,7 @@ use Entropy\FileSystem\FileFinder;
 use Entropy\Reflection\ClassNameResolver;
 use Entropy\Tests\Container\Autodiscovery\AutodiscoveryTest;
 use ReflectionClass;
+use Throwable;
 use Webmozart\Assert\Assert;
 
 /**
@@ -38,7 +39,7 @@ final class Autodiscovery
             return true;
         }
 
-        if ($reflectionClass->isSubclassOf(\Throwable::class)) {
+        if ($reflectionClass->isSubclassOf(Throwable::class)) {
             return true;
         }
 

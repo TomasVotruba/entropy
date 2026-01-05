@@ -7,12 +7,13 @@ namespace Entropy\Tests\Reflection\ParameterDescriptionResolver;
 use Entropy\Reflection\ParameterDescriptionResolver;
 use Entropy\Tests\Reflection\ParameterDescriptionResolver\Fixture\SomeClassWithMethod;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 
 final class ParameterDescriptionResolverTest extends TestCase
 {
     public function test(): void
     {
-        $reflectionMethod = new \ReflectionMethod(SomeClassWithMethod::class, 'someMethod');
+        $reflectionMethod = new ReflectionMethod(SomeClassWithMethod::class, 'someMethod');
 
         $parameterDescriptions = ParameterDescriptionResolver::resolve($reflectionMethod);
 

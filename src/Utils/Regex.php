@@ -23,4 +23,9 @@ final class Regex
 
         return $matches;
     }
+
+    public static function replace(string $subject, string $pattern, string $replacement): string
+    {
+        return preg_replace($pattern, $replacement, $subject) ?? $subject;
+    }
 }

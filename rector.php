@@ -13,11 +13,15 @@ return RectorConfig::configure()
         __DIR__ . '/tests',
     ])
     ->withPhpSets()
+    ->withImportNames()
     ->withPreparedSets(
         deadCode: true,
+        codingStyle: true,
         codeQuality: true,
         typeDeclarations: true,
         naming: true,
+        privatization: true,
+        earlyReturn: true,
     )
     ->withSkip([
         // false-positive validation

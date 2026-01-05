@@ -34,6 +34,7 @@ final class FileSystem
             foreach ($files as $file) {
                 self::delete($fileOrDirectory . DIRECTORY_SEPARATOR . $file);
             }
+
             rmdir($fileOrDirectory);
         } elseif (is_file($fileOrDirectory)) {
             unlink($fileOrDirectory);

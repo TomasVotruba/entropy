@@ -6,6 +6,8 @@ namespace Entropy\FileSystem;
 
 use Entropy\Attributes\RelatedTest;
 use Entropy\Tests\FileSystem\FileFinder\FileFinderTest;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use SplFileInfo;
 
 #[RelatedTest(FileFinderTest::class)]
@@ -18,7 +20,7 @@ final class FileFinder
     public static function findPhpFiles(string $directory): array
     {
         $files = [];
-        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory));
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory));
 
         foreach ($iterator as $fileInfo) {
             if (! $fileInfo->isFile()) {

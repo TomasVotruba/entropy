@@ -9,6 +9,7 @@ use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Exception\ConsoleInputMappingException;
 use Entropy\Console\ValueObject\CLIRequest;
 use Entropy\Tests\Console\Mapper\CLIRequestMapperTest;
+use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionType;
@@ -31,7 +32,7 @@ final class CLIRequestMapper
     public function resolveArguments(CommandInterface $command, CLIRequest $cliRequest): array
     {
         Assert::methodExists($command, 'run');
-        $reflectionMethod = new \ReflectionMethod($command, 'run');
+        $reflectionMethod = new ReflectionMethod($command, 'run');
 
         $args = [];
 
