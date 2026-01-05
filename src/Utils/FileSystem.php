@@ -45,7 +45,7 @@ final class FileSystem
     }
 
     /**
-     * @param array<string, mixed>
+     * @param array<string, mixed> $json
      */
     public static function saveJsonToFile(array $json, string $targetFilePath): void
     {
