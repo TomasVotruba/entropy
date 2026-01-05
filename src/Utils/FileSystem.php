@@ -21,6 +21,12 @@ final class FileSystem
         return $fileContents;
     }
 
+    public static function write(string $filePath, string $contents): void
+    {
+        $result = file_put_contents($filePath, $contents);
+        Assert::notFalse($result, sprintf('Failed to write to the "%s" file. Contents: "%s"', $filePath, $contents));
+    }
+
     public static function delete(string $fileOrDirectory): void
     {
         if (is_dir($fileOrDirectory)) {
