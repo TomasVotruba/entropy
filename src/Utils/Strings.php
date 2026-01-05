@@ -7,15 +7,16 @@ namespace Entropy\Utils;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Tests\Utils\StringsTest;
 
+/**
+ * @api to be used outside
+ */
 #[RelatedTest(StringsTest::class)]
 final class Strings
 {
     public static function webalize(string $text): string
     {
-        $text = preg_replace('/[^\p{L}\p{N}]+/u', '-', $text);
-        $text = trim($text, '-');
-        $text = mb_strtolower($text);
-
-        return $text ?? '';
+        $text = (string) preg_replace('/[^\p{L}\p{N}]+/u', '-', $text);
+        $text = (string) trim($text, '-');
+        return strtolower($text);
     }
 }

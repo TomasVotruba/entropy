@@ -16,6 +16,9 @@ final class StringsTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
+    /**
+     * @return iterable<array{0: string, 1: string}>
+     */
     public static function webalizeDataProvider(): iterable
     {
         yield ['Hello World!', 'hello-world'];
