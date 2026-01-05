@@ -43,4 +43,14 @@ final class FileSystem
 
         return json_decode($fileContents, true, 512, JSON_THROW_ON_ERROR);
     }
+
+    /**
+     * @param array<string, mixed>
+     */
+    public static function saveJsonToFile(array $json, string $targetFilePath): void
+    {
+        $jsonContents = json_encode($json, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR) . PHP_EOL;
+
+        file_put_contents($targetFilePath, $jsonContents);
+    }
 }
