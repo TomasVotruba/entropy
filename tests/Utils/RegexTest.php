@@ -45,6 +45,9 @@ final class RegexTest extends TestCase
         $this->assertSame($expectedResult, $result);
     }
 
+    /**
+     * @return iterable<array{0: string, 1: string}>
+     */
     public static function replacementDataProvider(): iterable
     {
         yield ['The brown fox', 'The white dog'];
