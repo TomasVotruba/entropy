@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Utils;
 
+use Nette\Utils\Json;
 use Webmozart\Assert\Assert;
 
 /**
@@ -48,7 +49,10 @@ final class FileSystem
     {
         $fileContents = self::read($filePath);
 
-        return json_decode($fileContents, true, 512, JSON_THROW_ON_ERROR);
+        $json = json_decode($fileContents, true, 512, JSON_THROW_ON_ERROR);
+        Assert::isArray($json);
+
+        return $json;
     }
 
     /**
