@@ -6,6 +6,9 @@ namespace Entropy\Utils;
 
 use Webmozart\Assert\Assert;
 
+/**
+ * @api to be used outside
+ */
 final class Json
 {
     /**
