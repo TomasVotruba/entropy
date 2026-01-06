@@ -14,7 +14,7 @@ final readonly class OutputColorizer
 
     public function __construct()
     {
-        $this->useColors = $useColors ?? $this->isTty();
+        $this->useColors = $this->isTty();
     }
 
     /**
