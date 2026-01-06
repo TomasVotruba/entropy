@@ -19,7 +19,7 @@ final class Json
         $encoded = json_encode($data, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
         Assert::string($encoded);
 
-        return $encoded;
+        return $encoded . PHP_EOL;
     }
 
     /**

@@ -65,7 +65,7 @@ final class FileSystem
      */
     public static function saveJsonToFile(array $json, string $targetFilePath): void
     {
-        $jsonContents = json_encode($json, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR) . PHP_EOL;
+        $jsonContents = Json::encode($json);
 
         file_put_contents($targetFilePath, $jsonContents);
     }
