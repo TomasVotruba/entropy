@@ -120,6 +120,12 @@ final readonly class OutputPrinter
         };
     }
 
+    public function title(string $text): void
+    {
+        $this->yellow($text);
+        $this->yellow(str_repeat('=', strlen($text)));
+    }
+
     private function colorize(string $text): string
     {
         $matches = [];
