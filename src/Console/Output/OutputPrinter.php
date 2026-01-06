@@ -88,6 +88,12 @@ final readonly class OutputPrinter
         }
     }
 
+    public function title(string $text): void
+    {
+        $this->yellow($text);
+        $this->yellow(str_repeat('=', strlen($text)));
+    }
+
     private function color(string $text, string $type): string
     {
         if (! $this->useColors) {
@@ -118,12 +124,6 @@ final readonly class OutputPrinter
             'red' => "\033[41;30m{$text}\033[0m",               // WHITE on red (important)
             default => $text,
         };
-    }
-
-    public function title(string $text): void
-    {
-        $this->yellow($text);
-        $this->yellow(str_repeat('=', strlen($text)));
     }
 
     private function colorize(string $text): string
