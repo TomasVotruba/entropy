@@ -16,7 +16,7 @@ final class Strings
     public static function webalize(string $text): string
     {
         $text = (string) preg_replace('/[^\p{L}\p{N}]+/u', '-', $text);
-        $text = (string) trim($text, '-');
+        $text = trim($text, '-');
         return strtolower($text);
     }
 }

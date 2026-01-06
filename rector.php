@@ -23,6 +23,10 @@ return RectorConfig::configure()
         privatization: true,
         earlyReturn: true,
     )
+    ->withRules([
+        \Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector::class,
+        \Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector::class,
+    ])
     ->withSkip([
         // false-positive validation
         RemoveUnusedConstructorParamRector::class => __DIR__ . '/src/Attributes',

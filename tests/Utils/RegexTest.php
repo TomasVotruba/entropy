@@ -34,7 +34,7 @@ final class RegexTest extends TestCase
     {
         $pattern = '/brown (?<animal>\w+)/';
 
-        $result = Regex::replace($subject, $pattern, function (array $matches) {
+        $result = Regex::replace($subject, $pattern, function (array $matches): string {
             if (isset($matches['animal']) && $matches['animal'] === 'fox') {
                 return 'white dog';
             }

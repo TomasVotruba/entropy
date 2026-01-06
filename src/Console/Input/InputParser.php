@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Entropy\Console\Input;
 
 use Entropy\Attributes\RelatedTest;
