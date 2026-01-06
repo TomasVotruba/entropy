@@ -90,8 +90,12 @@ final readonly class OutputPrinter
 
     public function title(string $text): void
     {
+        $this->newline();
+
         $this->yellow($text);
         $this->yellow(str_repeat('=', strlen($text)));
+
+        $this->newline();
     }
 
     private function color(string $text, string $type): string
