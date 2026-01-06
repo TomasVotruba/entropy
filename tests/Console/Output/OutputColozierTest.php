@@ -34,17 +34,26 @@ final class OutputColozierTest extends TestCase
         yield ['some <fg=green>success</> next', "some \e[32msuccess\e[0m next"];
         yield ['here <bg=yellow>orange</> is', "here \e[43;30m orange \e[0m is"];
 
-        yield [' * loading files from "<fg=green>%s</>" remote repository', " * loading files from \"\e[32m%s\e[0m\" remote repository"];
+        yield [
+            ' * loading files from "<fg=green>%s</>" remote repository',
+            " * loading files from \"\e[32m%s\e[0m\" remote repository",
+        ];
+
+        // buggy
+        yield [
+            ' * loading files from "<fg=green>https://github.com/rectorphp/rector-symfony.git</>" remote repository',
+            " * loading files from \"\e[32mhttps://github.com/rectorphp/rector-symfony.git\e[0m\" remote repository",
+        ];
 
         yield [
-<<<MULTILINE
+            <<<MULTILINE
 some multline contents <fg=green>
 all wrapped in green
 </>
 then finished
 MULTILINE
             ,
-<<<MULTILINE
+            <<<MULTILINE
 some multline contents \e[32m
 all wrapped in green
 \e[0m

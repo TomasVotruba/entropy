@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Utils;
 
+use Entropy\FileSystem\Exception\FileSystemException;
 use Webmozart\Assert\Assert;
 
 /**
@@ -30,12 +31,7 @@ final class FileSystem
     public static function delete(string $fileOrDirectory): void
     {
         if (is_dir($fileOrDirectory)) {
-            $files = array_diff(scandir($fileOrDirectory, SCANDIR_SORT_NONE), ['.', '..']);
-            foreach ($files as $file) {
-                self::delete($fileOrDirectory . DIRECTORY_SEPARATOR . $file);
-            }
-
-            rmdir($fileOrDirectory);
+            self::deleteDirectory($fileOrDirectory);
         } elseif (is_file($fileOrDirectory)) {
             unlink($fileOrDirectory);
         }
@@ -68,5 +64,34 @@ final class FileSystem
         $jsonContents = Json::encode($json);
 
         file_put_contents($targetFilePath, $jsonContents);
+    }
+
+    private static function deleteDirectory(string $directory): void
+    {
+        if (! is_dir($directory)) {
+            return;
+        }
+
+        // safety: never allow root or empty paths
+        $realPath = realpath($directory);
+        if ($realPath === false || $realPath === '/' || $realPath === '') {
+            throw new FileSystemException(sprintf('Refusing to delete unsafe directory: "%s"', $directory));
+        }
+
+        foreach (scandir($realPath) as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+
+            $fullPath = $realPath . DIRECTORY_SEPARATOR . $item;
+
+            if (is_dir($fullPath) && ! is_link($fullPath)) {
+                self::deleteDirectory($fullPath);
+            } else {
+                unlink($fullPath);
+            }
+        }
+
+        rmdir($realPath);
     }
 }
