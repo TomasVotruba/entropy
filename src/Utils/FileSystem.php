@@ -57,10 +57,7 @@ final class FileSystem
     {
         $fileContents = self::read($filePath);
 
-        $json = json_decode($fileContents, true, 512, JSON_THROW_ON_ERROR);
-        Assert::isArray($json);
-
-        return $json;
+        return Json::decode($fileContents);
     }
 
     /**
