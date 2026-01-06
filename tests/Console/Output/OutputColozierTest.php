@@ -34,6 +34,8 @@ final class OutputColozierTest extends TestCase
         yield ['some <fg=green>success</> next', "some \e[32msuccess\e[0m next"];
         yield ['here <bg=yellow>orange</> is', "here \e[43;30m orange \e[0m is"];
 
+        yield [' * loading files from "<fg=green>%s</>" remote repository', " * loading files from \"\e[32m%s\e[0m\" remote repository"];
+
         yield [
 <<<MULTILINE
 some multline contents <fg=green>
