@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Entropy\Utils;
 
-use Nette\Utils\Json;
 use Webmozart\Assert\Assert;
 
 /**
