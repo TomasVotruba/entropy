@@ -33,5 +33,17 @@ final class OutputColozierTest extends TestCase
         // @note double quote must be used here, to preserve \e character as escape one
         yield ['some <fg=green>success</> next', "some \e[32msuccess\e[0m next"];
         yield ['here <bg=yellow>orange</> is', "here \e[43;30m orange \e[0m is"];
+
+        yield [
+<<<MULTILINE
+some multline contents <fg=green>
+all wrapped in green
+</>
+then finished
+MULTILINE
+            ,
+
+
+        ]
     }
 }
