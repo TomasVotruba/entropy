@@ -41,6 +41,15 @@ final class FileSystem
         }
     }
 
+    public static function ensureDirectoryExists(string $directoryPath): void
+    {
+        if (is_dir($directoryPath)) {
+            return;
+        }
+
+        mkdir($directoryPath, 0777, recursive: true);
+    }
+
     /**
      * @return array<string, mixed>
      */
