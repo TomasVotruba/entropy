@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Tests\Console\Output;
 
+use Iterator;
 use Entropy\Console\Output\OutputColorizer;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -25,6 +26,10 @@ final class OutputColozierTest extends TestCase
         $this->assertSame($expected, $colorized);
     }
 
+
+    /**
+     * @return Iterator<array<int, string>>
+     */
     public static function colorizeDataProvider(): iterable
     {
         // @note double quote must be used here, to preserve \e character as escape one

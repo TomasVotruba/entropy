@@ -58,7 +58,7 @@ final class InputParser
     }
 
     /**
-     * @param mixed[] $argv
+     * @param array<int, mixed> $argv
      * @return array{mixed, mixed}
      */
     private function parseLongOption(string $item, array &$argv): array
