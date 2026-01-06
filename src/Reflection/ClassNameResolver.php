@@ -32,7 +32,7 @@ final class ClassNameResolver
 
         $count = count($tokens);
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $t = $tokens[$i];
             if (! is_array($t)) {
                 continue;
@@ -41,7 +41,7 @@ final class ClassNameResolver
             // Handle "namespace Foo\Bar;" and "namespace Foo\Bar {"
             if ($t[0] === T_NAMESPACE) {
                 $namespace = '';
-                for ($j = $i + 1; $j < $count; $j++) {
+                for ($j = $i + 1; $j < $count; ++$j) {
                     $tj = $tokens[$j];
 
                     if ($tj === ';' || $tj === '{') {
@@ -86,7 +86,7 @@ final class ClassNameResolver
 
             // Next T_STRING is the getName (skip whitespace, attributes/comments, etc.)
             $name = null;
-            for ($j = $i + 1; $j < $count; $j++) {
+            for ($j = $i + 1; $j < $count; ++$j) {
                 $tj = $tokens[$j];
 
                 if (! is_array($tj)) {
@@ -127,7 +127,7 @@ final class ClassNameResolver
      */
     private static function previousNonWhitespaceToken(array $tokens, int $index): array|string|null
     {
-        for ($i = $index - 1; $i >= 0; $i--) {
+        for ($i = $index - 1; $i >= 0; --$i) {
             $t = $tokens[$i];
 
             if (is_array($t) && (in_array($t[0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true))) {

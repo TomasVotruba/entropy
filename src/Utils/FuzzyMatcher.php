@@ -86,7 +86,7 @@ final class FuzzyMatcher
         // find first mismatch
         $i = 0;
         while ($i < $len && $a[$i] === $b[$i]) {
-            $i++;
+            ++$i;
         }
 
         // no mismatch
@@ -100,7 +100,7 @@ final class FuzzyMatcher
         }
 
         // rest must match
-        for ($j = $i + 2; $j < $len; $j++) {
+        for ($j = $i + 2; $j < $len; ++$j) {
             if ($a[$j] !== $b[$j]) {
                 return false;
             }

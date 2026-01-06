@@ -11,8 +11,6 @@ use Webmozart\Assert\Assert;
  */
 final readonly class OutputPrinter
 {
-    private bool $useColors;
-
     private bool $isSilent;
 
     public function __construct(
@@ -32,7 +30,7 @@ final readonly class OutputPrinter
             return;
         }
 
-        $coloredText = $this->colorize($text);
+        $coloredText = $this->outputColorizer->colorize($text);
 
         fwrite(STDOUT, $coloredText . PHP_EOL);
 

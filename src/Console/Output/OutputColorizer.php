@@ -8,7 +8,7 @@ use Entropy\Attributes\RelatedTest;
 use Entropy\Tests\Console\Output\OutputColozierTest;
 
 #[RelatedTest(OutputColozierTest::class)]
-final class OutputColorizer
+final readonly class OutputColorizer
 {
     private bool $useColors;
 
