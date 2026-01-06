@@ -68,7 +68,11 @@ final readonly class ConsoleApplication
             return $command->run(...$runArguments);
 
         } catch (Throwable $throwable) {
-            fwrite(STDERR, sprintf('Unhandled error: %s%s', $throwable->getMessage(), PHP_EOL));
+            $this->outputPrinter->redBackground('Run failed: ' . $throwable->getMessage());
+
+            $this->outputPrinter->newline();
+            $this->outputPrinter->writeln($throwable->getTraceAsString());
+
             return ExitCode::ERROR;
         }
     }
