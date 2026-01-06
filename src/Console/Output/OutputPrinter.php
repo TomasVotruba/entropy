@@ -76,6 +76,18 @@ final readonly class OutputPrinter
         fwrite(STDOUT, str_repeat(PHP_EOL, $count));
     }
 
+    /**
+     * @param string[] $items
+     */
+    public function listing(array $items, string $bulletChar = '*'): void
+    {
+        Assert::allString($items);
+
+        foreach ($items as $item) {
+            $this->writeln(sprintf('%s %s', $bulletChar, $item));
+        }
+    }
+
     private function color(string $text, string $type): string
     {
         if (! $this->useColors) {
@@ -106,18 +118,6 @@ final readonly class OutputPrinter
             'red' => "\033[41;30m{$text}\033[0m",               // WHITE on red (important)
             default => $text,
         };
-    }
-
-    /**
-     * @param string[] $items
-     */
-    public function listing(array $items, string $bulletChar = '*'): void
-    {
-        Assert::allString($items);
-
-        foreach ($items as $item) {
-            $this->writeln(sprintf('%s %s', $bulletChar, $item));
-        }
     }
 
     private function colorize(string $text): string
