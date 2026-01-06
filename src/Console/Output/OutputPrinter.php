@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Entropy\Console\Output;
 
+use Webmozart\Assert\Assert;
+
 /**
  * @api used in many ways
  */
@@ -106,19 +108,16 @@ final readonly class OutputPrinter
         };
     }
 
-    private function pad(string $text): string
+    /**
+     * @param string[] $items
+     */
+    public function listing(array $items, string $bulletChar = '*'): void
     {
-        return ' ' . $text . ' ';
-    }
+        Assert::allString($items);
 
-    private function isTty(): bool
-    {
-        if (function_exists('stream_isatty')) {
-            return @stream_isatty(STDOUT);
+        foreach ($items as $item) {
+            $this->writeln(sprintf('%s %s', $bulletChar, $item));
         }
-
-        // Fallback: respect NO_COLOR if present
-        return getenv('NO_COLOR') === false;
     }
 
     private function colorize(string $text): string
@@ -140,5 +139,20 @@ final readonly class OutputPrinter
         }
 
         return $text;
+    }
+
+    private function pad(string $text): string
+    {
+        return ' ' . $text . ' ';
+    }
+
+    private function isTty(): bool
+    {
+        if (function_exists('stream_isatty')) {
+            return @stream_isatty(STDOUT);
+        }
+
+        // Fallback: respect NO_COLOR if present
+        return getenv('NO_COLOR') === false;
     }
 }
