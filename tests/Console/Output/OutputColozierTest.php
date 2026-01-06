@@ -42,8 +42,12 @@ all wrapped in green
 then finished
 MULTILINE
             ,
-
-
-        ]
+<<<MULTILINE
+some multline contents \e[32m
+all wrapped in green
+\e[0m
+then finished
+MULTILINE
+        ];
     }
 }
