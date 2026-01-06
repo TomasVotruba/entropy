@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Entropy\Tests\Console\Output;
 
-use Iterator;
 use Entropy\Console\Output\OutputColorizer;
+use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
