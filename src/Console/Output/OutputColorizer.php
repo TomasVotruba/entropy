@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Entropy\Console\Output;
 
 use Entropy\Attributes\RelatedTest;
+use Entropy\Console\Enum\Color;
 use Entropy\Tests\Console\Output\OutputColozierTest;
 
 #[RelatedTest(OutputColozierTest::class)]
@@ -41,6 +42,9 @@ final readonly class OutputColorizer
         return $text;
     }
 
+    /**
+     * @param Color::* $color
+     */
     public function color(string $text, string $color): string
     {
         if (! $this->useColors) {
@@ -48,14 +52,16 @@ final readonly class OutputColorizer
         }
 
         return match ($color) {
-            'green' => "\033[32m{$text}\033[0m",
-            'yellow' => "\033[33m{$text}\033[0m",
-            'red' => "\033[31m{$text}\033[0m",
-            'cyan' => "\033[36m{$text}\033[0m",
-            default => $text,
+            Color::GREEN => "\033[32m{$text}\033[0m",
+            Color::YELLOW => "\033[33m{$text}\033[0m",
+            Color::RED => "\033[31m{$text}\033[0m",
+            Color::CYAN => "\033[36m{$text}\033[0m",
         };
     }
 
+    /**
+     * @param Color::* $color
+     */
     public function background(string $text, string $color): string
     {
         $text = $this->padding($text);
@@ -66,10 +72,9 @@ final readonly class OutputColorizer
 
         return match ($color) {
             // background ; foreground
-            'green' => "\033[42;30m{$text}\033[0m",             // black on green
-            'yellow', 'orange' => "\033[43;30m{$text}\033[0m",  // black on yellow
-            'red' => "\033[41;30m{$text}\033[0m",               // WHITE on red (important)
-            default => $text,
+            Color::GREEN => "\033[42;30m{$text}\033[0m",             // black on green
+            Color::YELLOW, 'orange' => "\033[43;30m{$text}\033[0m",  // black on yellow
+            Color::RED => "\033[41;30m{$text}\033[0m",               // WHITE on red (important)
         };
     }
 
