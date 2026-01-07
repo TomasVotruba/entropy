@@ -12,6 +12,7 @@ return RectorConfig::configure()
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ])
+    ->withRootFiles()
     ->withPhpSets()
     ->withImportNames()
     ->withPreparedSets(
@@ -23,15 +24,11 @@ return RectorConfig::configure()
         naming: true,
         privatization: true,
         earlyReturn: true,
+        rectorPreset: true
     )
-    ->withRules([
-        \Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector::class,
-        \Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector::class,
-    ])
     ->withSkip([
         // false-positive validation
-        RemoveUnusedConstructorParamRector::class => __DIR__ . '/src/Attributes',
-        RemoveEmptyClassMethodRector::class => __DIR__ . '/src/Attributes',
+//        RemoveEmptyClassMethodRector::class => __DIR__ . '/src/Attributes',
 
         // testing string to class name resolution
         StringClassNameToClassConstantRector::class => __DIR__ . '/tests/Reflection/ClassNameResolver/ClassNameResolverTest.php',

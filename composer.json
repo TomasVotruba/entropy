@@ -17,7 +17,7 @@
         "phpstan/extension-installer": "^1.4",
         "tomasvotruba/type-coverage": "^2.1",
         "shipmonk/composer-dependency-analyser": "^1.8",
-        "rector/rector": "^2.3",
+        "rector/rector": "dev-main",
         "rector/swiss-knife": "^2.3",
         "tomasvotruba/unused-public": "^2.1",
         "rector/jack": "^0.5.1"

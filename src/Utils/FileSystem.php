@@ -79,7 +79,7 @@ final class FileSystem
         }
 
         foreach (scandir($realPath) as $item) {
-            if ($item === '.' || $item === '..') {
+            if (in_array($item, ['.', '..'], true)) {
                 continue;
             }
 
