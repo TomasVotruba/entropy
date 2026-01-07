@@ -31,8 +31,3 @@ parameters:
 
         # dynamic CommentInterface contract
         - '#Call to an undefined method Entropy\\Console\\Contract\\CommandInterface\:\:run\(\)#'
-
-        # playing is safe
-        -
-            message: '#Strict comparison using \=\=\= between non\-empty\-string and (.*?) will always evaluate to false#'
-            path: src/Utils/FileSystem.php
