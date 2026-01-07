@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Console\Output;
 
+use Entropy\Console\Enum\Color;
 use Webmozart\Assert\Assert;
 
 /**
@@ -53,17 +54,17 @@ final readonly class OutputPrinter
 
     public function orangeBackground(string $text): void
     {
-        $this->writeln($this->outputColorizer->background($text, 'orange'));
+        $this->writeln($this->outputColorizer->background($text, Color::YELLOW));
     }
 
     public function greenBackground(string $text): void
     {
-        $this->writeln($this->outputColorizer->background($text, 'green'));
+        $this->writeln($this->outputColorizer->background($text, Color::GREEN));
     }
 
     public function redBackground(string $text): void
     {
-        $this->writeln($this->outputColorizer->background($text, 'red'));
+        $this->writeln($this->outputColorizer->background($text, Color::RED));
     }
 
     public function newline(int $count = 1): void
