@@ -15,6 +15,12 @@ final readonly class OutputColorizer
 
     public function __construct()
     {
+        if (defined('PHPUNIT_COMPOSER_INSTALL')) {
+            // enable colors during unit tests
+            $this->useColors = true;
+            return;
+        }
+
         $this->useColors = $this->isTty();
     }
 
