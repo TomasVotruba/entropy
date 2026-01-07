@@ -23,21 +23,19 @@ final readonly class OutputColorizer
      */
     public function colorize(string $text): string
     {
-        $matches = [];
-
         // foreground colors: <fg=green>text</>
-        if (preg_match_all('~<fg=(green|yellow|red|cyan)>(.*?)</>~su', $text, $matches, PREG_SET_ORDER)) {
+        if (preg_match_all('#<fg=(green|yellow|red|cyan)>(.*?)</>#su', $text, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 $text = str_replace($match[0], $this->color($match[2], $match[1]), $text);
             }
         }
 
         // background colors: <bg=green>text</>
-        if (preg_match_all('/<bg=(green|yellow|red|cyan|orange)>(.*?)<\/>/', $text, $matches, PREG_SET_ORDER)) {
+        if (preg_match_all('#<bg=(green|yellow|red|cyan)>(.*?)</>#su', $text, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 $content = $match[2];
-                /** @var Color::* $color */
                 $color = $match[1];
+
                 $text = str_replace($match[0], $this->background($content, $color), $text);
             }
         }
