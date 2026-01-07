@@ -28,7 +28,7 @@ return RectorConfig::configure()
     )
     ->withSkip([
         // false-positive validation
-        RemoveEmptyClassMethodRector::class => __DIR__ . '/src/Attributes',
+//        RemoveEmptyClassMethodRector::class => __DIR__ . '/src/Attributes',
 
         // testing string to class name resolution
         StringClassNameToClassConstantRector::class => __DIR__ . '/tests/Reflection/ClassNameResolver/ClassNameResolverTest.php',

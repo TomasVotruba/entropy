@@ -74,7 +74,7 @@ final class FileSystem
 
         // safety: never allow root or empty paths
         $realPath = realpath($directory);
-        if ($realPath === false || $realPath === '/' || $realPath === '') {
+        if (in_array($realPath, [false, '/', ''], true)) {
             throw new FileSystemException(sprintf('Refusing to delete unsafe directory: "%s"', $directory));
         }
 
