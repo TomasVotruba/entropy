@@ -35,7 +35,7 @@ final readonly class OutputColorizer
         // background colors: <bg=green>text</>
         if (preg_match_all('/<bg=(green|yellow|red|cyan|orange)>(.*?)<\/>/', $text, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
-                $content   = $match[2];
+                $content = $match[2];
                 /** @var Color::* $color */
                 $color = $match[1];
                 $text = str_replace($match[0], $this->background($content, $color), $text);
