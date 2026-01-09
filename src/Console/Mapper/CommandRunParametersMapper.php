@@ -58,6 +58,13 @@ final class CommandRunParametersMapper
             if ($key === 0 && in_array($parameterType, ['string', 'array'], true)) {
                 $arguments[] = new Argument($parameterName, $description, $acceptsMultipleValue);
             } else {
+                // correct plural argumen to singular --option name
+                if ($acceptsMultipleValue) {
+                    if (str_ends_with($parameterName, 's')) {
+                        $parameterName = substr($parameterName, 0, -1);
+                    }
+                }
+
                 $options[] = new Option(
                     $parameterName,
                     $parameterType,
