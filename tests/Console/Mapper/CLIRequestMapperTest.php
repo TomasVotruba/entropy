@@ -87,6 +87,7 @@ final class CLIRequestMapperTest extends TestCase
         $this->expectExceptionMessage('Missing required "path" argument');
 
         $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
-
     }
+
+    // @todo add --skip-file to $skipFiles mapping
 }
