@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Console\Mapper;
 
+use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Console\ValueObject\Argument;
@@ -13,6 +14,7 @@ use Entropy\Reflection\ParameterDescriptionResolver;
 use ReflectionMethod;
 use ReflectionNamedType;
 
+#[RelatedTest(\Entropy\Tests\Console\Mapper\CommandRunParametersMapperTest::class)]
 final class CommandRunParametersMapper
 {
     public function map(CommandInterface $command): ArgumentsAndOptions
