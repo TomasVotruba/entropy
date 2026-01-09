@@ -53,9 +53,17 @@ final class CLIRequestMapper
             // option name: dryRun → dry-run
             $optionName = $this->camelToKebab($name);
 
+            // enable singular --option to parameter plural $options
+            if ($key !== 0 && (string) $reflectionParameter->getType() === 'array') {
+                if (str_ends_with($optionName, 's')) {
+                    $optionName = substr($optionName, 0, -1);
+                }
+            }
+
             // 1) Options always win (if present)
             if (array_key_exists($optionName, $options)) {
                 $value = $cliRequest->option($optionName);
+
                 $consumedOptionNames[$optionName] = true;
 
                 $args[] = $this->castValueByParameterType($value, $type);

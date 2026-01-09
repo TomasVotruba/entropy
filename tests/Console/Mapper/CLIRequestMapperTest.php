@@ -7,6 +7,7 @@ namespace Entropy\Tests\Console\Mapper;
 use Entropy\Console\Exception\ConsoleInputMappingException;
 use Entropy\Console\Mapper\CLIRequestMapper;
 use Entropy\Console\ValueObject\CLIRequest;
+use Entropy\Tests\Console\Mapper\Fixture\SkipFilesCommand;
 use Entropy\Tests\Console\Mapper\Fixture\SomeCommand;
 use PHPUnit\Framework\TestCase;
 
@@ -90,4 +91,18 @@ final class CLIRequestMapperTest extends TestCase
     }
 
     // @todo add --skip-file to $skipFiles mapping
+    public function testSingularOptionToPluralParameter(): void
+    {
+        $cliRequest = new CLIRequest(
+            'some',
+            arguments: ['source'],
+            options: [
+                'skip-file' => ['first', 'second'],
+            ]
+        );
+
+        $arguments = $this->cliRequestMapper->resolveArguments(new SkipFilesCommand(), $cliRequest);
+
+        $this->assertSame(['source', ['first', 'second']], $arguments);
+    }
 }
