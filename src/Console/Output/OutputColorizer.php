@@ -63,6 +63,8 @@ final readonly class OutputColorizer
             Color::YELLOW => "\033[33m{$text}\033[0m",
             Color::RED => "\033[31m{$text}\033[0m",
             Color::CYAN => "\033[36m{$text}\033[0m",
+            // use light grey
+            Color::GREY => "\033[37m{$text}\033[0m",
         };
     }
 

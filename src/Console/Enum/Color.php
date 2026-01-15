@@ -13,4 +13,6 @@ final class Color
     public const string RED = 'red';
 
     public const string CYAN = 'cyan';
+
+    public const string GREY = 'grey';
 }
