@@ -19,6 +19,21 @@ final class RegexTest extends TestCase
         $this->assertSame('Joe', $matches['name']);
     }
 
+    public function testMatchAll(): void
+    {
+        $subject = 'apple banana apple orange banana';
+        $pattern = '/\b(?<fruit>\w+)\b/';
+
+        $matches = Regex::matchAll($subject, $pattern);
+        $this->assertCount(5, $matches);
+
+        $this->assertSame('apple', $matches[0]['fruit']);
+        $this->assertSame('banana', $matches[1]['fruit']);
+        $this->assertSame('apple', $matches[2]['fruit']);
+        $this->assertSame('orange', $matches[3]['fruit']);
+        $this->assertSame('banana', $matches[4]['fruit']);
+    }
+
     public function testReplace(): void
     {
         $subject = 'The quick brown fox';

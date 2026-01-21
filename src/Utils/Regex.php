@@ -24,6 +24,17 @@ final class Regex
         return $matches;
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public static function matchAll(string $subject, string $pattern): array
+    {
+        $matches = [];
+        preg_match_all($pattern, $subject, $matches, PREG_SET_ORDER);
+
+        return $matches;
+    }
+
     public static function replace(string $subject, string $pattern, string|callable $replacement): string
     {
         if (is_callable($replacement)) {
