@@ -31,3 +31,9 @@ parameters:
 
         # dynamic CommentInterface contract
         - '#Call to an undefined method Entropy\\Console\\Contract\\CommandInterface\:\:run\(\)#'
+
+        # no background grey on purpose
+        -
+            identifier: match.unhandled
+            count: 1
+            path: src/Console/Output/OutputColorizer.php
