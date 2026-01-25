@@ -9,14 +9,28 @@ use PHPUnit\Framework\TestCase;
 
 final class InputParserTest extends TestCase
 {
+    private InputParser $inputParser;
+
+    protected function setUp(): void
+    {
+        $this->inputParser = new InputParser();
+    }
+
     public function test(): void
     {
-        $inputParser = new InputParser();
-
-        $cliRequest = $inputParser->parse(['bin/rector', 'process', 'src']);
+        $cliRequest = $this->inputParser->parse(['bin/rector', 'process', 'src']);
 
         $this->assertSame('process', $cliRequest->getCommandName());
         $this->assertSame(['src'], $cliRequest->getArguments());
         $this->assertSame([], $cliRequest->getOptions());
+    }
+
+    public function testArrayOptions(): void
+    {
+        $cliRequest = $this->inputParser->parse(['bin/rector', 'process', 'src', '--skip', 'this', '--skip', 'that']);
+
+        $this->assertSame([
+            'skip' => ['this', 'that'],
+        ], $cliRequest->getOptions());
     }
 }

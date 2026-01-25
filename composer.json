@@ -5,7 +5,7 @@
     "require": {
         "php": "^8.3",
         "ext-tokenizer": "*",
-        "webmozart/assert": "^1.12|^2.0"
+        "webmozart/assert": "^2.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^12.5",
@@ -19,7 +19,7 @@
         "shipmonk/composer-dependency-analyser": "^1.8",
         "rector/rector": "dev-main",
         "rector/swiss-knife": "^2.3",
-        "tomasvotruba/unused-public": "^2.1",
+        "tomasvotruba/unused-public": "^2.2",
         "rector/jack": "^0.5.1"
     },
     "autoload": {
