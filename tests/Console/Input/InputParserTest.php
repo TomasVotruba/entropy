@@ -43,12 +43,7 @@ final class InputParserTest extends TestCase
     {
         $inputParser = new InputParser();
 
-        $cliRequest = $inputParser->parse([
-            'bin/jack',
-            'breakpoint',
-            '--ignore=symfony/',
-            '--dev',
-        ]);
+        $cliRequest = $inputParser->parse(['bin/jack', 'breakpoint', '--ignore=symfony/', '--dev']);
 
         $this->assertSame('breakpoint', $cliRequest->getCommandName());
         $this->assertSame([], $cliRequest->getArguments());
