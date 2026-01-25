@@ -40,7 +40,7 @@ final class InputParser
             // --option or --option=value
             if (str_starts_with((string) $item, '--')) {
                 [$name, $value] = $this->parseLongOption($item, $argv);
-                $options[$name] = $value;
+                $this->addOptionValue($options, $name, $value);
                 continue;
             }
 
@@ -75,5 +75,26 @@ final class InputParser
         }
 
         return [$item, true];
+    }
+
+    /**
+     * Add option value to the options array, handling multiple values for the same option name.
+     *
+     * @param array<string, mixed> $options
+     * @param mixed $value
+     */
+    private function addOptionValue(array &$options, string $name, mixed $value): void
+    {
+        if (! array_key_exists($name, $options)) {
+            $options[$name] = $value;
+            return;
+        }
+
+        // handle multiple values for the same option
+        if (! is_array($options[$name])) {
+            $options[$name] = [$options[$name]];
+        }
+
+        $options[$name][] = $value;
     }
 }
