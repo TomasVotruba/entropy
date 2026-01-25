@@ -58,23 +58,24 @@ final class InputParserTest extends TestCase
         ], $cliRequest->getOptions());
     }
 
-    public function testMultipleOptionsWithMixedFormats(): void
+    public function testMultipleOptionsWithArguments(): void
     {
         $inputParser = new InputParser();
 
         $cliRequest = $inputParser->parse([
             'bin/jack',
             'process',
-            '--path=src',
-            '--path=tests',
+            'src',
+            'tests',
+            '--path=dir1',
+            '--path=dir2',
             '--dev',
-            'extra-arg',
         ]);
 
         $this->assertSame('process', $cliRequest->getCommandName());
-        $this->assertSame(['extra-arg'], $cliRequest->getArguments());
+        $this->assertSame(['src', 'tests'], $cliRequest->getArguments());
         $this->assertSame([
-            'path' => ['src', 'tests'],
+            'path' => ['dir1', 'dir2'],
             'dev' => true,
         ], $cliRequest->getOptions());
     }
