@@ -40,6 +40,13 @@ final class InputParser
             // --option or --option=value
             if (str_starts_with((string) $item, '--')) {
                 [$name, $value] = $this->parseLongOption($item, $argv);
+
+                if (is_string($value)) {
+                    // allow multiple param
+                    $options[$name][] = $value;
+                    continue;
+                }
+
                 $options[$name] = $value;
                 continue;
             }
