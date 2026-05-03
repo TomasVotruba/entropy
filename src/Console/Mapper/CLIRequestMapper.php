@@ -54,10 +54,8 @@ final class CLIRequestMapper
             $optionName = $this->camelToKebab($name);
 
             // enable singular --option to parameter plural $options
-            if ($key !== 0 && (string) $reflectionParameter->getType() === 'array') {
-                if (str_ends_with($optionName, 's')) {
-                    $optionName = substr($optionName, 0, -1);
-                }
+            if ($key !== 0 && (string) $reflectionParameter->getType() === 'array' && str_ends_with($optionName, 's')) {
+                $optionName = substr($optionName, 0, -1);
             }
 
             // 1) Options always win (if present)

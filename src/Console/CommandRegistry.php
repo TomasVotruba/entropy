@@ -18,7 +18,7 @@ final readonly class CommandRegistry
         private array $commands
     ) {
         if ($commands === []) {
-            throw new InvalidCommandException('Register at leats one command, so application can run');
+            throw new InvalidCommandException('Register at least one command, so application can run');
         }
 
         Assert::allIsInstanceOf($commands, CommandInterface::class);

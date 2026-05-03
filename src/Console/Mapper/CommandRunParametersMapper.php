@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Console\Mapper;
 
+use Entropy\Tests\Console\Mapper\CommandRunParametersMapperTest;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Exception\InvalidCommandException;
@@ -14,7 +15,7 @@ use Entropy\Reflection\ParameterDescriptionResolver;
 use ReflectionMethod;
 use ReflectionNamedType;
 
-#[RelatedTest(\Entropy\Tests\Console\Mapper\CommandRunParametersMapperTest::class)]
+#[RelatedTest(CommandRunParametersMapperTest::class)]
 final class CommandRunParametersMapper
 {
     public function map(CommandInterface $command): ArgumentsAndOptions
@@ -59,10 +60,8 @@ final class CommandRunParametersMapper
                 $arguments[] = new Argument($parameterName, $description, $acceptsMultipleValue);
             } else {
                 // correct plural argumen to singular --option name
-                if ($acceptsMultipleValue) {
-                    if (str_ends_with($parameterName, 's')) {
-                        $parameterName = substr($parameterName, 0, -1);
-                    }
+                if ($acceptsMultipleValue && str_ends_with($parameterName, 's')) {
+                    $parameterName = substr($parameterName, 0, -1);
                 }
 
                 $options[] = new Option(

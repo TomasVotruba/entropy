@@ -20,7 +20,8 @@
         "rector/rector": "^2.4",
         "rector/swiss-knife": "^2.3",
         "tomasvotruba/unused-public": "^2.2",
-        "rector/jack": "^1.0"
+        "rector/jack": "^1.0",
+        "symplify/easy-coding-standard": "^13.0"
     },
     "autoload": {
         "psr-4": {
