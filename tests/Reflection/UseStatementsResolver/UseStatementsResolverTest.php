@@ -20,4 +20,28 @@ final class UseStatementsResolverTest extends TestCase
             'Nested' => Nested::class,
         ], $useStatements);
     }
+
+    public function testAliasedImport(): void
+    {
+        $useStatements = UseStatementsResolver::resolve(__DIR__ . '/Fixture/AliasedClass.php');
+
+        $this->assertSame([
+            'Aliased' => AnotherNestedClass::class,
+            'Nested' => Nested::class,
+        ], $useStatements);
+    }
+
+    public function testNoUseStatements(): void
+    {
+        $useStatements = UseStatementsResolver::resolve(__DIR__ . '/Fixture/NoUsesClass.php');
+
+        $this->assertSame([], $useStatements);
+    }
+
+    public function testMissingFileReturnsEmpty(): void
+    {
+        $useStatements = @UseStatementsResolver::resolve(__DIR__ . '/Fixture/DoesNotExist.php');
+
+        $this->assertSame([], $useStatements);
+    }
 }
