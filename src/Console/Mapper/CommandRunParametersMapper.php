@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Entropy\Console\Mapper;
 
-use Entropy\Tests\Console\Mapper\CommandRunParametersMapperTest;
 use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Exception\InvalidCommandException;
@@ -12,6 +11,7 @@ use Entropy\Console\ValueObject\Argument;
 use Entropy\Console\ValueObject\ArgumentsAndOptions;
 use Entropy\Console\ValueObject\Option;
 use Entropy\Reflection\ParameterDescriptionResolver;
+use Entropy\Tests\Console\Mapper\CommandRunParametersMapperTest;
 use ReflectionMethod;
 use ReflectionNamedType;
 
