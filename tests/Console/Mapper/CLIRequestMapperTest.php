@@ -7,6 +7,7 @@ namespace Entropy\Tests\Console\Mapper;
 use Entropy\Console\Exception\ConsoleInputMappingException;
 use Entropy\Console\Mapper\CLIRequestMapper;
 use Entropy\Console\ValueObject\CLIRequest;
+use Entropy\Tests\Console\Mapper\Fixture\OptionMarkerCommand;
 use Entropy\Tests\Console\Mapper\Fixture\SkipFilesCommand;
 use Entropy\Tests\Console\Mapper\Fixture\SomeCommand;
 use PHPUnit\Framework\TestCase;
@@ -88,6 +89,31 @@ final class CLIRequestMapperTest extends TestCase
         $this->expectExceptionMessage('Missing required "path" argument');
 
         $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
+    }
+
+    public function testOptionMarkerAcceptsLongOption(): void
+    {
+        $cliRequest = new CLIRequest(
+            'option-marker',
+            arguments: [],
+            options: [
+                'source' => '/some/path',
+            ]
+        );
+
+        $arguments = $this->cliRequestMapper->resolveArguments(new OptionMarkerCommand(), $cliRequest);
+
+        $this->assertSame(['/some/path', false], $arguments);
+    }
+
+    public function testOptionMarkerRejectsBarePositional(): void
+    {
+        $cliRequest = new CLIRequest('option-marker', arguments: ['/some/path']);
+
+        $this->expectException(ConsoleInputMappingException::class);
+        $this->expectExceptionMessage('Missing required value for "source" (use "--source" to provide it)');
+
+        $this->cliRequestMapper->resolveArguments(new OptionMarkerCommand(), $cliRequest);
     }
 
     // @todo add --skip-file to $skipFiles mapping

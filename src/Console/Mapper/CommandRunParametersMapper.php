@@ -11,6 +11,7 @@ use Entropy\Console\ValueObject\Argument;
 use Entropy\Console\ValueObject\ArgumentsAndOptions;
 use Entropy\Console\ValueObject\Option;
 use Entropy\Reflection\ParameterDescriptionResolver;
+use Entropy\Reflection\ParameterOptionMarkerResolver;
 use Entropy\Tests\Console\Mapper\CommandRunParametersMapperTest;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -23,6 +24,7 @@ final class CommandRunParametersMapper
         $runReflectionMethod = new ReflectionMethod($command, 'run');
 
         $paramDescriptions = ParameterDescriptionResolver::resolve($runReflectionMethod);
+        $optionMarkers = ParameterOptionMarkerResolver::resolve($runReflectionMethod);
 
         $arguments = [];
         $options = [];
@@ -55,8 +57,11 @@ final class CommandRunParametersMapper
                 }
             }
 
-            // first param can be an arg by convention, only "string" and "array" are allowed types
-            if ($key === 0 && in_array($parameterType, ['string', 'array'], true)) {
+            // first param can be an arg by convention, only "string" and "array" are allowed types,
+            // unless explicitly marked as an option via "@option $paramName" in the docblock
+            $isExplicitOption = isset($optionMarkers[$parameterName]);
+
+            if ($key === 0 && ! $isExplicitOption && in_array($parameterType, ['string', 'array'], true)) {
                 $arguments[] = new Argument($parameterName, $description, $acceptsMultipleValue);
             } else {
                 // correct plural argumen to singular --option name

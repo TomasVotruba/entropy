@@ -8,6 +8,7 @@ use Entropy\Attributes\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Exception\ConsoleInputMappingException;
 use Entropy\Console\ValueObject\CLIRequest;
+use Entropy\Reflection\ParameterOptionMarkerResolver;
 use Entropy\Tests\Console\Mapper\CLIRequestMapperTest;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -33,6 +34,8 @@ final class CLIRequestMapper
     {
         Assert::methodExists($command, 'run');
         $reflectionMethod = new ReflectionMethod($command, 'run');
+
+        $optionMarkers = ParameterOptionMarkerResolver::resolve($reflectionMethod);
 
         $args = [];
 
@@ -66,6 +69,26 @@ final class CLIRequestMapper
 
                 $args[] = $this->castValueByParameterType($value, $type);
                 continue;
+            }
+
+            // 1b) Param explicitly marked as "@option" must not consume positional arguments
+            $isExplicitOption = isset($optionMarkers[$name]);
+            if ($isExplicitOption) {
+                if ($reflectionParameter->isDefaultValueAvailable()) {
+                    $args[] = $reflectionParameter->getDefaultValue();
+                    continue;
+                }
+
+                if ($isBool) {
+                    $args[] = false;
+                    continue;
+                }
+
+                throw new ConsoleInputMappingException(sprintf(
+                    'Missing required value for "%s" (use "--%s" to provide it)',
+                    $name,
+                    $optionName,
+                ));
             }
 
             // 2) Variadic param: consume all remaining positionals as separate arguments
