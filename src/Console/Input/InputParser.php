@@ -43,6 +43,10 @@ final class InputParser
 
                 if (! is_numeric($value)) {
                     // allow multiple param
+                    if (! isset($options[$name]) || ! is_array($options[$name])) {
+                        $options[$name] = [];
+                    }
+
                     $options[$name][] = $value;
                     continue;
                 }
