@@ -117,6 +117,25 @@ bin/console hello src/ --loud
 
 <br>
 
+Need the first parameter to be an option instead of a positional argument? Mark it with `@option` in the docblock:
+
+```php
+/**
+ * @option $source
+ * @param string $source The source path
+ */
+public function run(string $source, bool $verbose = false): int
+{
+    // ...
+}
+```
+
+```bash
+bin/console hello --source=src/
+```
+
+<br>
+
 Typo a command name and the fuzzy matcher will pick the closest one. Pass `--help` for global help, or `command --help` for command-level help built from your docblocks.
 
 <br>
