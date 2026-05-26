@@ -33,4 +33,13 @@ final class InputParserTest extends TestCase
             'skip' => ['this', 'that'],
         ], $cliRequest->getOptions());
     }
+
+    public function testNumericOptionIsScalar(): void
+    {
+        $cliRequest = $this->inputParser->parse(['bin/rector', 'process', 'src', '--limit', '5']);
+
+        $this->assertSame([
+            'limit' => '5',
+        ], $cliRequest->getOptions());
+    }
 }

@@ -41,7 +41,7 @@ final class InputParser
             if (str_starts_with((string) $item, '--')) {
                 [$name, $value] = $this->parseLongOption($item, $argv);
 
-                if (is_string($value)) {
+                if (! is_numeric($value)) {
                     // allow multiple param
                     $options[$name][] = $value;
                     continue;
