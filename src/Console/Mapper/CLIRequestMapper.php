@@ -201,6 +201,11 @@ final class CLIRequestMapper
             return $defaultValue;
         }
 
+        // special case, use single value if param type is scalar
+        if (in_array($reflectionType->getName(), ['string', 'int', 'float'], true) && is_array($value)) {
+            $value = array_shift($value);
+        }
+
         return match ($reflectionType->getName()) {
             'bool' => filter_var($value, FILTER_VALIDATE_BOOL),
             'int' => (int) $value,
