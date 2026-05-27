@@ -116,6 +116,21 @@ final class CLIRequestMapperTest extends TestCase
         $this->cliRequestMapper->resolveArguments(new OptionMarkerCommand(), $cliRequest);
     }
 
+    public function testScalarOptionTakesLastValueFromArray(): void
+    {
+        $cliRequest = new CLIRequest(
+            'option-marker',
+            arguments: [],
+            options: [
+                'source' => ['/first/path', '/second/path'],
+            ]
+        );
+
+        $arguments = $this->cliRequestMapper->resolveArguments(new OptionMarkerCommand(), $cliRequest);
+
+        $this->assertSame(['/first/path', false], $arguments);
+    }
+
     // @todo add --skip-file to $skipFiles mapping
     public function testSingularOptionToPluralParameter(): void
     {

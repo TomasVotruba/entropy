@@ -34,6 +34,15 @@ final class InputParserTest extends TestCase
         ], $cliRequest->getOptions());
     }
 
+    public function testSingleStringOption(): void
+    {
+        $cliRequest = $this->inputParser->parse(['bin/rector', 'process', 'src', '--directory', 'some-path']);
+
+        $this->assertSame([
+            'directory' => ['some-path'],
+        ], $cliRequest->getOptions());
+    }
+
     public function testNumericOptionIsScalar(): void
     {
         $cliRequest = $this->inputParser->parse(['bin/rector', 'process', 'src', '--limit', '5']);
