@@ -7,6 +7,7 @@ namespace Entropy\Tests\Console\Mapper;
 use Entropy\Console\Exception\ConsoleInputMappingException;
 use Entropy\Console\Mapper\CLIRequestMapper;
 use Entropy\Console\ValueObject\CLIRequest;
+use Entropy\Tests\Console\Mapper\Fixture\NullableArrayCommand;
 use Entropy\Tests\Console\Mapper\Fixture\OptionMarkerCommand;
 use Entropy\Tests\Console\Mapper\Fixture\SkipFilesCommand;
 use Entropy\Tests\Console\Mapper\Fixture\SomeCommand;
@@ -143,6 +144,21 @@ final class CLIRequestMapperTest extends TestCase
         );
 
         $arguments = $this->cliRequestMapper->resolveArguments(new SkipFilesCommand(), $cliRequest);
+
+        $this->assertSame(['source', ['first', 'second']], $arguments);
+    }
+
+    public function testSingularOptionToNullablePluralParameter(): void
+    {
+        $cliRequest = new CLIRequest(
+            'nullable-array',
+            arguments: ['source'],
+            options: [
+                'skip-file' => ['first', 'second'],
+            ]
+        );
+
+        $arguments = $this->cliRequestMapper->resolveArguments(new NullableArrayCommand(), $cliRequest);
 
         $this->assertSame(['source', ['first', 'second']], $arguments);
     }
