@@ -24,15 +24,15 @@ final class InputParser
             return new CLIRequest(null);
         }
 
+        $args = [];
+        $options = [];
+
         $command = array_shift($argv);
         if (str_starts_with((string) $command, '-')) {
             // most likely an option
-            $command = null;
             $options[ltrim((string) $command, '-')] = true;
+            $command = null;
         }
-
-        $args = [];
-        $options = [];
 
         while ($argv !== []) {
             $item = array_shift($argv);
