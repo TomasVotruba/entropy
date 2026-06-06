@@ -8,6 +8,7 @@ use Entropy\Console\Exception\ConsoleInputMappingException;
 use Entropy\Console\Mapper\CLIRequestMapper;
 use Entropy\Console\ValueObject\CLIRequest;
 use Entropy\Tests\Console\Mapper\Fixture\NullableArrayCommand;
+use Entropy\Tests\Console\Mapper\Fixture\BoolCommand;
 use Entropy\Tests\Console\Mapper\Fixture\OptionMarkerCommand;
 use Entropy\Tests\Console\Mapper\Fixture\SkipFilesCommand;
 use Entropy\Tests\Console\Mapper\Fixture\SomeCommand;
@@ -17,12 +18,15 @@ final class CLIRequestMapperTest extends TestCase
 {
     private SomeCommand $someCommand;
 
+    private BoolCommand $boolCommand;
+
     private CLIRequestMapper $cliRequestMapper;
 
     protected function setUp(): void
     {
         $this->cliRequestMapper = new CLIRequestMapper();
         $this->someCommand = new SomeCommand();
+        $this->boolCommand = new BoolCommand();
     }
 
     public function testMultipleArgs(): void
@@ -115,6 +119,29 @@ final class CLIRequestMapperTest extends TestCase
         $this->expectExceptionMessage('Missing required value for "source" (use "--source" to provide it)');
 
         $this->cliRequestMapper->resolveArguments(new OptionMarkerCommand(), $cliRequest);
+    }
+
+    public function testBoolOptionsInArray(): void
+    {
+        $cliRequest = new CLIRequest(
+            'bool',
+            options: [
+                'flag-string-true' => ['true'],
+                'flag-string-false' => ['false'],
+                'flag-bool-true' => [true],
+                'flag-bool-false' => [false],
+                'flag-int-true' => [1],
+                'flag-int-false' => [0],
+                'flag-null' => null,
+                'flag-array-empty' => [],
+                'flag-array-filled' => [
+                    'a' => 1,
+                ],
+            ]
+        );
+
+        $arguments = $this->cliRequestMapper->resolveArguments($this->boolCommand, $cliRequest);
+        $this->assertSame([true, false, true, false, true, false, false, false, true, true, false, null], $arguments);
     }
 
     public function testScalarOptionTakesLastValueFromArray(): void
