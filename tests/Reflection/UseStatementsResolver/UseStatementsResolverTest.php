@@ -44,4 +44,14 @@ final class UseStatementsResolverTest extends TestCase
 
         $this->assertSame([], $useStatements);
     }
+
+    public function testTopLevelClassImport(): void
+    {
+        $useStatements = UseStatementsResolver::resolve(__DIR__ . '/Fixture/TopLevelUseClass.php');
+
+        $this->assertSame([
+            'Throwable' => 'Throwable',
+        ], $useStatements);
+        $this->assertArrayNotHasKey('', $useStatements);
+    }
 }

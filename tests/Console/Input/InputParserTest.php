@@ -51,4 +51,24 @@ final class InputParserTest extends TestCase
             'limit' => '5',
         ], $cliRequest->getOptions());
     }
+
+    public function testFirstTokenShortFlag(): void
+    {
+        $cliRequest = $this->inputParser->parse(['bin/rector', '-h']);
+
+        $this->assertNull($cliRequest->getCommandName());
+        $this->assertSame([
+            'h' => true,
+        ], $cliRequest->getOptions());
+    }
+
+    public function testFirstTokenLongFlag(): void
+    {
+        $cliRequest = $this->inputParser->parse(['bin/rector', '--help']);
+
+        $this->assertNull($cliRequest->getCommandName());
+        $this->assertSame([
+            'help' => true,
+        ], $cliRequest->getOptions());
+    }
 }

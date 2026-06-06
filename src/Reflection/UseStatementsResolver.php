@@ -22,7 +22,9 @@ final class UseStatementsResolver
 
         foreach ($matches as $match) {
             $fullClassName = $match[1];
-            $shortClassName = $match[3] ?? substr((string) strrchr($fullClassName, '\\'), 1);
+            $shortClassName = $match[3] ?? (str_contains($fullClassName, '\\')
+                ? substr((string) strrchr($fullClassName, '\\'), 1)
+                : $fullClassName);
             $useStatements[$shortClassName] = $fullClassName;
         }
 
