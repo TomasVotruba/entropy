@@ -16,8 +16,14 @@ use ReflectionMethod;
 use ReflectionParameter;
 use Webmozart\Assert\Assert;
 
+/**
+ * Designed to be extended by applications that need to customise resolution
+ * (e.g. add their own service kinds), so this class is intentionally not final.
+ *
+ * @api extendable container
+ */
 #[RelatedTest(ContainerTest::class)]
-final class Container
+class Container
 {
     /**
      * @var array<class-string, callable(Container): object>
