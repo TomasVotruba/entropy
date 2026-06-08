@@ -74,4 +74,25 @@ final class ContainerTest extends TestCase
         // try to override service
         $container->service(SomeType::class, fn (): SomeType => new SomeType());
     }
+
+    public function testBuildReturnsFreshInstanceWithoutCaching(): void
+    {
+        $container = new Container();
+
+        $firstSomeType = $container->build(SomeType::class);
+        $secondSomeType = $container->build(SomeType::class);
+
+        $this->assertInstanceOf(SomeType::class, $firstSomeType);
+        // build() never caches, so each call is a new instance
+        $this->assertNotSame($firstSomeType, $secondSomeType);
+    }
+
+    public function testBuildResolvesDependencies(): void
+    {
+        $container = new Container();
+
+        $withDependencies = $container->build(WithDependencies::class);
+        $this->assertInstanceOf(WithDependencies::class, $withDependencies);
+        $this->assertInstanceOf(SomeType::class, $withDependencies->getSomeType());
+    }
 }
