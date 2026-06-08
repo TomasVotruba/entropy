@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Entropy\Console;
 
 use Entropy\Console\Contract\CommandInterface;
+use Entropy\Console\Contract\DefaultCommandInterface;
+use Entropy\Console\Contract\HiddenCommandInterface;
 use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Utils\FuzzyMatcher;
 use Webmozart\Assert\Assert;
@@ -46,11 +48,37 @@ final readonly class CommandRegistry
     }
 
     /**
+     * @api used in tests and by applications inspecting registered commands
+     *
      * @return CommandInterface[]
      */
     public function all(): array
     {
         return $this->commands;
+    }
+
+    /**
+     * Commands that should be listed in help output (hidden ones are excluded).
+     *
+     * @return CommandInterface[]
+     */
+    public function getVisible(): array
+    {
+        return array_values(array_filter(
+            $this->commands,
+            static fn (CommandInterface $command): bool => ! $command instanceof HiddenCommandInterface
+        ));
+    }
+
+    public function getDefault(): ?CommandInterface
+    {
+        foreach ($this->commands as $command) {
+            if ($command instanceof DefaultCommandInterface) {
+                return $command;
+            }
+        }
+
+        return null;
     }
 
     public function has(string $commandName): bool
