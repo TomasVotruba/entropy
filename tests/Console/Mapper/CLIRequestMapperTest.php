@@ -189,4 +189,23 @@ final class CLIRequestMapperTest extends TestCase
 
         $this->assertSame(['source', ['first', 'second']], $arguments);
     }
+
+    public function testGlobalOptionsAreIgnored(): void
+    {
+        $cliRequest = new CLIRequest(
+            'some',
+            arguments: ['/some/path'],
+            options: [
+                'flag' => true,
+                'count' => '5',
+                // standard global flags handled by the application/output layer
+                'quiet' => true,
+                'help' => true,
+            ]
+        );
+
+        $arguments = $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
+
+        $this->assertSame([['/some/path'], true, 5, null], $arguments);
+    }
 }

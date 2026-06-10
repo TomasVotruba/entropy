@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Entropy\Console;
 
 use Entropy\Attributes\RelatedTest;
+use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
 use Entropy\Console\Input\InputParser;
 use Entropy\Console\Mapper\CLIRequestMapper;
@@ -35,21 +36,35 @@ final readonly class ConsoleApplication
     {
         $cliRequest = $this->inputParser->parse($argv);
 
-        // global help
-        if ($cliRequest->isHelp()) {
-            $this->helpPrinter->print();
-            return ExitCode::SUCCESS;
-        }
-
-        /** @var string $commandName */
         $commandName = $cliRequest->getCommandName();
 
+        // no command name given - fall back to the default command, or show help
+        if ($commandName === null) {
+            $defaultCommand = $this->commandRegistry->getDefault();
+            $wantsHelp = array_intersect(['h', 'help'], array_keys($cliRequest->getOptions())) !== [];
+
+            if (! $defaultCommand instanceof CommandInterface || $wantsHelp) {
+                $this->helpPrinter->print();
+                return ExitCode::SUCCESS;
+            }
+
+            $commandName = $defaultCommand->getName();
+        }
+
         if (! $this->commandRegistry->has($commandName)) {
-            fwrite(STDERR, sprintf("Unknown command: %s\n\n", $commandName));
+            $defaultCommand = $this->commandRegistry->getDefault();
 
-            $this->helpPrinter->print();
+            // with a default command, an unknown leading token is its first argument (e.g. "ecs src")
+            if (! $defaultCommand instanceof CommandInterface) {
+                fwrite(STDERR, sprintf("Unknown command: %s\n\n", $commandName));
 
-            return ExitCode::INVALID_COMMAND;
+                $this->helpPrinter->print();
+
+                return ExitCode::INVALID_COMMAND;
+            }
+
+            $cliRequest = $cliRequest->withCommandNameAndPrependedArgument($defaultCommand->getName(), $commandName);
+            $commandName = $defaultCommand->getName();
         }
 
         try {

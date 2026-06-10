@@ -20,11 +20,16 @@ use Webmozart\Assert\Assert;
 final class CLIRequestMapper
 {
     /**
+     * Standard global flags handled by the application/output layer, not by a
+     * command's run() signature. They are silently ignored during mapping.
+     *
      * @var array<string, bool>
      */
     private const array IGNORED_OPTIONS = [
         'help' => true,
         'h' => true,
+        'version' => true,
+        'quiet' => true,
     ];
 
     /**
