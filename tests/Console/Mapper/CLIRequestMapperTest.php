@@ -199,8 +199,8 @@ final class CLIRequestMapperTest extends TestCase
                 'flag' => true,
                 'count' => '5',
                 // standard global flags handled by the application/output layer
-                'ansi' => true,
-                'vvv' => true,
+                'quiet' => true,
+                'help' => true,
             ]
         );
 

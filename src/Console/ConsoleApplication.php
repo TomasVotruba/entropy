@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Entropy\Console;
 
 use Entropy\Attributes\RelatedTest;
+use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
 use Entropy\Console\Input\InputParser;
 use Entropy\Console\Mapper\CLIRequestMapper;
@@ -42,7 +43,7 @@ final readonly class ConsoleApplication
             $defaultCommand = $this->commandRegistry->getDefault();
             $wantsHelp = array_intersect(['h', 'help'], array_keys($cliRequest->getOptions())) !== [];
 
-            if ($defaultCommand === null || $wantsHelp) {
+            if (! $defaultCommand instanceof CommandInterface || $wantsHelp) {
                 $this->helpPrinter->print();
                 return ExitCode::SUCCESS;
             }
@@ -54,7 +55,7 @@ final readonly class ConsoleApplication
             $defaultCommand = $this->commandRegistry->getDefault();
 
             // with a default command, an unknown leading token is its first argument (e.g. "ecs src")
-            if ($defaultCommand === null) {
+            if (! $defaultCommand instanceof CommandInterface) {
                 fwrite(STDERR, sprintf("Unknown command: %s\n\n", $commandName));
 
                 $this->helpPrinter->print();

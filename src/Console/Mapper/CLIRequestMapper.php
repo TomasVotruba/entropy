@@ -28,16 +28,8 @@ final class CLIRequestMapper
     private const array IGNORED_OPTIONS = [
         'help' => true,
         'h' => true,
-        'ansi' => true,
-        'no-ansi' => true,
         'version' => true,
-        'V' => true,
         'quiet' => true,
-        'q' => true,
-        'verbose' => true,
-        'v' => true,
-        'vv' => true,
-        'vvv' => true,
     ];
 
     /**

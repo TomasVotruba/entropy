@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Entropy\Tests\Console\CommandRegistry;
 
 use Entropy\Console\CommandRegistry;
+use Entropy\Console\Contract\CommandInterface;
 use Entropy\Tests\Console\CommandRegistry\Fixture\DefaultFixtureCommand;
 use Entropy\Tests\Console\CommandRegistry\Fixture\HiddenFixtureCommand;
 use Entropy\Tests\Console\CommandRegistry\Fixture\RegularFixtureCommand;
@@ -36,7 +37,10 @@ final class CommandRegistryTest extends TestCase
 
         $this->assertCount(2, $visibleCommands);
 
-        $visibleNames = array_map(static fn ($command): string => $command->getName(), $visibleCommands);
+        $visibleNames = array_map(
+            static fn (CommandInterface $command): string => $command->getName(),
+            $visibleCommands
+        );
         $this->assertContains('check', $visibleNames);
         $this->assertContains('list-checkers', $visibleNames);
         $this->assertNotContains('worker', $visibleNames);

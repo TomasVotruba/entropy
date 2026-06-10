@@ -161,33 +161,6 @@ class Container
     }
 
     /**
-     * Autowire a fresh instance via reflection, without caching or registering it.
-     *
-     * Useful inside a service factory that needs to build the very class it is
-     * registered for, and then decorate it (e.g. configure it) before returning.
-     *
-     * @api used by applications building/decorating their own services
-     *
-     * @template TType as object
-     *
-     * @param class-string<TType> $class
-     * @return TType
-     */
-    public function build(string $class): object
-    {
-        $reflectionClass = new ReflectionClass($class);
-
-        if (! $reflectionClass->isInstantiable()) {
-            throw new CreateServiceException(sprintf('Class "%s" is not instantiable', $class));
-        }
-
-        /** @var TType $instance */
-        $instance = $this->createInstanceFromReflection($reflectionClass);
-
-        return $instance;
-    }
-
-    /**
      * @template TType as object
      *
      * @param class-string<TType> $contractClass
