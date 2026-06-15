@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
-use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 
 return RectorConfig::configure()
-    ->withPaths([
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
-    ])
+    ->withPaths([__DIR__ . '/src', __DIR__ . '/tests'])
     ->withRootFiles()
     ->withPhpSets()
     ->withImportNames()
@@ -27,6 +23,12 @@ return RectorConfig::configure()
         rectorPreset: true
     )
     ->withSkip([
+<<<<<<< HEAD
+=======
+        // false-positive validation
+        //        RemoveEmptyClassMethodRector::class => __DIR__ . '/src/Attributes',
+
+>>>>>>> 6b78300 (bump deps)
         // testing string to class name resolution
         StringClassNameToClassConstantRector::class => __DIR__ . '/tests/Reflection/ClassNameResolver/ClassNameResolverTest.php',
     ])

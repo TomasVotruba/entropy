@@ -13,6 +13,12 @@ parameters:
         # test fixtures
         - */Fixture/*
 
+    symplify:
+        ctor: true
+        symfonyReturnType: true
+        laravelReturnType: true
+        pathStrings: true
+
     treatPhpDocTypesAsCertain: false
 
     # false positive
