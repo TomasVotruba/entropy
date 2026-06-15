@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Entropy\Console\Output;
 
 use Entropy\Attributes\RelatedTest;
-use Entropy\Console\Enum\Color;
 use Entropy\Tests\Console\Output\ProgressBarTest;
 
 /**
@@ -27,9 +26,8 @@ final class ProgressBar
 
     private readonly bool $isSilent;
 
-    public function __construct(
-        private readonly OutputColorizer $outputColorizer
-    ) {
+    public function __construct()
+    {
         // avoid printing to stdout during unit tests
         $this->isSilent = defined('PHPUNIT_COMPOSER_INSTALL');
     }
@@ -97,6 +95,6 @@ final class ProgressBar
         }
 
         // \r returns the cursor to the line start, so the bar is re-written in place
-        fwrite(STDOUT, "\r" . $this->outputColorizer->color($this->render(), Color::GREEN));
+        fwrite(STDOUT, "\r" . $this->render());
     }
 }
