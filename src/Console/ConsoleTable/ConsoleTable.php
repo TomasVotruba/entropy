@@ -12,6 +12,7 @@ use Entropy\Tests\Console\ConsoleTable\ConsoleTableTest;
 final readonly class ConsoleTable
 {
     /**
+     * @api used in tests
      * Marks a separator line between table rows.
      */
     public const string SEPARATOR = '__separator__';

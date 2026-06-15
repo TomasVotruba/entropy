@@ -24,6 +24,9 @@ final readonly class ViewRenderer
     ) {
     }
 
+    /**
+     * @api to be used outside
+     */
     public function renderTableView(TableView $tableView): void
     {
         $this->outputPrinter->newline();
