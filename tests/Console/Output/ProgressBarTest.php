@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Entropy\Tests\Console\Output;
 
-use Entropy\Console\Output\OutputColorizer;
 use Entropy\Console\Output\ProgressBar;
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +13,7 @@ final class ProgressBarTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->progressBar = new ProgressBar(new OutputColorizer());
+        $this->progressBar = new ProgressBar();
     }
 
     public function testStartRendersZeroPercent(): void
