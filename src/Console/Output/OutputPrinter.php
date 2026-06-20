@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Entropy\Console\Output;
 
 use Entropy\Console\Enum\Color;
+use Entropy\Console\Terminal\Terminal;
 use Webmozart\Assert\Assert;
 
 /**
@@ -150,11 +151,15 @@ final readonly class OutputPrinter
      */
     private function block(string $text, string $color): void
     {
-        $emptyLine = str_repeat(' ', strlen($text));
+        // reserve 2 chars for the single space padding the background() adds on each side
+        $contentWidth = Terminal::getWidth() - 2;
+
+        $emptyLine = str_repeat(' ', $contentWidth);
+        $paddedText = Terminal::padVisibleRight($text, $contentWidth);
 
         $this->newline();
         $this->writeln($this->outputColorizer->background($emptyLine, $color));
-        $this->writeln($this->outputColorizer->background($text, $color));
+        $this->writeln($this->outputColorizer->background($paddedText, $color));
         $this->writeln($this->outputColorizer->background($emptyLine, $color));
         $this->newline();
     }
