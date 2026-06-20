@@ -108,23 +108,17 @@ final readonly class OutputPrinter
 
     public function success(string $text): void
     {
-        $this->newline();
-        $this->writeln($this->outputColorizer->background('[OK] ' . $text, Color::GREEN));
-        $this->newline();
+        $this->block('[OK] ' . $text, Color::GREEN);
     }
 
     public function warning(string $text): void
     {
-        $this->newline();
-        $this->writeln($this->outputColorizer->background('[WARNING] ' . $text, Color::YELLOW));
-        $this->newline();
+        $this->block('[WARNING] ' . $text, Color::YELLOW);
     }
 
     public function error(string $text): void
     {
-        $this->newline();
-        $this->writeln($this->outputColorizer->background('[ERROR] ' . $text, Color::RED));
-        $this->newline();
+        $this->block('[ERROR] ' . $text, Color::RED);
     }
 
     /**
@@ -146,5 +140,20 @@ final readonly class OutputPrinter
 
         $answer = trim($answer);
         return $answer === '' ? $default : $answer;
+    }
+
+    /**
+     * Print a colored block padded by a blank colored line above and below the message,
+     * the same way SymfonyStyle renders success/warning/error blocks.
+     *
+     * @param Color::* $color
+     */
+    private function block(string $text, string $color): void
+    {
+        $this->newline();
+        $this->writeln($this->outputColorizer->background('', $color));
+        $this->writeln($this->outputColorizer->background($text, $color));
+        $this->writeln($this->outputColorizer->background('', $color));
+        $this->newline();
     }
 }
