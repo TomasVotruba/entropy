@@ -150,10 +150,12 @@ final readonly class OutputPrinter
      */
     private function block(string $text, string $color): void
     {
+        $emptyLine = str_repeat(' ', strlen($text));
+
         $this->newline();
-        $this->writeln($this->outputColorizer->background('', $color));
+        $this->writeln($this->outputColorizer->background($emptyLine, $color));
         $this->writeln($this->outputColorizer->background($text, $color));
-        $this->writeln($this->outputColorizer->background('', $color));
+        $this->writeln($this->outputColorizer->background($emptyLine, $color));
         $this->newline();
     }
 }

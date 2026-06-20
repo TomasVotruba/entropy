@@ -25,6 +25,17 @@ final class OutputColozierTest extends TestCase
         $this->assertSame($expected, $colorized);
     }
 
+    public function testBackgroundEqualLengthHasEqualVisibleWidth(): void
+    {
+        $text = '[OK] No errors found.';
+        $emptyLine = str_repeat(' ', strlen($text));
+
+        $backgroundText = $this->outputColorizer->background($text, 'green');
+        $backgroundEmptyLine = $this->outputColorizer->background($emptyLine, 'green');
+
+        $this->assertSame($this->visibleWidth($backgroundEmptyLine), $this->visibleWidth($backgroundText));
+    }
+
     /**
      * @return Iterator<array<int, string>>
      */
@@ -60,5 +71,13 @@ all wrapped in green
 then finished
 MULTILINE
         ];
+    }
+
+    private function visibleWidth(string $text): int
+    {
+        // strip ANSI color escape sequences
+        $stripped = (string) preg_replace('#\e\[[0-9;]*m#', '', $text);
+
+        return strlen($stripped);
     }
 }
