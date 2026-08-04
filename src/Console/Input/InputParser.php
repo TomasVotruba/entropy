@@ -28,8 +28,14 @@ final class InputParser
         $options = [];
 
         $command = array_shift($argv);
-        if (str_starts_with((string) $command, '-')) {
-            // most likely an option
+        if (str_starts_with((string) $command, '--')) {
+            // most likely an option, possibly carrying a value, e.g. "--limit=5" or "--limit 5"
+            [$name, $value] = $this->parseLongOption((string) $command, $argv);
+
+            $options[$name] = $value;
+            $command = null;
+        } elseif (str_starts_with((string) $command, '-')) {
+            // most likely a short flag
             $options[ltrim((string) $command, '-')] = true;
             $command = null;
         }
