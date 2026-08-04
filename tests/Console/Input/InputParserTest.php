@@ -71,4 +71,36 @@ final class InputParserTest extends TestCase
             'help' => true,
         ], $cliRequest->getOptions());
     }
+
+    public function testFirstTokenLongOptionWithInlineValue(): void
+    {
+        $cliRequest = $this->inputParser->parse(['bin/rector', '--limit=5']);
+
+        $this->assertNull($cliRequest->getCommandName());
+        $this->assertSame([
+            'limit' => '5',
+        ], $cliRequest->getOptions());
+    }
+
+    public function testFirstTokenLongOptionWithSeparatedValue(): void
+    {
+        $cliRequest = $this->inputParser->parse(['bin/rector', '--directory', 'some-path']);
+
+        $this->assertNull($cliRequest->getCommandName());
+        $this->assertSame([], $cliRequest->getArguments());
+        $this->assertSame([
+            'directory' => 'some-path',
+        ], $cliRequest->getOptions());
+    }
+
+    public function testFirstTokenLongOptionFollowedByMore(): void
+    {
+        $cliRequest = $this->inputParser->parse(['bin/rector', '--limit=5', '--directory', 'some-path']);
+
+        $this->assertNull($cliRequest->getCommandName());
+        $this->assertSame([
+            'limit' => '5',
+            'directory' => ['some-path'],
+        ], $cliRequest->getOptions());
+    }
 }
