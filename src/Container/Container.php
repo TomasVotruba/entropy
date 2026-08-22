@@ -206,6 +206,33 @@ class Container
     }
 
     /**
+     * Forget every factory, discovery registration and cached instance whose class is-a $contract,
+     * so make() and findByContract() no longer return them. A later make() rebuilds a fresh instance.
+     *
+     * @param class-string $contract
+     */
+    public function forgetByContract(string $contract): void
+    {
+        foreach (array_keys($this->serviceFactories) as $class) {
+            if (is_a($class, $contract, true)) {
+                unset($this->serviceFactories[$class]);
+            }
+        }
+
+        foreach (array_keys($this->registeredClasses) as $class) {
+            if (is_a($class, $contract, true)) {
+                unset($this->registeredClasses[$class]);
+            }
+        }
+
+        foreach (array_keys($this->instances) as $class) {
+            if (is_a($class, $contract, true)) {
+                unset($this->instances[$class]);
+            }
+        }
+    }
+
+    /**
      * @param ReflectionParameter[] $reflectionParameters
      * @param class-string $class
      * @return array<object|object[]>
