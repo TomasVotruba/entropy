@@ -47,6 +47,12 @@ class Container
      */
     private array $makingStack = [];
 
+    /**
+     * Classes registered for autowiring and contract discovery, without a factory.
+     * @var array<class-string, true>
+     */
+    private array $registeredClasses = [];
+
     public function __construct()
     {
         // setup default console service
@@ -100,7 +106,26 @@ class Container
             throw new RegisterServiceException(sprintf('Service for "%s" class is already registered', $class));
         }
 
+        // a factory supersedes a bare registration of the same class
+        unset($this->registeredClasses[$class]);
+
         $this->serviceFactories[$class] = $factory;
+    }
+
+    /**
+     * Register a class for autowiring and contract discovery, without a factory. The container builds it
+     * via reflection on demand, and findByContract() can then find it among its implementations.
+     * Idempotent, unlike service(); a class already backed by a factory is left untouched.
+     *
+     * @param class-string $class
+     */
+    public function register(string $class): void
+    {
+        if (isset($this->serviceFactories[$class])) {
+            return;
+        }
+
+        $this->registeredClasses[$class] = true;
     }
 
     /**
@@ -164,13 +189,20 @@ class Container
      * @template TType as object
      *
      * @param class-string<TType> $contractClass
-     * @return array<TType>
+     * @return list<TType>
      */
     public function findByContract(string $contractClass): array
     {
         $this->warmUpInstanceServices($contractClass);
 
-        return array_filter($this->instances, fn (object $instance): bool => $instance instanceof $contractClass);
+        $matches = array_filter(
+            $this->instances,
+            fn (object $instance): bool => $instance instanceof $contractClass
+        );
+
+        // return a plain 0-indexed list; class-string keys would turn a variadic spread
+        // (e.g. new Traverser(...$services)) into named arguments
+        return array_values($matches);
     }
 
     /**
@@ -197,18 +229,20 @@ class Container
 
     private function warmUpInstanceServices(string $contractClass): void
     {
-        // warm up instances with registered service of contract
-        foreach (array_keys($this->serviceFactories) as $class) {
-            if (! is_a($class, $contractClass, true)) {
+        // warm up both factory-backed services and bare-registered classes of the contract
+        $knownClasses = [...array_keys($this->serviceFactories), ...array_keys($this->registeredClasses)];
+
+        foreach ($knownClasses as $knownClass) {
+            if (! is_a($knownClass, $contractClass, true)) {
                 continue;
             }
 
-            if (isset($this->instances[$class])) {
+            if (isset($this->instances[$knownClass])) {
                 continue;
             }
 
             // warm up cache if not yet
-            $this->instances[$class] = $this->make($class);
+            $this->instances[$knownClass] = $this->make($knownClass);
         }
     }
 
