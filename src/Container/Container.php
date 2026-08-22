@@ -53,6 +53,24 @@ class Container
      */
     private array $registeredClasses = [];
 
+    /**
+     * Callbacks run once, right after a matching instance is built, keyed by the type they apply to.
+     * @var array<class-string, list<callable(object, self): void>>
+     */
+    private array $afterResolvingCallbacks = [];
+
+    /**
+     * Instances built during the current top-level make() that still wait for their afterResolving
+     * callbacks. Draining is deferred to the outermost make() so a service and the collection it
+     * belongs to can resolve without tripping the circular-dependency guard.
+     * @var list<object>
+     */
+    private array $pendingAfterResolving = [];
+
+    private int $resolutionDepth = 0;
+
+    private bool $isDraining = false;
+
     public function __construct()
     {
         // setup default console service
@@ -129,6 +147,29 @@ class Container
     }
 
     /**
+     * Register a callback run once, right after an instance of $class (or a subtype) is built.
+     * Useful for setter injection that would otherwise create a dependency cycle. Draining is
+     * deferred to the outermost make(), so the callback can resolve the collection $class belongs to.
+     *
+     * @template TObject of object
+     * @param class-string<TObject> $class
+     * @param callable(TObject, self): void $callback
+     */
+    public function afterResolving(string $class, callable $callback): void
+    {
+        // wrap in a widening closure so the heterogeneous store stays type-safe; the guard narrows
+        // the built instance back to TObject before handing it to the typed callback
+        $this->afterResolvingCallbacks[$class][] = function (object $instance, self $container) use (
+            $callback,
+            $class
+        ): void {
+            if ($instance instanceof $class) {
+                $callback($instance, $container);
+            }
+        };
+    }
+
+    /**
      * @template TType as object
      *
      * @param class-string<TType> $class
@@ -155,6 +196,7 @@ class Container
         // mark as "currently being created"
         $this->making[$class] = true;
         $this->makingStack[] = $class;
+        ++$this->resolutionDepth;
 
         try {
             // factories / registered services
@@ -163,6 +205,7 @@ class Container
 
                 $instance = $factory($this);
                 $this->instances[$class] = $instance;
+                $this->queueAfterResolving($instance);
 
                 return $instance;
             }
@@ -173,6 +216,7 @@ class Container
             if ($reflectionClass->isInstantiable()) {
                 $instance = $this->createInstanceFromReflection($reflectionClass);
                 $this->instances[$class] = $instance;
+                $this->queueAfterResolving($instance);
 
                 return $instance;
             }
@@ -182,6 +226,13 @@ class Container
             // always unmark, even if construction throws
             array_pop($this->makingStack);
             unset($this->making[$class]);
+
+            // drain queued callbacks once the outermost make() has unwound, so their re-entrant
+            // lookups see fully built instances instead of hitting the circular-dependency guard
+            --$this->resolutionDepth;
+            if ($this->resolutionDepth === 0 && ! $this->isDraining) {
+                $this->drainAfterResolving();
+            }
         }
     }
 
@@ -270,6 +321,39 @@ class Container
 
             // warm up cache if not yet
             $this->instances[$knownClass] = $this->make($knownClass);
+        }
+    }
+
+    private function queueAfterResolving(object $instance): void
+    {
+        foreach (array_keys($this->afterResolvingCallbacks) as $registeredClass) {
+            if ($instance instanceof $registeredClass) {
+                $this->pendingAfterResolving[] = $instance;
+                return;
+            }
+        }
+    }
+
+    private function drainAfterResolving(): void
+    {
+        $this->isDraining = true;
+
+        try {
+            while ($this->pendingAfterResolving !== []) {
+                $instance = array_shift($this->pendingAfterResolving);
+
+                foreach ($this->afterResolvingCallbacks as $registeredClass => $callbacks) {
+                    if (! $instance instanceof $registeredClass) {
+                        continue;
+                    }
+
+                    foreach ($callbacks as $callback) {
+                        $callback($instance, $this);
+                    }
+                }
+            }
+        } finally {
+            $this->isDraining = false;
         }
     }
 
