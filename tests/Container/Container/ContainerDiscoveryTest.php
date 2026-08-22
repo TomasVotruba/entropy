@@ -45,4 +45,29 @@ final class ContainerDiscoveryTest extends TestCase
 
         $this->assertSame([0, 1], array_keys($collected));
     }
+
+    public function testForgetByContractRemovesRegisteredImplementations(): void
+    {
+        $container = new Container();
+        $container->register(FirstCollected::class);
+        $container->register(SecondCollected::class);
+
+        $this->assertCount(2, $container->findByContract(CollectedInterface::class));
+
+        $container->forgetByContract(CollectedInterface::class);
+
+        $this->assertCount(0, $container->findByContract(CollectedInterface::class));
+    }
+
+    public function testForgetByContractRebuildsFreshInstance(): void
+    {
+        $container = new Container();
+        $container->register(FirstCollected::class);
+
+        $firstInstance = $container->make(FirstCollected::class);
+        $container->forgetByContract(CollectedInterface::class);
+        $secondInstance = $container->make(FirstCollected::class);
+
+        $this->assertNotSame($firstInstance, $secondInstance);
+    }
 }
