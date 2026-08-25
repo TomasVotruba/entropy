@@ -54,6 +54,14 @@ class Container
     private array $registeredClasses = [];
 
     /**
+     * Contracts already materialised by findByContract(). Registering a fresh implementation of
+     * one of these afterwards is refused: the collection that consumed the contract is a snapshot
+     * and would silently miss the late class.
+     * @var array<class-string, true>
+     */
+    private array $resolvedContracts = [];
+
+    /**
      * Callbacks run once, right after a matching instance is built, keyed by the type they apply to.
      * @var array<class-string, list<callable(object, self): void>>
      */
@@ -119,6 +127,8 @@ class Container
      */
     public function service(string $class, callable $factory): void
     {
+        $this->assertNoLateContractRegistration($class);
+
         if (isset($this->serviceFactories[$class])) {
             // avoid service override
             throw new RegisterServiceException(sprintf('Service for "%s" class is already registered', $class));
@@ -142,6 +152,8 @@ class Container
         if (isset($this->serviceFactories[$class])) {
             return;
         }
+
+        $this->assertNoLateContractRegistration($class);
 
         $this->registeredClasses[$class] = true;
     }
@@ -281,6 +293,40 @@ class Container
                 unset($this->instances[$class]);
             }
         }
+
+        // the snapshot is gone, so re-registering members of this contract is allowed again
+        unset($this->resolvedContracts[$contract]);
+    }
+
+    /**
+     * Refuse a registration that arrives after its contract was already materialised by
+     * findByContract(): the consumer holds a snapshot and would never see the new class.
+     * Re-registering an already-known class is fine, it does not change any collection.
+     *
+     * @param class-string $class
+     */
+    private function assertNoLateContractRegistration(string $class): void
+    {
+        if (isset($this->serviceFactories[$class]) || isset($this->registeredClasses[$class]) || isset(
+            $this->instances[$class]
+        )) {
+            return;
+        }
+
+        foreach (array_keys($this->resolvedContracts) as $contract) {
+            if (! is_a($class, $contract, true)) {
+                continue;
+            }
+
+            throw new RegisterServiceException(sprintf(
+                'Class "%s" is registered after its contract "%s" was already resolved via findByContract(). '
+                . 'The consumer of that contract holds a snapshot and would silently miss this class. '
+                . 'Register it before the first findByContract("%s") call.',
+                $class,
+                $contract,
+                $contract
+            ));
+        }
     }
 
     /**
@@ -297,9 +343,16 @@ class Container
 
         $dependencies = [];
         foreach ($parameterTypes as $parameterType) {
-            $dependencies[] = is_array($parameterType) ? $this->findByContract($parameterType[0]) : $this->make(
-                $parameterType
-            );
+            if (! is_array($parameterType)) {
+                $dependencies[] = $this->make($parameterType);
+                continue;
+            }
+
+            $dependencies[] = $this->findByContract($parameterType[0]);
+
+            // the collection is now frozen inside the consumer being built; a later registration of a
+            // fresh implementation would be silently missed, so refuse it from here on
+            $this->resolvedContracts[$parameterType[0]] = true;
         }
 
         return $dependencies;

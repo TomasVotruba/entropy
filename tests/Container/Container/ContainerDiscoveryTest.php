@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Entropy\Tests\Container\Container;
 
 use Entropy\Container\Container;
+use Entropy\Container\Exception\RegisterServiceException;
 use Entropy\Tests\Container\Container\Fixture\CollectedAggregate;
 use Entropy\Tests\Container\Container\Fixture\CollectedInterface;
 use Entropy\Tests\Container\Container\Fixture\FirstCollected;
@@ -71,6 +72,45 @@ final class ContainerDiscoveryTest extends TestCase
         $secondInstance = $container->make(FirstCollected::class);
 
         $this->assertNotSame($firstInstance, $secondInstance);
+    }
+
+    public function testRegisteringImplementationAfterContractInjectedThrows(): void
+    {
+        $container = new Container();
+        $container->register(FirstCollected::class);
+
+        // building the aggregate freezes the CollectedInterface collection inside it
+        $container->make(CollectedAggregate::class);
+
+        $this->expectException(RegisterServiceException::class);
+        $container->register(SecondCollected::class);
+    }
+
+    public function testDirectFindByContractDoesNotFreezeRegistration(): void
+    {
+        $container = new Container();
+        $container->register(FirstCollected::class);
+
+        // a transient query, not an injection, so later registrations are still allowed
+        $this->assertCount(1, $container->findByContract(CollectedInterface::class));
+
+        $container->register(SecondCollected::class);
+
+        $this->assertCount(2, $container->findByContract(CollectedInterface::class));
+    }
+
+    public function testForgetByContractUnfreezesRegistration(): void
+    {
+        $container = new Container();
+        $container->register(FirstCollected::class);
+        $container->make(CollectedAggregate::class);
+
+        $container->forgetByContract(CollectedInterface::class);
+
+        // the snapshot is gone, so registering an implementation again is allowed
+        $container->register(SecondCollected::class);
+
+        $this->assertCount(1, $container->findByContract(CollectedInterface::class));
     }
 
     public function testAfterResolvingRunsOncePerInstance(): void
