@@ -54,13 +54,6 @@ class Container
     private array $registeredClasses = [];
 
     /**
-     * Once booted, the service graph is frozen: no further register()/service() is accepted, so any
-     * collection resolved afterwards via findByContract() is complete and order-independent. Call
-     * reopen() to register again (e.g. a reused container that re-imports a fresh config).
-     */
-    private bool $isBooted = false;
-
-    /**
      * Callbacks run once, right after a matching instance is built, keyed by the type they apply to.
      * @var array<class-string, list<callable(object, self): void>>
      */
@@ -126,8 +119,6 @@ class Container
      */
     public function service(string $class, callable $factory): void
     {
-        $this->assertNotBooted($class);
-
         if (isset($this->serviceFactories[$class])) {
             // avoid service override
             throw new RegisterServiceException(sprintf('Service for "%s" class is already registered', $class));
@@ -152,37 +143,7 @@ class Container
             return;
         }
 
-        // re-registering an already-known class changes no collection, so allow it even after boot
-        if (isset($this->registeredClasses[$class])) {
-            return;
-        }
-
-        $this->assertNotBooted($class);
-
         $this->registeredClasses[$class] = true;
-    }
-
-    /**
-     * Freeze the service graph. After this, register()/service() of a new class is refused, so every
-     * collection resolved via findByContract() from now on is complete regardless of resolution order.
-     */
-    public function boot(): void
-    {
-        $this->isBooted = true;
-    }
-
-    /**
-     * Re-open the graph for registration after a boot(). Meant for a reused container that discards its
-     * previous config and imports a fresh one (e.g. the test harness), not for production wiring.
-     */
-    public function reopen(): void
-    {
-        $this->isBooted = false;
-    }
-
-    public function isBooted(): bool
-    {
-        return $this->isBooted;
     }
 
     /**
@@ -342,22 +303,6 @@ class Container
         }
 
         return $dependencies;
-    }
-
-    /**
-     * @param class-string $class
-     */
-    private function assertNotBooted(string $class): void
-    {
-        if (! $this->isBooted) {
-            return;
-        }
-
-        throw new RegisterServiceException(sprintf(
-            'Class "%s" cannot be registered after the container was booted. Register every service before '
-            . 'boot(), so contract collections resolve completely. Call reopen() first if you must register again.',
-            $class
-        ));
     }
 
     private function warmUpInstanceServices(string $contractClass): void

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Entropy\Tests\Container\Container;
 
 use Entropy\Container\Container;
-use Entropy\Container\Exception\RegisterServiceException;
 use Entropy\Tests\Container\Container\Fixture\CollectedAggregate;
 use Entropy\Tests\Container\Container\Fixture\CollectedInterface;
 use Entropy\Tests\Container\Container\Fixture\FirstCollected;
@@ -15,61 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 final class ContainerDiscoveryTest extends TestCase
 {
-    public function testIsBootedReflectsState(): void
-    {
-        $container = new Container();
-        $this->assertFalse($container->isBooted());
-
-        $container->boot();
-        $this->assertTrue($container->isBooted());
-
-        $container->reopen();
-        $this->assertFalse($container->isBooted());
-    }
-
-    public function testRegisterAfterBootThrows(): void
-    {
-        $container = new Container();
-        $container->register(FirstCollected::class);
-        $container->boot();
-
-        $this->expectException(RegisterServiceException::class);
-        $container->register(SecondCollected::class);
-    }
-
-    public function testServiceAfterBootThrows(): void
-    {
-        $container = new Container();
-        $container->boot();
-
-        $this->expectException(RegisterServiceException::class);
-        $container->service(SomeType::class, static fn (): SomeType => new SomeType());
-    }
-
-    public function testReRegisteringKnownClassAfterBootIsAllowed(): void
-    {
-        $container = new Container();
-        $container->register(FirstCollected::class);
-        $container->boot();
-
-        // re-registering an already-known class changes no collection, so it must not throw
-        $container->register(FirstCollected::class);
-
-        $this->assertCount(1, $container->findByContract(CollectedInterface::class));
-    }
-
-    public function testReopenAllowsRegistrationAgain(): void
-    {
-        $container = new Container();
-        $container->register(FirstCollected::class);
-        $container->boot();
-
-        $container->reopen();
-        $container->register(SecondCollected::class);
-
-        $this->assertCount(2, $container->findByContract(CollectedInterface::class));
-    }
-
     public function testRegisterMakesClassDiscoverableByContract(): void
     {
         $container = new Container();
