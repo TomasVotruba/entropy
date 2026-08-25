@@ -152,7 +152,7 @@ final readonly class OutputPrinter
     private function block(string $text, string $color): void
     {
         // reserve 2 chars for the single space padding the background() adds on each side
-        $contentWidth = Terminal::getWidth() - 2;
+        $contentWidth = max(0, Terminal::getWidth() - 2);
 
         $emptyLine = str_repeat(' ', $contentWidth);
         $paddedText = Terminal::padVisibleRight($text, $contentWidth);
