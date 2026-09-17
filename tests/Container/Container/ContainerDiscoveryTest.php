@@ -66,11 +66,11 @@ final class ContainerDiscoveryTest extends TestCase
         $container = new Container();
         $container->register(FirstCollected::class);
 
-        $firstInstance = $container->make(FirstCollected::class);
+        $firstCollected = $container->make(FirstCollected::class);
         $container->forgetByContract(CollectedInterface::class);
         $secondInstance = $container->make(FirstCollected::class);
 
-        $this->assertNotSame($firstInstance, $secondInstance);
+        $this->assertNotSame($firstCollected, $secondInstance);
     }
 
     public function testAfterResolvingRunsOncePerInstance(): void
