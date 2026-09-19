@@ -21,6 +21,10 @@ final class Terminal
             return min((int) $columns, self::MAX_LINE_LENGTH);
         }
 
+        if (\PHP_OS_FAMILY === 'Windows') {
+            return self::MAX_LINE_LENGTH;
+        }
+
         $sttySize = @exec('stty size 2>/dev/null');
         if (is_string($sttySize) && preg_match('#\d+ (?<columns>\d+)#', $sttySize, $matches) === 1) {
             return min((int) $matches['columns'], self::MAX_LINE_LENGTH);
