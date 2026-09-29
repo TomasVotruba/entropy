@@ -32,9 +32,6 @@ parameters:
 
         - '#Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string<T of object>\|T of object, string given#'
 
-        # false positive, always 2 strings
-        - '#Method Entropy\\Console\\Input\\InputParser\:\:parseLongOption\(\) should return array\{mixed, mixed\} but returns non\-empty\-list<string>#'
-
         # dynamic CommentInterface contract
         - '#Call to an undefined method Entropy\\Console\\Contract\\CommandInterface\:\:run\(\)#'
 

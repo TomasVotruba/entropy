@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Container;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\FileSystem\FileFinder;
 use Entropy\Reflection\ClassNameResolver;
 use Entropy\Tests\Container\Autodiscovery\AutodiscoveryTest;

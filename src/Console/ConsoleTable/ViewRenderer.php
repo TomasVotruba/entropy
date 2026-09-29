@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Entropy\Console\ConsoleTable;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\Console\ConsoleTable\ValueObject\TableRow;
 use Entropy\Console\ConsoleTable\ValueObject\TableView;
 use Entropy\Console\Output\OutputPrinter;
 use Entropy\Tests\Console\ConsoleTable\ViewRendererTest;
 
+/**
+ * @see \Entropy\Tests\Console\ConsoleTable\ViewRendererTest
+ */
 #[RelatedTest(ViewRendererTest::class)]
 final readonly class ViewRenderer
 {

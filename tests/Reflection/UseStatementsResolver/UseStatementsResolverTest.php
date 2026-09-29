@@ -40,7 +40,7 @@ final class UseStatementsResolverTest extends TestCase
 
     public function testMissingFileReturnsEmpty(): void
     {
-        $useStatements = @UseStatementsResolver::resolve(__DIR__ . '/Fixture/DoesNotExist.php');
+        $useStatements = UseStatementsResolver::resolve(__DIR__ . '/Fixture/DoesNotExist.php');
 
         $this->assertSame([], $useStatements);
     }

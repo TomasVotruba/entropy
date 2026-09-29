@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Reflection;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\Container\Exception\CreateServiceException;
 use Entropy\Tests\Reflection\ParameterTypesResolver\ParameterTypesResolverTest;
 use ReflectionMethod;

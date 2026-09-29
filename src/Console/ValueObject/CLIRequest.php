@@ -6,6 +6,9 @@ namespace Entropy\Console\ValueObject;
 
 use Webmozart\Assert\Assert;
 
+/**
+ * @see \Entropy\Tests\Console\ValueObject\CLIRequestTest
+ */
 final class CLIRequest
 {
     /**

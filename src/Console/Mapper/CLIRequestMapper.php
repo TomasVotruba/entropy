@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Console\Mapper;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Exception\ConsoleInputMappingException;
 use Entropy\Console\ValueObject\CLIRequest;
@@ -16,6 +16,9 @@ use ReflectionParameter;
 use ReflectionType;
 use Webmozart\Assert\Assert;
 
+/**
+ * @see \Entropy\Tests\Console\Mapper\CLIRequestMapperTest
+ */
 #[RelatedTest(CLIRequestMapperTest::class)]
 final class CLIRequestMapper
 {
@@ -125,7 +128,8 @@ final class CLIRequestMapper
 
             // 4) Single positional
             if (! $isBool && isset($positionals[$positionIndex])) {
-                $value = $positionals[$positionIndex++];
+                $value = $positionals[$positionIndex];
+                ++$positionIndex;
                 $args[] = $this->castValueByParameterType($value, $type);
                 continue;
             }
@@ -202,7 +206,7 @@ final class CLIRequestMapper
         }
 
         // fallback to default value if empty
-        if ($defaultValue !== 'unknown' && empty($value)) {
+        if ($defaultValue !== 'unknown' && in_array($value, [null, false, '', '0', 0, 0.0, []], true)) {
             return $defaultValue;
         }
 

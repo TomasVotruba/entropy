@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Console\Output;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\Tests\Console\Output\ProgressBarTest;
 
 /**
@@ -14,6 +14,7 @@ use Entropy\Tests\Console\Output\ProgressBarTest;
  * tested without writing to the terminal.
  *
  * @api used by console applications to report progress
+ * @see \Entropy\Tests\Console\Output\ProgressBarTest
  */
 #[RelatedTest(ProgressBarTest::class)]
 final class ProgressBar
