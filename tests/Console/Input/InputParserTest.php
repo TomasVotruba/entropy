@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Entropy\Tests\Console\Input;
 
+use Entropy\Console\CommandRegistry;
 use Entropy\Console\Input\InputParser;
+use Entropy\Tests\Console\Input\Fixture\ProcessCommand;
 use PHPUnit\Framework\TestCase;
 
 final class InputParserTest extends TestCase
@@ -13,7 +15,8 @@ final class InputParserTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->inputParser = new InputParser();
+        $commandRegistry = new CommandRegistry([new ProcessCommand()]);
+        $this->inputParser = new InputParser($commandRegistry);
     }
 
     public function test(): void
@@ -89,7 +92,7 @@ final class InputParserTest extends TestCase
         $this->assertNull($cliRequest->getCommandName());
         $this->assertSame([], $cliRequest->getArguments());
         $this->assertSame([
-            'directory' => 'some-path',
+            'directory' => ['some-path'],
         ], $cliRequest->getOptions());
     }
 
@@ -101,6 +104,45 @@ final class InputParserTest extends TestCase
         $this->assertSame([
             'limit' => '5',
             'directory' => ['some-path'],
+        ], $cliRequest->getOptions());
+    }
+
+    public function testFlagDoesNotSwallowPath(): void
+    {
+        $cliRequest = $this->inputParser->parse(
+            ['bin/ecs', 'process', '--config', 'ecs.php', '--clear-cache', 'src/A.php']
+        );
+
+        $this->assertSame('process', $cliRequest->getCommandName());
+        $this->assertSame(['src/A.php'], $cliRequest->getArguments());
+        $this->assertSame([
+            'config' => ['ecs.php'],
+            'clear-cache' => true,
+        ], $cliRequest->getOptions());
+    }
+
+    public function testFlagBeforeConfigDoesNotSwallowPath(): void
+    {
+        $cliRequest = $this->inputParser->parse(
+            ['bin/ecs', 'process', '--fix', '--config', 'ecs.php', 'src/A.php']
+        );
+
+        $this->assertSame(['src/A.php'], $cliRequest->getArguments());
+        $this->assertSame([
+            'fix' => true,
+            'config' => ['ecs.php'],
+        ], $cliRequest->getOptions());
+    }
+
+    public function testDoubleDashEndsOptionParsing(): void
+    {
+        $cliRequest = $this->inputParser->parse(
+            ['bin/ecs', 'process', '--config', 'ecs.php', '--', 'src/A.php']
+        );
+
+        $this->assertSame(['src/A.php'], $cliRequest->getArguments());
+        $this->assertSame([
+            'config' => ['ecs.php'],
         ], $cliRequest->getOptions());
     }
 }
