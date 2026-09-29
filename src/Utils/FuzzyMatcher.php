@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Entropy\Utils;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\Tests\Utils\FuzzyMatcherTest;
 
+/**
+ * @see \Entropy\Tests\Utils\FuzzyMatcherTest
+ */
 #[RelatedTest(FuzzyMatcherTest::class)]
 final class FuzzyMatcher
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Reflection;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\Tests\Reflection\ParameterOptionMarkerResolver\ParameterOptionMarkerResolverTest;
 use ReflectionMethod;
 

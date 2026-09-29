@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Entropy\Console\ConsoleTable;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\Console\Output\OutputPrinter;
 use Entropy\Tests\Console\ConsoleTable\ConsoleTableTest;
 
+/**
+ * @see \Entropy\Tests\Console\ConsoleTable\ConsoleTableTest
+ */
 #[RelatedTest(ConsoleTableTest::class)]
 final readonly class ConsoleTable
 {

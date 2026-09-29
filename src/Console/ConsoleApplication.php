@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Console;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
 use Entropy\Console\Input\InputParser;

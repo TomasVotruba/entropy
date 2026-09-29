@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Entropy\Utils;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\Tests\Utils\RegexTest;
 
 /**
  * @api to be used
+ * @see \Entropy\Tests\Utils\RegexTest
  */
 #[RelatedTest(RegexTest::class)]
 final class Regex

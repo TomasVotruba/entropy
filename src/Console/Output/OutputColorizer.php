@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Console\Output;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\Console\Enum\Color;
 use Entropy\Tests\Console\Output\OutputColozierTest;
 
@@ -59,12 +59,12 @@ final readonly class OutputColorizer
         }
 
         return match ($color) {
-            Color::GREEN => "\033[32m{$text}\033[0m",
-            Color::YELLOW => "\033[33m{$text}\033[0m",
-            Color::RED => "\033[31m{$text}\033[0m",
-            Color::CYAN => "\033[36m{$text}\033[0m",
+            Color::GREEN => "\033[32m" . $text . "\033[0m",
+            Color::YELLOW => "\033[33m" . $text . "\033[0m",
+            Color::RED => "\033[31m" . $text . "\033[0m",
+            Color::CYAN => "\033[36m" . $text . "\033[0m",
             // use light grey
-            Color::GREY => "\033[37m{$text}\033[0m",
+            Color::GREY => "\033[37m" . $text . "\033[0m",
         };
     }
 
@@ -81,11 +81,11 @@ final readonly class OutputColorizer
 
         return match ($color) {
             // background ; foreground
-            Color::GREEN => "\033[42;30m{$text}\033[0m",
-            Color::YELLOW, 'orange' => "\033[43;30m{$text}\033[0m",
+            Color::GREEN => "\033[42;30m" . $text . "\033[0m",
+            Color::YELLOW, 'orange' => "\033[43;30m" . $text . "\033[0m",
             // WHITE on red (important)
-            Color::RED => "\033[41;30m{$text}\033[0m",
-            Color::CYAN => "\033[46;30m{$text}\033[0m",
+            Color::RED => "\033[41;30m" . $text . "\033[0m",
+            Color::CYAN => "\033[46;30m" . $text . "\033[0m",
         };
     }
 
@@ -96,8 +96,8 @@ final readonly class OutputColorizer
 
     private function isTty(): bool
     {
-        if (function_exists('stream_isatty')) {
-            return @stream_isatty(STDOUT);
+        if (function_exists('stream_isatty') && defined('STDOUT')) {
+            return stream_isatty(STDOUT);
         }
 
         // Fallback: respect NO_COLOR if present

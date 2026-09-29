@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Entropy\Attributes;
+namespace Entropy\Attribute;
 
 use Attribute;
 use PHPUnit\Framework\TestCase;

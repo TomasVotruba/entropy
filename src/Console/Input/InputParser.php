@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Console\Input;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\Console\CommandRegistry;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\ValueObject\CLIRequest;
@@ -12,6 +12,9 @@ use Entropy\Reflection\ValueOptionNameResolver;
 use Entropy\Tests\Console\Input\InputParserTest;
 use ReflectionMethod;
 
+/**
+ * @see \Entropy\Tests\Console\Input\InputParserTest
+ */
 #[RelatedTest(InputParserTest::class)]
 final readonly class InputParser
 {
@@ -57,7 +60,21 @@ final readonly class InputParser
 
             // --option or --option=value
             if (! $optionsEnded && str_starts_with((string) $item, '--')) {
-                [$name, $value] = $this->parseLongOption((string) $item, $argv, $valueOptionNames);
+                $name = ltrim((string) $item, '-');
+
+                if (str_contains($name, '=')) {
+                    [$name, $value] = explode('=', $name, 2);
+                } elseif (
+                    isset($valueOptionNames[$name])
+                    && $argv !== []
+                    && $argv[0] !== '--'
+                    && ! str_starts_with((string) $argv[0], '-')
+                ) {
+                    // only value options consume the next token; a flag never does
+                    $value = array_shift($argv);
+                } else {
+                    $value = true;
+                }
 
                 // flag, no value
                 if ($value === true) {
@@ -90,32 +107,6 @@ final readonly class InputParser
         }
 
         return new CLIRequest($command, $args, $options);
-    }
-
-    /**
-     * @param array<int, mixed> $argv
-     * @param array<string, true> $valueOptionNames
-     * @return array{mixed, mixed}
-     */
-    private function parseLongOption(string $item, array &$argv, array $valueOptionNames): array
-    {
-        $name = ltrim($item, '-');
-
-        if (str_contains($name, '=')) {
-            return explode('=', $name, 2);
-        }
-
-        // only value options consume the next token; a flag never does
-        if (
-            isset($valueOptionNames[$name])
-            && $argv !== []
-            && $argv[0] !== '--'
-            && ! str_starts_with((string) $argv[0], '-')
-        ) {
-            return [$name, array_shift($argv)];
-        }
-
-        return [$name, true];
     }
 
     /**

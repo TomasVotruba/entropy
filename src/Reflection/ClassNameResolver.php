@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Reflection;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\Tests\Reflection\ClassNameResolver\ClassNameResolverTest;
 
 #[RelatedTest(ClassNameResolverTest::class)]
@@ -20,7 +20,11 @@ final class ClassNameResolver
      */
     public static function resolveFromFilePath(string $filePath): ?string
     {
-        $code = @file_get_contents($filePath);
+        if (! is_file($filePath)) {
+            return null;
+        }
+
+        $code = file_get_contents($filePath);
         if ($code === false) {
             return null;
         }

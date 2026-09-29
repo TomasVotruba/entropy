@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Container;
 
-use Entropy\Attributes\RelatedTest;
+use Entropy\Attribute\RelatedTest;
 use Entropy\Console\CommandRegistry;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Container\Exception\CreateServiceException;
