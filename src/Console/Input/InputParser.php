@@ -5,14 +5,23 @@ declare(strict_types=1);
 namespace Entropy\Console\Input;
 
 use Entropy\Attributes\RelatedTest;
+use Entropy\Console\CommandRegistry;
+use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\ValueObject\CLIRequest;
+use Entropy\Reflection\ValueOptionNameResolver;
 use Entropy\Tests\Console\Input\InputParserTest;
+use ReflectionMethod;
 
 #[RelatedTest(InputParserTest::class)]
-final class InputParser
+final readonly class InputParser
 {
+    public function __construct(
+        private CommandRegistry $commandRegistry
+    ) {
+    }
+
     /**
-     * @param mixed[] $argv
+     * @param array<int, mixed> $argv
      */
     public function parse(array $argv): CLIRequest
     {
@@ -24,45 +33,54 @@ final class InputParser
             return new CLIRequest(null);
         }
 
+        // the first non-option token is the command name
+        $command = null;
+        if (! str_starts_with((string) $argv[0], '-')) {
+            $command = array_shift($argv);
+        }
+
+        // which "--name" options take a value, so a flag never swallows the next token
+        $valueOptionNames = $this->resolveValueOptionNames($command);
+
         $args = [];
         $options = [];
-
-        $command = array_shift($argv);
-        if (str_starts_with((string) $command, '--')) {
-            // most likely an option, possibly carrying a value, e.g. "--limit=5" or "--limit 5"
-            [$name, $value] = $this->parseLongOption((string) $command, $argv);
-
-            $options[$name] = $value;
-            $command = null;
-        } elseif (str_starts_with((string) $command, '-')) {
-            // most likely a short flag
-            $options[ltrim((string) $command, '-')] = true;
-            $command = null;
-        }
+        $optionsEnded = false;
 
         while ($argv !== []) {
             $item = array_shift($argv);
 
+            // "--" ends option parsing; everything after it is a positional argument
+            if (! $optionsEnded && $item === '--') {
+                $optionsEnded = true;
+                continue;
+            }
+
             // --option or --option=value
-            if (str_starts_with((string) $item, '--')) {
-                [$name, $value] = $this->parseLongOption($item, $argv);
+            if (! $optionsEnded && str_starts_with((string) $item, '--')) {
+                [$name, $value] = $this->parseLongOption((string) $item, $argv, $valueOptionNames);
 
-                if (! is_numeric($value)) {
-                    // allow multiple param
-                    if (! isset($options[$name]) || ! is_array($options[$name])) {
-                        $options[$name] = [];
-                    }
-
-                    $options[$name][] = $value;
+                // flag, no value
+                if ($value === true) {
+                    $options[$name] = true;
                     continue;
                 }
 
-                $options[$name] = $value;
+                if (is_numeric($value)) {
+                    $options[$name] = $value;
+                    continue;
+                }
+
+                // allow a repeatable value option
+                if (! isset($options[$name]) || ! is_array($options[$name])) {
+                    $options[$name] = [];
+                }
+
+                $options[$name][] = $value;
                 continue;
             }
 
             // -v
-            if (str_starts_with((string) $item, '-')) {
+            if (! $optionsEnded && str_starts_with((string) $item, '-')) {
                 $options[ltrim((string) $item, '-')] = true;
                 continue;
             }
@@ -76,21 +94,50 @@ final class InputParser
 
     /**
      * @param array<int, mixed> $argv
+     * @param array<string, true> $valueOptionNames
      * @return array{mixed, mixed}
      */
-    private function parseLongOption(string $item, array &$argv): array
+    private function parseLongOption(string $item, array &$argv, array $valueOptionNames): array
     {
-        $item = ltrim($item, '--');
+        $name = ltrim($item, '-');
 
-        if (str_contains($item, '=')) {
-            return explode('=', $item, 2);
+        if (str_contains($name, '=')) {
+            return explode('=', $name, 2);
         }
 
-        // --option value
-        if ($argv !== [] && ! str_starts_with((string) $argv[0], '-')) {
-            return [$item, array_shift($argv)];
+        // only value options consume the next token; a flag never does
+        if (
+            isset($valueOptionNames[$name])
+            && $argv !== []
+            && $argv[0] !== '--'
+            && ! str_starts_with((string) $argv[0], '-')
+        ) {
+            return [$name, array_shift($argv)];
         }
 
-        return [$item, true];
+        return [$name, true];
+    }
+
+    /**
+     * @return array<string, true>
+     */
+    private function resolveValueOptionNames(?string $commandName): array
+    {
+        $command = $this->resolveCommand($commandName);
+        if (! $command instanceof CommandInterface) {
+            return [];
+        }
+
+        return ValueOptionNameResolver::resolve(new ReflectionMethod($command, 'run'));
+    }
+
+    private function resolveCommand(?string $commandName): ?CommandInterface
+    {
+        if ($commandName !== null && $this->commandRegistry->has($commandName)) {
+            return $this->commandRegistry->get($commandName);
+        }
+
+        // no command name (options first) or an unknown token: fall back to the default command's schema
+        return $this->commandRegistry->getDefault();
     }
 }
