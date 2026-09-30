@@ -54,9 +54,9 @@ final class CommandRunParametersMapper
             if ($reflectionParameter->isDefaultValueAvailable()) {
                 $defaultValue = $reflectionParameter->getDefaultValue();
 
-                // not relevant default value
-                if ($defaultValue === []) {
-                    $defaultValue = null;
+                // array default is not a scalar option value, join it or drop when empty
+                if (is_array($defaultValue)) {
+                    $defaultValue = $defaultValue === [] ? null : implode(', ', $defaultValue);
                 }
             }
 
