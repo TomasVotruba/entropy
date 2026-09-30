@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Entropy\Tests\Console\Mapper;
 
 use Entropy\Console\Mapper\CommandRunParametersMapper;
+use Entropy\Tests\Console\Mapper\Fixture\ArrayDefaultCommand;
 use Entropy\Tests\Console\Mapper\Fixture\OptionMarkerCommand;
 use Entropy\Tests\Console\Mapper\Fixture\SkipFilesCommand;
 use PHPUnit\Framework\TestCase;
@@ -39,5 +40,16 @@ final class CommandRunParametersMapperTest extends TestCase
         $sourceOption = $argumentsAndOptions->getOptions()[0];
         $this->assertSame('source', $sourceOption->getName());
         $this->assertSame('string', $sourceOption->getType());
+    }
+
+    public function testArrayDefaultValueIsJoinedToString(): void
+    {
+        $argumentsAndOptions = $this->commandRunParametersMapper->map(new ArrayDefaultCommand());
+
+        $this->assertCount(1, $argumentsAndOptions->getOptions());
+
+        $fileExtensionOption = $argumentsAndOptions->getOptions()[0];
+        $this->assertSame('file-extension', $fileExtensionOption->getName());
+        $this->assertSame('php', $fileExtensionOption->getDefaultValue());
     }
 }
