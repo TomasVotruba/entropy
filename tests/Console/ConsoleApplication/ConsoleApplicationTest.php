@@ -7,7 +7,6 @@ namespace Entropy\Tests\Console\ConsoleApplication;
 use Entropy\Console\ConsoleApplication;
 use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Container\Container;
-use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 
 final class ConsoleApplicationTest extends TestCase
@@ -21,7 +20,9 @@ final class ConsoleApplicationTest extends TestCase
         $container->make(ConsoleApplication::class);
     }
 
-    #[DoesNotPerformAssertions]
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testValidCommandRegistry(): void
     {
         $container = new Container();

@@ -19,17 +19,17 @@ use Entropy\Tests\Console\Output\ProgressBarTest;
 #[RelatedTest(ProgressBarTest::class)]
 final class ProgressBar
 {
-    private const int BAR_WIDTH = 28;
+    private const BAR_WIDTH = 28;
 
-    private const string COMPLETE_CHAR = '▓';
+    private const COMPLETE_CHAR = '▓';
 
-    private const string REMAINING_CHAR = '░';
+    private const REMAINING_CHAR = '░';
 
     private int $current = 0;
 
     private int $maxSteps = 0;
 
-    private readonly bool $isSilent;
+    private bool $isSilent;
 
     public function __construct()
     {

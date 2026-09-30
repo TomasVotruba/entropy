@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Entropy\Tests\Utils;
 
 use Entropy\Utils\Strings;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class StringsTest extends TestCase
 {
-    #[DataProvider('webalizeDataProvider')]
+    /**
+     * @dataProvider webalizeDataProvider
+     */
     public function testWebalize(string $input, string $expected): void
     {
         $result = Strings::webalize($input);

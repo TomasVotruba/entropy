@@ -43,7 +43,7 @@ final class FileSystem
             return;
         }
 
-        mkdir($directoryPath, 0777, recursive: true);
+        mkdir($directoryPath, 0777, true);
     }
 
     /**

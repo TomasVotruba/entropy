@@ -14,17 +14,21 @@ use Entropy\Tests\Console\ConsoleTable\ViewRendererTest;
  * @see \Entropy\Tests\Console\ConsoleTable\ViewRendererTest
  */
 #[RelatedTest(ViewRendererTest::class)]
-final readonly class ViewRenderer
+final class ViewRenderer
 {
     /**
      * @var int Tables span at least this many characters wide
      */
-    private const int MIN_WIDTH = 60;
+    private const MIN_WIDTH = 60;
 
-    public function __construct(
-        private OutputPrinter $outputPrinter,
-        private ConsoleTable $consoleTable,
-    ) {
+    private OutputPrinter $outputPrinter;
+
+    private ConsoleTable $consoleTable;
+
+    public function __construct(OutputPrinter $outputPrinter, ConsoleTable $consoleTable)
+    {
+        $this->outputPrinter = $outputPrinter;
+        $this->consoleTable = $consoleTable;
     }
 
     /**

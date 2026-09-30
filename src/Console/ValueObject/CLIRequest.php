@@ -11,15 +11,31 @@ use Entropy\Validation\Assert;
  */
 final class CLIRequest
 {
+    private ?string $commandName;
+
+    /**
+     * @var mixed[]
+     */
+    private array $arguments;
+
+    /**
+     * @var array<string, mixed>
+     */
+    private array $options;
+
     /**
      * @param mixed[] $arguments
      * @param array<string, mixed> $options
      */
     public function __construct(
-        private readonly ?string $commandName,
-        private readonly array $arguments = [],
-        private array $options = []
+        ?string $commandName,
+        array $arguments = [],
+        array $options = []
     ) {
+        $this->commandName = $commandName;
+        $this->arguments = $arguments;
+        $this->options = $options;
+
         Assert::allString(array_keys($options));
     }
 
@@ -53,7 +69,11 @@ final class CLIRequest
         return $this->options;
     }
 
-    public function option(string $name, mixed $default = null): mixed
+    /**
+     * @param mixed $default
+     * @return mixed
+     */
+    public function option(string $name, $default = null)
     {
         return $this->options[$name] ?? $default;
     }

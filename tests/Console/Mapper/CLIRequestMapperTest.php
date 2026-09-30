@@ -33,8 +33,8 @@ final class CLIRequestMapperTest extends TestCase
     {
         $cliRequest = new CLIRequest(
             'some',
-            arguments: ['/some/path', '/another-path'],
-            options: [
+            ['/some/path', '/another-path'],
+            [
                 'flag' => true,
                 'count' => '5',
             ]
@@ -48,8 +48,8 @@ final class CLIRequestMapperTest extends TestCase
     {
         $cliRequest = new CLIRequest(
             'some',
-            arguments: [['/some/path']],
-            options: [
+            [['/some/path']],
+            [
                 'flag' => true,
                 'count' => '5',
                 'extra-option' => 1234,
@@ -66,8 +66,8 @@ final class CLIRequestMapperTest extends TestCase
     {
         $cliRequest = new CLIRequest(
             'some',
-            arguments: [['/some/path']],
-            options: [
+            [['/some/path']],
+            [
                 'flag' => true,
             ]
         );
@@ -83,8 +83,8 @@ final class CLIRequestMapperTest extends TestCase
     {
         $cliRequest = new CLIRequest(
             'some',
-            arguments: [],
-            options: [
+            [],
+            [
                 'count' => '10',
                 'flag' => true,
             ]
@@ -100,8 +100,8 @@ final class CLIRequestMapperTest extends TestCase
     {
         $cliRequest = new CLIRequest(
             'option-marker',
-            arguments: [],
-            options: [
+            [],
+            [
                 'source' => '/some/path',
             ]
         );
@@ -113,7 +113,7 @@ final class CLIRequestMapperTest extends TestCase
 
     public function testOptionMarkerRejectsBarePositional(): void
     {
-        $cliRequest = new CLIRequest('option-marker', arguments: ['/some/path']);
+        $cliRequest = new CLIRequest('option-marker', ['/some/path']);
 
         $this->expectException(ConsoleInputMappingException::class);
         $this->expectExceptionMessage('Missing required value for "source" (use "--source" to provide it)');
@@ -125,7 +125,8 @@ final class CLIRequestMapperTest extends TestCase
     {
         $cliRequest = new CLIRequest(
             'bool',
-            options: [
+            [],
+            [
                 'flag-string-true' => ['true'],
                 'flag-string-false' => ['false'],
                 'flag-bool-true' => [true],
@@ -148,8 +149,8 @@ final class CLIRequestMapperTest extends TestCase
     {
         $cliRequest = new CLIRequest(
             'option-marker',
-            arguments: [],
-            options: [
+            [],
+            [
                 'source' => ['/first/path', '/second/path'],
             ]
         );
@@ -164,8 +165,8 @@ final class CLIRequestMapperTest extends TestCase
     {
         $cliRequest = new CLIRequest(
             'some',
-            arguments: ['source'],
-            options: [
+            ['source'],
+            [
                 'skip-file' => ['first', 'second'],
             ]
         );
@@ -179,8 +180,8 @@ final class CLIRequestMapperTest extends TestCase
     {
         $cliRequest = new CLIRequest(
             'nullable-array',
-            arguments: ['source'],
-            options: [
+            ['source'],
+            [
                 'skip-file' => ['first', 'second'],
             ]
         );
@@ -194,8 +195,8 @@ final class CLIRequestMapperTest extends TestCase
     {
         $cliRequest = new CLIRequest(
             'some',
-            arguments: ['/some/path'],
-            options: [
+            ['/some/path'],
+            [
                 'flag' => true,
                 'count' => '5',
                 // standard global flags handled by the application/output layer

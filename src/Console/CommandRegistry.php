@@ -11,14 +11,20 @@ use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Utils\FuzzyMatcher;
 use Entropy\Validation\Assert;
 
-final readonly class CommandRegistry
+final class CommandRegistry
 {
+    /**
+     * @var CommandInterface[]
+     */
+    private array $commands;
+
     /**
      * @param CommandInterface[] $commands
      */
-    public function __construct(
-        private array $commands
-    ) {
+    public function __construct(array $commands)
+    {
+        $this->commands = $commands;
+
         if ($commands === []) {
             throw new InvalidCommandException('Register at least one command, so application can run');
         }

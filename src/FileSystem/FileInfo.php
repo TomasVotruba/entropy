@@ -9,12 +9,16 @@ use SplFileInfo;
 
 final class FileInfo extends SplFileInfo
 {
-    public function __construct(
-        string $filePath,
-        private readonly string $relativePath = '',
-        private readonly string $relativePathname = '',
-    ) {
+    private string $relativePath;
+
+    private string $relativePathname;
+
+    public function __construct(string $filePath, string $relativePath = '', string $relativePathname = '')
+    {
         parent::__construct($filePath);
+
+        $this->relativePath = $relativePath;
+        $this->relativePathname = $relativePathname;
     }
 
     /**

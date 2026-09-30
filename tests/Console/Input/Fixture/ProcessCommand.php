@@ -30,7 +30,7 @@ final class ProcessCommand implements CommandInterface, DefaultCommandInterface
         ?string $config = null,
         int $limit = 10,
         bool $clearCache = false,
-        bool $fix = false,
+        bool $fix = false
     ): void {
     }
 }

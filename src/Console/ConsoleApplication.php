@@ -16,16 +16,34 @@ use Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
 use Throwable;
 
 #[RelatedTest(ConsoleApplicationTest::class)]
-final readonly class ConsoleApplication
+final class ConsoleApplication
 {
+    private HelpPrinter $helpPrinter;
+
+    private OutputPrinter $outputPrinter;
+
+    private CommandHelpFactory $commandHelpFactory;
+
+    private InputParser $inputParser;
+
+    private CommandRegistry $commandRegistry;
+
+    private CLIRequestMapper $cliRequestMapper;
+
     public function __construct(
-        private HelpPrinter $helpPrinter,
-        private OutputPrinter $outputPrinter,
-        private CommandHelpFactory $commandHelpFactory,
-        private InputParser $inputParser,
-        private CommandRegistry $commandRegistry,
-        private CLIRequestMapper $cliRequestMapper,
+        HelpPrinter $helpPrinter,
+        OutputPrinter $outputPrinter,
+        CommandHelpFactory $commandHelpFactory,
+        InputParser $inputParser,
+        CommandRegistry $commandRegistry,
+        CLIRequestMapper $cliRequestMapper
     ) {
+        $this->helpPrinter = $helpPrinter;
+        $this->outputPrinter = $outputPrinter;
+        $this->commandHelpFactory = $commandHelpFactory;
+        $this->inputParser = $inputParser;
+        $this->commandRegistry = $commandRegistry;
+        $this->cliRequestMapper = $cliRequestMapper;
     }
 
     /**

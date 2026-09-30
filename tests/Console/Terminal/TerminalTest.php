@@ -9,7 +9,10 @@ use PHPUnit\Framework\TestCase;
 
 final class TerminalTest extends TestCase
 {
-    private string|false $originalColumns;
+    /**
+     * @var string|false
+     */
+    private $originalColumns;
 
     protected function setUp(): void
     {

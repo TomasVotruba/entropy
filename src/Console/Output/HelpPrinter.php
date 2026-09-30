@@ -6,15 +6,18 @@ namespace Entropy\Console\Output;
 
 use Entropy\Console\CommandRegistry;
 
-final readonly class HelpPrinter
+final class HelpPrinter
 {
-    private const int MIN_WIDTH = 10;
+    private const MIN_WIDTH = 10;
 
-    public function __construct(
-        private CommandRegistry $commandRegistry,
-        private OutputPrinter $outputPrinter
-    ) {
+    private CommandRegistry $commandRegistry;
 
+    private OutputPrinter $outputPrinter;
+
+    public function __construct(CommandRegistry $commandRegistry, OutputPrinter $outputPrinter)
+    {
+        $this->commandRegistry = $commandRegistry;
+        $this->outputPrinter = $outputPrinter;
     }
 
     public function print(): void
