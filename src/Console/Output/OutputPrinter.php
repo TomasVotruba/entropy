@@ -6,7 +6,7 @@ namespace Entropy\Console\Output;
 
 use Entropy\Console\Enum\Color;
 use Entropy\Console\Terminal\Terminal;
-use Webmozart\Assert\Assert;
+use Entropy\Validation\Assert;
 
 /**
  * @api used in many ways

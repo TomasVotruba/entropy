@@ -9,7 +9,7 @@ use Entropy\Console\Contract\DefaultCommandInterface;
 use Entropy\Console\Contract\HiddenCommandInterface;
 use Entropy\Console\Exception\InvalidCommandException;
 use Entropy\Utils\FuzzyMatcher;
-use Webmozart\Assert\Assert;
+use Entropy\Validation\Assert;
 
 final readonly class CommandRegistry
 {

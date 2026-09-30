@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Entropy\Utils;
 
 use Entropy\FileSystem\Exception\FileSystemException;
-use Webmozart\Assert\Assert;
+use Entropy\Validation\Assert;
 
 /**
  * @api public api to use
