@@ -45,6 +45,8 @@ final class OutputColozierTest extends TestCase
         // @note double quote must be used here, to preserve \e character as escape one
         yield ['some <fg=green>success</> next', "some \e[32msuccess\e[0m next"];
         yield ['here <bg=yellow>orange</> is', "here \e[43;30m orange \e[0m is"];
+        yield ['<options=underscore>Applied checkers:</>', "\e[4mApplied checkers:\e[0m"];
+        yield ['<options=bold>1) src/Foo.php</>', "\e[1m1) src/Foo.php\e[0m"];
 
         yield [
             ' * loading files from "<fg=green>%s</>" remote repository',
