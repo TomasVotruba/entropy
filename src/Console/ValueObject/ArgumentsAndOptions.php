@@ -6,16 +6,29 @@ namespace Entropy\Console\ValueObject;
 
 use Entropy\Validation\Assert;
 
-final readonly class ArgumentsAndOptions
+final class ArgumentsAndOptions
 {
+    /**
+     * @var Argument[]
+     */
+    private array $arguments;
+
+    /**
+     * @var Option[]
+     */
+    private array $options;
+
     /**
      * @param Argument[] $arguments
      * @param Option[] $options
      */
     public function __construct(
-        private array $arguments,
-        private array $options
+        array $arguments,
+        array $options
     ) {
+        $this->arguments = $arguments;
+        $this->options = $options;
+
         Assert::allIsInstanceOf($arguments, Argument::class);
         Assert::allIsInstanceOf($options, Option::class);
     }

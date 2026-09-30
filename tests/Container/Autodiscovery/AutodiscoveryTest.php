@@ -11,6 +11,10 @@ use Entropy\Console\CommandRegistry;
 use Entropy\Container\Container;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Fixture tree contains a native enum, so discovery is exercised on PHP 8.1+ only.
+ * @requires PHP 8.1
+ */
 final class AutodiscoveryTest extends TestCase
 {
     public function testSkipValueObjects(): void

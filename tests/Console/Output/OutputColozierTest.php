@@ -6,7 +6,6 @@ namespace Entropy\Tests\Console\Output;
 
 use Entropy\Console\Output\OutputColorizer;
 use Iterator;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class OutputColozierTest extends TestCase
@@ -18,7 +17,9 @@ final class OutputColozierTest extends TestCase
         $this->outputColorizer = new OutputColorizer();
     }
 
-    #[DataProvider('colorizeDataProvider')]
+    /**
+     * @dataProvider colorizeDataProvider
+     */
     public function testColorize(string $input, string $expected): void
     {
         $colorized = $this->outputColorizer->colorize($input);

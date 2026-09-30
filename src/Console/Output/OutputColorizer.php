@@ -9,7 +9,7 @@ use Entropy\Console\Enum\Color;
 use Entropy\Tests\Console\Output\OutputColozierTest;
 
 #[RelatedTest(OutputColozierTest::class)]
-final readonly class OutputColorizer
+final class OutputColorizer
 {
     private bool $useColors;
 
@@ -58,14 +58,28 @@ final readonly class OutputColorizer
             return $text;
         }
 
-        return match ($color) {
-            Color::GREEN => "\033[32m" . $text . "\033[0m",
-            Color::YELLOW => "\033[33m" . $text . "\033[0m",
-            Color::RED => "\033[31m" . $text . "\033[0m",
-            Color::CYAN => "\033[36m" . $text . "\033[0m",
+        if ($color === Color::GREEN) {
+            return "\033[32m" . $text . "\033[0m";
+        }
+
+        if ($color === Color::YELLOW) {
+            return "\033[33m" . $text . "\033[0m";
+        }
+
+        if ($color === Color::RED) {
+            return "\033[31m" . $text . "\033[0m";
+        }
+
+        if ($color === Color::CYAN) {
+            return "\033[36m" . $text . "\033[0m";
+        }
+
+        if ($color === Color::GREY) {
             // use light grey
-            Color::GREY => "\033[37m" . $text . "\033[0m",
-        };
+            return "\033[37m" . $text . "\033[0m";
+        }
+
+        throw new \RuntimeException('Unhandled color value');
     }
 
     /**
@@ -79,14 +93,25 @@ final readonly class OutputColorizer
             return $text;
         }
 
-        return match ($color) {
+        if ($color === Color::GREEN) {
             // background ; foreground
-            Color::GREEN => "\033[42;30m" . $text . "\033[0m",
-            Color::YELLOW, 'orange' => "\033[43;30m" . $text . "\033[0m",
+            return "\033[42;30m" . $text . "\033[0m";
+        }
+
+        if ($color === Color::YELLOW || $color === 'orange') {
+            return "\033[43;30m" . $text . "\033[0m";
+        }
+
+        if ($color === Color::RED) {
             // WHITE on red (important)
-            Color::RED => "\033[41;30m" . $text . "\033[0m",
-            Color::CYAN => "\033[46;30m" . $text . "\033[0m",
-        };
+            return "\033[41;30m" . $text . "\033[0m";
+        }
+
+        if ($color === Color::CYAN) {
+            return "\033[46;30m" . $text . "\033[0m";
+        }
+
+        throw new \RuntimeException('Unhandled color value');
     }
 
     private function padding(string $text): string

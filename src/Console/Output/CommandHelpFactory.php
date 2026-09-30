@@ -13,11 +13,13 @@ use Entropy\Console\ValueObject\Option;
 use Entropy\Tests\Console\Output\CommandHelpFactory\CommandHelpFactoryTest;
 
 #[RelatedTest(CommandHelpFactoryTest::class)]
-final readonly class CommandHelpFactory
+final class CommandHelpFactory
 {
-    public function __construct(
-        private CommandRunParametersMapper $commandRunParametersMapper,
-    ) {
+    private CommandRunParametersMapper $commandRunParametersMapper;
+
+    public function __construct(CommandRunParametersMapper $commandRunParametersMapper)
+    {
+        $this->commandRunParametersMapper = $commandRunParametersMapper;
     }
 
     public function build(CommandInterface $command): string
@@ -51,7 +53,10 @@ final readonly class CommandHelpFactory
         return implode(PHP_EOL, $help);
     }
 
-    private function formatParameterLine(Argument|Option $argumentOrOption): string
+    /**
+     * @param Argument|Option $argumentOrOption
+     */
+    private function formatParameterLine($argumentOrOption): string
     {
         $description = trim((string) $argumentOrOption->getDescription());
 
@@ -66,7 +71,10 @@ final readonly class CommandHelpFactory
         return rtrim($parameterLine);
     }
 
-    private function nameWithDefaultValue(Option|Argument $argumentOrOption): string
+    /**
+     * @param Option|Argument $argumentOrOption
+     */
+    private function nameWithDefaultValue($argumentOrOption): string
     {
         if ($argumentOrOption instanceof Option) {
             $contents = '--' . $argumentOrOption->getName();

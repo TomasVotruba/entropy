@@ -6,9 +6,9 @@ namespace Entropy\Console\Enum;
 
 final class ExitCode
 {
-    public const int SUCCESS = 0;
+    public const SUCCESS = 0;
 
-    public const int ERROR = 1;
+    public const ERROR = 1;
 
-    public const int INVALID_COMMAND = 2;
+    public const INVALID_COMMAND = 2;
 }

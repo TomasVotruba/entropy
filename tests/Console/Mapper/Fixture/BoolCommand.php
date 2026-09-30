@@ -30,7 +30,7 @@ final class BoolCommand implements CommandInterface
         bool $flagArrayFilled,
         ?bool $flagNotGivenTrue = true,
         ?bool $flagNotGivenFalse = false,
-        ?bool $flagNotGivenNull = null,
+        ?bool $flagNotGivenNull = null
     ): void {
     }
 }

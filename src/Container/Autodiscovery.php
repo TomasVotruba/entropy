@@ -43,7 +43,8 @@ final class Autodiscovery
             return true;
         }
 
-        if ($reflectionClass->isEnum()) {
+        // isEnum() exists on PHP 8.1+; on older versions there are no enums to skip
+        if (\PHP_VERSION_ID >= 80100 && $reflectionClass->isEnum()) {
             return true;
         }
 

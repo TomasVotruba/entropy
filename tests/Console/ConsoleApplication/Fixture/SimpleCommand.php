@@ -9,11 +9,13 @@ use Entropy\Console\Enum\ExitCode;
 use Entropy\Console\Output\OutputPrinter;
 use InvalidArgumentException;
 
-final readonly class SimpleCommand implements CommandInterface
+final class SimpleCommand implements CommandInterface
 {
-    public function __construct(
-        private OutputPrinter $outputPrinter
-    ) {
+    private OutputPrinter $outputPrinter;
+
+    public function __construct(OutputPrinter $outputPrinter)
+    {
+        $this->outputPrinter = $outputPrinter;
     }
 
     public function getName(): string

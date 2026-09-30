@@ -4,13 +4,22 @@ declare(strict_types=1);
 
 namespace Entropy\Console\ValueObject;
 
-final readonly class Argument
+final class Argument
 {
+    private string $name;
+
+    private ?string $description;
+
+    private bool $acceptsMultipleValues;
+
     public function __construct(
-        private string $name,
-        private ?string $description = null,
-        private bool $acceptsMultipleValues = false,
+        string $name,
+        ?string $description = null,
+        bool $acceptsMultipleValues = false
     ) {
+        $this->name = $name;
+        $this->description = $description;
+        $this->acceptsMultipleValues = $acceptsMultipleValues;
     }
 
     public function getName(): string

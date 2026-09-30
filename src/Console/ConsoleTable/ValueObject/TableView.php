@@ -6,18 +6,30 @@ namespace Entropy\Console\ConsoleTable\ValueObject;
 
 use Entropy\Validation\Assert;
 
-final readonly class TableView
+final class TableView
 {
+    private string $title;
+
+    private string $label;
+
+    /**
+     * @var TableRow[]
+     */
+    private array $tableRows;
+
+    private bool $shouldIncludeRelative;
+
     /**
      * @param TableRow[] $tableRows
      */
-    public function __construct(
-        private string $title,
-        private string $label,
-        private array $tableRows,
-        private bool $shouldIncludeRelative = false,
-    ) {
+    public function __construct(string $title, string $label, array $tableRows, bool $shouldIncludeRelative = false)
+    {
         Assert::allIsInstanceOf($tableRows, TableRow::class);
+
+        $this->title = $title;
+        $this->label = $label;
+        $this->tableRows = $tableRows;
+        $this->shouldIncludeRelative = $shouldIncludeRelative;
     }
 
     public function getTitle(): string

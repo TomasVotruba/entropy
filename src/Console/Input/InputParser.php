@@ -16,11 +16,13 @@ use ReflectionMethod;
  * @see \Entropy\Tests\Console\Input\InputParserTest
  */
 #[RelatedTest(InputParserTest::class)]
-final readonly class InputParser
+final class InputParser
 {
-    public function __construct(
-        private CommandRegistry $commandRegistry
-    ) {
+    private CommandRegistry $commandRegistry;
+
+    public function __construct(CommandRegistry $commandRegistry)
+    {
+        $this->commandRegistry = $commandRegistry;
     }
 
     /**

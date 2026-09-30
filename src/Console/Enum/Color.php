@@ -6,13 +6,13 @@ namespace Entropy\Console\Enum;
 
 final class Color
 {
-    public const string GREEN = 'green';
+    public const GREEN = 'green';
 
-    public const string YELLOW = 'yellow';
+    public const YELLOW = 'yellow';
 
-    public const string RED = 'red';
+    public const RED = 'red';
 
-    public const string CYAN = 'cyan';
+    public const CYAN = 'cyan';
 
-    public const string GREY = 'grey';
+    public const GREY = 'grey';
 }

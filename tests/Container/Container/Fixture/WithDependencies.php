@@ -6,9 +6,11 @@ namespace Entropy\Tests\Container\Container\Fixture;
 
 final class WithDependencies
 {
-    public function __construct(
-        private SomeType $someType
-    ) {
+    private SomeType $someType;
+
+    public function __construct(SomeType $someType)
+    {
+        $this->someType = $someType;
     }
 
     public function getSomeType(): SomeType

@@ -6,15 +6,14 @@ namespace Entropy\Tests\Utils;
 
 use Entropy\Utils\FuzzyMatcher;
 use Iterator;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class FuzzyMatcherTest extends TestCase
 {
     /**
+     * @dataProvider provideMatchCases
      * @param string[] $candidates
      */
-    #[DataProvider('provideMatchCases')]
     public function testMatch(string $input, array $candidates, ?string $expected): void
     {
         $this->assertSame($expected, FuzzyMatcher::match($input, $candidates));

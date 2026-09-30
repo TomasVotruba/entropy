@@ -12,19 +12,21 @@ use Entropy\Tests\Console\ConsoleTable\ConsoleTableTest;
  * @see \Entropy\Tests\Console\ConsoleTable\ConsoleTableTest
  */
 #[RelatedTest(ConsoleTableTest::class)]
-final readonly class ConsoleTable
+final class ConsoleTable
 {
     /**
      * @api used in tests
      * Marks a separator line between table rows.
      */
-    public const string SEPARATOR = '__separator__';
+    public const SEPARATOR = '__separator__';
 
-    private const int COLUMN_PADDING = 2;
+    private const COLUMN_PADDING = 2;
 
-    public function __construct(
-        private OutputPrinter $outputPrinter,
-    ) {
+    private OutputPrinter $outputPrinter;
+
+    public function __construct(OutputPrinter $outputPrinter)
+    {
+        $this->outputPrinter = $outputPrinter;
     }
 
     /**

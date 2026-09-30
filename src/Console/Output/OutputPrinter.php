@@ -11,13 +11,16 @@ use Entropy\Validation\Assert;
 /**
  * @api used in many ways
  */
-final readonly class OutputPrinter
+final class OutputPrinter
 {
     private bool $isSilent;
 
-    public function __construct(
-        private OutputColorizer $outputColorizer
-    ) {
+    private OutputColorizer $outputColorizer;
+
+    public function __construct(OutputColorizer $outputColorizer)
+    {
+        $this->outputColorizer = $outputColorizer;
+
         // avoid printing to stdout during unit tests
         $this->isSilent = defined('PHPUNIT_COMPOSER_INSTALL');
     }

@@ -12,7 +12,7 @@ final class Terminal
     /**
      * @see SymfonyStyle::MAX_LINE_LENGTH
      */
-    private const int MAX_LINE_LENGTH = 120;
+    private const MAX_LINE_LENGTH = 120;
 
     /**
      * Detect terminal width, capped at MAX_LINE_LENGTH, the same way SymfonyStyle does.

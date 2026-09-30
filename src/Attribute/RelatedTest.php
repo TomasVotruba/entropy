@@ -8,7 +8,7 @@ use Attribute;
 use PHPUnit\Framework\TestCase;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-final readonly class RelatedTest
+final class RelatedTest
 {
     /**
      * @param class-string<TestCase> $testClass

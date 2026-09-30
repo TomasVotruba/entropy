@@ -3,9 +3,13 @@ parameters:
 
     level: 8
 
-    # in-house Assert intentionally accepts mixed values
+    # lowered for PHP 7.4 support: typed constants, union and mixed native types are 8.x-only,
+    # so they live in PHPDoc instead and cannot count toward native type coverage
     type_coverage:
-        param_type: 96
+        param_type: 93
+        return_type: 98
+        property_type: 96
+        constant_type: 0
 
     paths:
         - ecs.php
@@ -38,9 +42,3 @@ parameters:
 
         # dynamic CommentInterface contract
         - '#Call to an undefined method Entropy\\Console\\Contract\\CommandInterface\:\:run\(\)#'
-
-        # no background grey on purpose
-        -
-            identifier: match.unhandled
-            count: 1
-            path: src/Console/Output/OutputColorizer.php

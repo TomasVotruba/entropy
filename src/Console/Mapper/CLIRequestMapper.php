@@ -28,7 +28,7 @@ final class CLIRequestMapper
      *
      * @var array<string, bool>
      */
-    private const array IGNORED_OPTIONS = [
+    private const IGNORED_OPTIONS = [
         'help' => true,
         'h' => true,
         'version' => true,
@@ -196,11 +196,16 @@ final class CLIRequestMapper
         return $reflectionType instanceof ReflectionNamedType && $reflectionType->getName() === 'array';
     }
 
+    /**
+     * @param mixed $value
+     * @param mixed $defaultValue
+     * @return mixed
+     */
     private function castValueByParameterType(
-        mixed $value,
+        $value,
         ?ReflectionType $reflectionType,
-        mixed $defaultValue = 'unknown'
-    ): mixed {
+        $defaultValue = 'unknown'
+    ) {
         if (! $reflectionType instanceof ReflectionNamedType) {
             return $value;
         }
@@ -215,13 +220,28 @@ final class CLIRequestMapper
             $value = array_shift($value);
         }
 
-        return match ($reflectionType->getName()) {
-            'bool' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
-            'int' => (int) $value,
-            'float' => (float) $value,
-            'string' => (string) $value,
-            'array' => (array) $value,
-            default => $value,
-        };
+        $typeName = $reflectionType->getName();
+
+        if ($typeName === 'bool') {
+            return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+        }
+
+        if ($typeName === 'int') {
+            return (int) $value;
+        }
+
+        if ($typeName === 'float') {
+            return (float) $value;
+        }
+
+        if ($typeName === 'string') {
+            return (string) $value;
+        }
+
+        if ($typeName === 'array') {
+            return (array) $value;
+        }
+
+        return $value;
     }
 }

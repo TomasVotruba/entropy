@@ -36,7 +36,10 @@ final class Regex
         return $matches;
     }
 
-    public static function replace(string $subject, string $pattern, string|callable $replacement): string
+    /**
+     * @param string|callable $replacement
+     */
+    public static function replace(string $subject, string $pattern, $replacement): string
     {
         if (is_callable($replacement)) {
             return (string) preg_replace_callback($pattern, $replacement, $subject);

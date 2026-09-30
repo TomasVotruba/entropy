@@ -16,7 +16,7 @@ final class SomeCommandWithOptions
         ?string $config = null,
         int $limit = 10,
         bool $clearCache = false,
-        bool $fix = false,
+        bool $fix = false
     ): void {
     }
 }
