@@ -7,7 +7,7 @@ namespace Entropy\Tests\Console\ConsoleApplication\Fixture;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
 use Entropy\Console\Output\OutputPrinter;
-use Webmozart\Assert\Assert;
+use InvalidArgumentException;
 
 final readonly class SimpleCommand implements CommandInterface
 {
@@ -40,7 +40,9 @@ final readonly class SimpleCommand implements CommandInterface
         dump($version);
 
         // default value should remain null
-        Assert::null($version, 'Default value for "--"version" should be null');
+        if ($version !== null) {
+            throw new InvalidArgumentException('Default value for "--version" should be null');
+        }
 
         $this->outputPrinter->yellow('Yellow');
         $this->outputPrinter->green('Green');

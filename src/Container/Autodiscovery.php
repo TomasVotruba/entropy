@@ -8,9 +8,9 @@ use Entropy\Attribute\RelatedTest;
 use Entropy\FileSystem\FileFinder;
 use Entropy\Reflection\ClassNameResolver;
 use Entropy\Tests\Container\Autodiscovery\AutodiscoveryTest;
+use Entropy\Validation\Assert;
 use ReflectionClass;
 use Throwable;
-use Webmozart\Assert\Assert;
 
 /**
  * Registers project classes to services automatically

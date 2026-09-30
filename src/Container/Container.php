@@ -11,10 +11,10 @@ use Entropy\Container\Exception\CreateServiceException;
 use Entropy\Container\Exception\RegisterServiceException;
 use Entropy\Reflection\ParameterTypesResolver;
 use Entropy\Tests\Container\Container\ContainerTest;
+use Entropy\Validation\Assert;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
-use Webmozart\Assert\Assert;
 
 /**
  * Designed to be extended by applications that need to customise resolution

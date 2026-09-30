@@ -10,11 +10,11 @@ use Entropy\Console\Exception\ConsoleInputMappingException;
 use Entropy\Console\ValueObject\CLIRequest;
 use Entropy\Reflection\ParameterOptionMarkerResolver;
 use Entropy\Tests\Console\Mapper\CLIRequestMapperTest;
+use Entropy\Validation\Assert;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionType;
-use Webmozart\Assert\Assert;
 
 /**
  * @see \Entropy\Tests\Console\Mapper\CLIRequestMapperTest

@@ -4,8 +4,7 @@
     "description": "Entropy framework",
     "require": {
         "php": "^8.4",
-        "ext-tokenizer": "*",
-        "webmozart/assert": "^2.4"
+        "ext-tokenizer": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^12.5",

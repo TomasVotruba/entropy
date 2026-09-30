@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Utils;
 
-use Webmozart\Assert\Assert;
+use Entropy\Validation\Assert;
 
 /**
  * @api to be used outside

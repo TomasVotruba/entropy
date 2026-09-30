@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Entropy\Console\ValueObject;
 
-use Webmozart\Assert\Assert;
+use Entropy\Validation\Assert;
 
 /**
  * @see \Entropy\Tests\Console\ValueObject\CLIRequestTest

@@ -3,6 +3,10 @@ parameters:
 
     level: 8
 
+    # in-house Assert intentionally accepts mixed values
+    type_coverage:
+        param_type: 96
+
     paths:
         - ecs.php
         - rector.php
