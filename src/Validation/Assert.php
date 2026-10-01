@@ -98,6 +98,7 @@ final class Assert
 
     /**
      * @param iterable<mixed> $values
+     * @phpstan-assert iterable<string> $values
      */
     public static function allString(iterable $values, string $message = ''): void
     {
