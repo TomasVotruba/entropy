@@ -21,4 +21,16 @@ final class ClassNameResolverTest extends TestCase
         $className = ClassNameResolver::resolveFromFilePath(__DIR__ . '/Fixture/bare-bin-file.php.inc');
         $this->assertSame(null, $className);
     }
+
+    public function testResolveNames(): void
+    {
+        $classNames = ClassNameResolver::resolveNamesFromFilePath(__DIR__ . '/Fixture/SomeClass.php');
+        $this->assertSame(['App\SomeNamespace\SomeClass'], $classNames);
+    }
+
+    public function testResolveNamesMultiple(): void
+    {
+        $classNames = ClassNameResolver::resolveNamesFromFilePath(__DIR__ . '/Fixture/TwoClasses.php.inc');
+        $this->assertSame(['App\SomeNamespace\FirstClass', 'App\SomeNamespace\SecondClass'], $classNames);
+    }
 }

@@ -11,22 +11,37 @@ use Entropy\Tests\Reflection\ClassNameResolver\ClassNameResolverTest;
 final class ClassNameResolver
 {
     /**
-     * Created by GPT
-     *
-     * Return all class-like FQNs (class, interface, trait, enum) declared in a PHP file,
-     * without autoloading or PHP-Parser. Uses token_get_all().
+     * Return the single class-like FQN declared in a PHP file, or null when the file
+     * declares none or more than one.
      *
      * @return class-string|null
      */
     public static function resolveFromFilePath(string $filePath): ?string
     {
+        $fqns = self::resolveNamesFromFilePath($filePath);
+        if (count($fqns) === 1) {
+            return $fqns[0];
+        }
+
+        return null;
+    }
+
+    /**
+     * Return all class-like FQNs (class, interface, trait, enum) declared in a PHP file,
+     * without autoloading or PHP-Parser. Uses token_get_all().
+     *
+     * @api
+     * @return class-string[]
+     */
+    public static function resolveNamesFromFilePath(string $filePath): array
+    {
         if (! is_file($filePath)) {
-            return null;
+            return [];
         }
 
         $code = file_get_contents($filePath);
         if ($code === false) {
-            return null;
+            return [];
         }
 
         $tokens = token_get_all($code);
@@ -117,12 +132,9 @@ final class ClassNameResolver
 
         // De-duplicate while preserving order (in case of weird tokenization)
         /** @var class-string[] $uniqueFqns */
-        $uniqueFqns = array_unique($fqns);
-        if (count($uniqueFqns) === 1) {
-            return $uniqueFqns[0];
-        }
+        $uniqueFqns = array_values(array_unique($fqns));
 
-        return null;
+        return $uniqueFqns;
     }
 
     /**
