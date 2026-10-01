@@ -61,6 +61,15 @@ final class RegexTest extends TestCase
         $this->assertSame($expectedResult, $result);
     }
 
+    public function testSplit(): void
+    {
+        $subject = "first\nsecond\r\nthird";
+        $pattern = '#\r?\n#';
+
+        $lines = Regex::split($subject, $pattern);
+        $this->assertSame(['first', 'second', 'third'], $lines);
+    }
+
     /**
      * @return iterable<array{0: string, 1: string}>
      */

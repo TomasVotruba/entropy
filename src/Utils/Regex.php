@@ -47,4 +47,17 @@ final class Regex
 
         return preg_replace($pattern, $replacement, $subject) ?? $subject;
     }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function split(string $subject, string $pattern): array
+    {
+        $parts = preg_split($pattern, $subject);
+        if ($parts === false) {
+            return [];
+        }
+
+        return $parts;
+    }
 }
