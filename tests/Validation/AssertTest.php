@@ -71,6 +71,30 @@ final class AssertTest extends TestCase
         Assert::allIsInstanceOf($this->mixed([new stdClass(), 'not-object']), stdClass::class);
     }
 
+    public function testNotEmptyFails(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        Assert::notEmpty($this->mixed(''));
+    }
+
+    public function testIsInstanceOfFails(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        Assert::isInstanceOf($this->mixed('not-object'), stdClass::class);
+    }
+
+    public function testAllFileExistsFails(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        Assert::allFileExists($this->mixed([__FILE__, __DIR__ . '/non-existing-file.php']));
+    }
+
+    public function testAllDirectoryFails(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        Assert::allDirectory($this->mixed([__DIR__, __DIR__ . '/non-existing-directory']));
+    }
+
     public function testCustomMessageIsUsed(): void
     {
         $this->expectException(InvalidArgumentException::class);
