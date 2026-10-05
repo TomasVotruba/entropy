@@ -40,6 +40,29 @@ final class StringsTest extends TestCase
     }
 
     /**
+     * @dataProvider beforeDataProvider
+     */
+    public function testBefore(string $haystack, string $needle, int $nth, ?string $expected): void
+    {
+        $result = Strings::before($haystack, $needle, $nth);
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @return iterable<array{0: string, 1: string, 2: int, 3: string|null}>
+     */
+    public static function beforeDataProvider(): iterable
+    {
+        yield ['App\Foo\Bar', '\\', -1, 'App\Foo'];
+        yield ['App\Foo\Bar', '\\', 1, 'App'];
+        yield ['App\Foo\Bar', '\\', 2, 'App\Foo'];
+        yield ['NoBackslash', '\\', -1, null];
+        yield ['NoBackslash', '\\', 1, null];
+        yield ['a.b.c', '.', -1, 'a.b'];
+        yield ['SomeClass $variable', ' $', 1, 'SomeClass'];
+    }
+
+    /**
      * @dataProvider containsDataProvider
      */
     public function testContains(string $haystack, string $needle, bool $expected): void
