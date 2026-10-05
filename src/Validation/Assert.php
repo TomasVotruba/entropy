@@ -142,6 +142,20 @@ final class Assert
         }
     }
 
+    /**
+     * @api
+     * @param iterable<mixed> $values
+     * @param class-string $class
+     */
+    public static function allIsAOf(iterable $values, string $class, string $message = ''): void
+    {
+        foreach ($values as $value) {
+            if (! is_a($value, $class, true)) {
+                self::fail($message !== '' ? $message : sprintf('Expected a class-string of type "%s" in every item.', $class));
+            }
+        }
+    }
+
     private static function fail(string $message): void
     {
         throw new InvalidArgumentException($message);

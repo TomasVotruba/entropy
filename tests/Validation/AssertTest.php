@@ -95,6 +95,18 @@ final class AssertTest extends TestCase
         Assert::allDirectory($this->mixed([__DIR__, __DIR__ . '/non-existing-directory']));
     }
 
+    public function testAllIsAOfPasses(): void
+    {
+        $this->expectNotToPerformAssertions();
+        Assert::allIsAOf($this->mixed([InvalidArgumentException::class]), \Throwable::class);
+    }
+
+    public function testAllIsAOfFails(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        Assert::allIsAOf($this->mixed([stdClass::class]), \Throwable::class);
+    }
+
     public function testCustomMessageIsUsed(): void
     {
         $this->expectException(InvalidArgumentException::class);
