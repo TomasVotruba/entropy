@@ -40,6 +40,26 @@ final class StringsTest extends TestCase
     }
 
     /**
+     * @dataProvider containsDataProvider
+     */
+    public function testContains(string $haystack, string $needle, bool $expected): void
+    {
+        $result = Strings::contains($haystack, $needle);
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @return iterable<array{0: string, 1: string, 2: bool}>
+     */
+    public static function containsDataProvider(): iterable
+    {
+        yield ['App\Foo\Bar', '\\', true];
+        yield ['App\Foo\Bar', 'Foo', true];
+        yield ['App\Foo\Bar', 'Missing', false];
+        yield ['anything', '', true];
+    }
+
+    /**
      * @return iterable<array{0: string, 1: string, 2: int, 3: string|null}>
      */
     public static function afterDataProvider(): iterable
