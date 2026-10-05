@@ -21,6 +21,11 @@ final class Strings
         return strtolower($text);
     }
 
+    public static function contains(string $haystack, string $needle): bool
+    {
+        return $needle === '' || strpos($haystack, $needle) !== false;
+    }
+
     /**
      * Returns the part of $haystack after the $nth occurrence of $needle,
      * or null when the needle is not found. Negative $nth counts from the end.
