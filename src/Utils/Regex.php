@@ -15,7 +15,7 @@ use Entropy\Tests\Utils\RegexTest;
 final class Regex
 {
     /**
-     * @return array<string, mixed>
+     * @return array<array-key, string>
      */
     public static function match(string $subject, string $pattern): array
     {
@@ -26,7 +26,7 @@ final class Regex
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @return array<int, array<array-key, string>>
      */
     public static function matchAll(string $subject, string $pattern): array
     {
