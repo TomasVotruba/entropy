@@ -29,4 +29,26 @@ final class StringsTest extends TestCase
         yield ['---Multiple---Dashes---', 'multiple-dashes'];
         yield ['No_Special*Chars@Here', 'no-special-chars-here'];
     }
+
+    /**
+     * @dataProvider afterDataProvider
+     */
+    public function testAfter(string $haystack, string $needle, int $nth, ?string $expected): void
+    {
+        $result = Strings::after($haystack, $needle, $nth);
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @return iterable<array{0: string, 1: string, 2: int, 3: string|null}>
+     */
+    public static function afterDataProvider(): iterable
+    {
+        yield ['App\Foo\Bar', '\\', -1, 'Bar'];
+        yield ['App\Foo\Bar', '\\', 1, 'Foo\Bar'];
+        yield ['App\Foo\Bar', '\\', 2, 'Bar'];
+        yield ['NoBackslash', '\\', -1, null];
+        yield ['NoBackslash', '\\', 1, null];
+        yield ['a.b.c', '.', -1, 'c'];
+    }
 }
