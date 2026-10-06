@@ -21,6 +21,10 @@ parameters:
         # test fixtures
         - */Fixture/*
 
+        # named args used in dev config, project min is 7.4
+        - ecs.php
+        - rector.php
+
     symplify:
         ctor: true
         symfonyReturnType: true
