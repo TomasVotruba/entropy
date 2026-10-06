@@ -39,7 +39,8 @@ final class ValueOptionNameResolver
                 && ! $reflectionParameter->isVariadic();
 
             if ($key !== 0 && $isArray && str_ends_with($optionName, 's')) {
-                $optionName = substr($optionName, 0, -1);
+                // cast for PHP 7.4, where substr() is typed string|false
+                $optionName = (string) substr($optionName, 0, -1);
             }
 
             $valueOptionNames[$optionName] = true;

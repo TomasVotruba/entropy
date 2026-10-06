@@ -11,15 +11,19 @@ return RectorConfig::configure()
     ->withPhpSets()
     ->withImportNames()
     ->withPreparedSets(
-        deadCode: true,
-        codeQuality: true,
-        codingStyle: true,
-        typeDeclarations: true,
-        typeDeclarationDocblocks: true,
-        privatization: true,
-        naming: true,
-        earlyReturn: true,
-        rectorPreset: true
+        true,  // deadCode
+        true,  // codeQuality
+        true,  // codingStyle
+        true,  // typeDeclarations
+        true,  // typeDeclarationDocblocks
+        true,  // privatization
+        true,  // naming
+        false, // namedArgs
+        false, // instanceOf
+        false, // if
+        true,  // earlyReturn
+        false, // carbon
+        true   // rectorPreset
     )
     ->withSkip([
         // testing string to class name resolution
