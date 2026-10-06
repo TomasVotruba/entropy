@@ -1,6 +1,9 @@
 parameters:
     errorFormat: symplify
 
+    # analysis runs on PHP 8.4, so config files may use 8.x syntax
+    phpVersion: 80400
+
     level: 8
 
     # lowered for PHP 7.4 support: typed constants, union and mixed native types are 8.x-only,
