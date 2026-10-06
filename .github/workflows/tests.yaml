@@ -26,7 +26,7 @@ jobs:
 
             # analysis tools require PHP 8.2+ and are irrelevant to the test run;
             # drop them so the low-PHP jobs install a clean, 7.4-compatible dependency set
-            -   run: composer remove --dev --no-update tracy/tracy symplify/easy-coding-standard phpstan/phpstan symplify/phpstan-rules phpstan/extension-installer tomasvotruba/type-coverage shipmonk/composer-dependency-analyser rector/rector rector/swiss-knife tomasvotruba/unused-public rector/jack
+            -   run: composer remove --dev --no-update tracy/tracy symplify/easy-coding-standard phpstan/phpstan symplify/phpstan-rules phpstan/extension-installer tomasvotruba/type-coverage shipmonk/composer-dependency-analyser rector/rector rector/swiss-knife shipmonk/dead-code-detector rector/jack
 
             -   run: composer update --no-progress --prefer-stable
 
