@@ -8,6 +8,7 @@ use Entropy\Console\Exception\ConsoleInputMappingException;
 use Entropy\Console\Mapper\CLIRequestMapper;
 use Entropy\Console\ValueObject\CLIRequest;
 use Entropy\Tests\Console\Mapper\Fixture\BoolCommand;
+use Entropy\Tests\Console\Mapper\Fixture\DefaultValueOptionCommand;
 use Entropy\Tests\Console\Mapper\Fixture\NullableArrayCommand;
 use Entropy\Tests\Console\Mapper\Fixture\OptionMarkerCommand;
 use Entropy\Tests\Console\Mapper\Fixture\SkipFilesCommand;
@@ -208,5 +209,33 @@ final class CLIRequestMapperTest extends TestCase
         $arguments = $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
 
         $this->assertSame([['/some/path'], true, 5, null], $arguments);
+    }
+
+    public function testBareValueOptionFallsBackToDefault(): void
+    {
+        $cliRequest = new CLIRequest(
+            'default-value-option',
+            ['/some/path'],
+            [
+                // "--output-format" passed with no value
+                'output-format' => true,
+            ]
+        );
+
+        $arguments = $this->cliRequestMapper->resolveArguments(new DefaultValueOptionCommand(), $cliRequest);
+
+        $this->assertSame([['/some/path'], 'console'], $arguments);
+    }
+
+    public function testBareValueOptionWithoutDefaultThrows(): void
+    {
+        $cliRequest = new CLIRequest('option-marker', [], [
+            'source' => true,
+        ]);
+
+        $this->expectException(ConsoleInputMappingException::class);
+        $this->expectExceptionMessage('Missing value for "source" (use "--source=<value>" to provide it)');
+
+        $this->cliRequestMapper->resolveArguments(new OptionMarkerCommand(), $cliRequest);
     }
 }
