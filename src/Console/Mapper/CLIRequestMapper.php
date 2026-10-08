@@ -75,6 +75,20 @@ final class CLIRequestMapper
 
                 $consumedOptionNames[$optionName] = true;
 
+                // non-bool option used as a bare flag (no value) -> fall back to default or fail
+                if ($value === true && ! $isBool) {
+                    if ($reflectionParameter->isDefaultValueAvailable()) {
+                        $args[] = $reflectionParameter->getDefaultValue();
+                        continue;
+                    }
+
+                    throw new ConsoleInputMappingException(sprintf(
+                        'Missing value for "%s" (use "--%s=<value>" to provide it)',
+                        $name,
+                        $optionName,
+                    ));
+                }
+
                 $args[] = $this->castValueByParameterType($value, $type);
                 continue;
             }
