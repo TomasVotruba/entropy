@@ -63,6 +63,24 @@ final class CLIRequestMapperTest extends TestCase
         $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
     }
 
+    public function testSingleDashOptionKeepsRawSpelling(): void
+    {
+        $cliRequest = new CLIRequest(
+            'some',
+            [['/some/path']],
+            [
+                'flag' => true,
+                'count' => '5',
+                '-clear-cache' => true,
+            ]
+        );
+
+        $this->expectException(ConsoleInputMappingException::class);
+        $this->expectExceptionMessage('Unknown option: "-clear-cache"');
+
+        $this->cliRequestMapper->resolveArguments($this->someCommand, $cliRequest);
+    }
+
     public function testMissingOption(): void
     {
         $cliRequest = new CLIRequest(
