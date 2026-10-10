@@ -65,6 +65,15 @@ final class InputParserTest extends TestCase
         ], $cliRequest->getOptions());
     }
 
+    public function testSingleDashMultiCharKeepsRawSpelling(): void
+    {
+        $cliRequest = $this->inputParser->parse(['bin/ecs', 'process', 'src', '-clear-cache']);
+
+        $this->assertSame([
+            '-clear-cache' => true,
+        ], $cliRequest->getOptions());
+    }
+
     public function testFirstTokenLongFlag(): void
     {
         $cliRequest = $this->inputParser->parse(['bin/rector', '--help']);

@@ -100,7 +100,16 @@ final class InputParser
 
             // -v
             if (! $optionsEnded && str_starts_with((string) $item, '-')) {
-                $options[ltrim((string) $item, '-')] = true;
+                $name = ltrim((string) $item, '-');
+
+                // a single dash with a multi-char name is not a valid short flag (likely a missing dash: "-clear-cache"),
+                // keep the raw spelling so it surfaces as an unknown option instead of silently matching a "--option"
+                if (strlen($name) > 1) {
+                    $options[(string) $item] = true;
+                    continue;
+                }
+
+                $options[$name] = true;
                 continue;
             }
 

@@ -186,7 +186,7 @@ final class CLIRequestMapper
                 'Unknown option%s: %s',
                 count($unknownOptions) > 1 ? 's' : '',
                 implode(', ', array_map(
-                    static fn (string $name): string => '"--' . $name . '"',
+                    static fn (string $name): string => '"' . (str_starts_with($name, '-') ? $name : '--' . $name) . '"',
                     array_keys($unknownOptions)
                 ))
             ));
