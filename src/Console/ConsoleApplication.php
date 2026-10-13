@@ -7,6 +7,7 @@ namespace Entropy\Console;
 use Entropy\Attribute\RelatedTest;
 use Entropy\Console\Contract\CommandInterface;
 use Entropy\Console\Enum\ExitCode;
+use Entropy\Console\Exception\ConsoleInputMappingException;
 use Entropy\Console\Input\InputParser;
 use Entropy\Console\Mapper\CLIRequestMapper;
 use Entropy\Console\Output\CommandHelpFactory;
@@ -100,6 +101,11 @@ final class ConsoleApplication
 
             return $command->run(...$runArguments);
 
+        } catch (ConsoleInputMappingException $consoleInputMappingException) {
+            // user input error - show a clean message without a stack trace
+            $this->outputPrinter->redBackground('Run failed: ' . $consoleInputMappingException->getMessage());
+
+            return ExitCode::ERROR;
         } catch (Throwable $throwable) {
             $this->outputPrinter->redBackground('Run failed: ' . $throwable->getMessage());
 
