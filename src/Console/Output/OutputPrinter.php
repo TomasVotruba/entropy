@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Entropy\Console\Output;
 
 use Entropy\Console\Enum\Color;
-use Entropy\Console\Terminal\Terminal;
 use Entropy\Validation\Assert;
 
 /**
@@ -112,17 +111,17 @@ final class OutputPrinter
 
     public function success(string $text): void
     {
-        $this->block('[OK] ' . $text, Color::GREEN);
+        $this->writeln($this->outputColorizer->color('[OK] ' . $text, Color::GREEN));
     }
 
     public function warning(string $text): void
     {
-        $this->block('[WARNING] ' . $text, Color::YELLOW);
+        $this->writeln($this->outputColorizer->color('[WARNING] ' . $text, Color::YELLOW));
     }
 
     public function error(string $text): void
     {
-        $this->block('[ERROR] ' . $text, Color::RED);
+        $this->writeln($this->outputColorizer->color('[ERROR] ' . $text, Color::RED));
     }
 
     /**
@@ -144,26 +143,5 @@ final class OutputPrinter
 
         $answer = trim($answer);
         return $answer === '' ? $default : $answer;
-    }
-
-    /**
-     * Print a colored block padded by a blank colored line above and below the message,
-     * the same way SymfonyStyle renders success/warning/error blocks.
-     *
-     * @param Color::* $color
-     */
-    private function block(string $text, string $color): void
-    {
-        // reserve 2 chars for the single space padding the background() adds on each side
-        $contentWidth = max(0, Terminal::getWidth() - 2);
-
-        $emptyLine = str_repeat(' ', $contentWidth);
-        $paddedText = Terminal::padVisibleRight($text, $contentWidth);
-
-        $this->newline();
-        $this->writeln($this->outputColorizer->background($emptyLine, $color));
-        $this->writeln($this->outputColorizer->background($paddedText, $color));
-        $this->writeln($this->outputColorizer->background($emptyLine, $color));
-        $this->newline();
     }
 }
