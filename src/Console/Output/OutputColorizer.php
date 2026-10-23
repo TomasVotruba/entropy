@@ -113,8 +113,8 @@ final class OutputColorizer
         }
 
         if ($color === Color::GREY) {
-            // use light grey
-            return "\033[37m" . $text . "\033[0m";
+            // bright black, readable on light and dark backgrounds
+            return "\033[90m" . $text . "\033[0m";
         }
 
         throw new \RuntimeException('Unhandled color value');
