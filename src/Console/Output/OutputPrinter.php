@@ -87,7 +87,7 @@ final class OutputPrinter
         Assert::allString($items);
 
         foreach ($items as $item) {
-            $this->writeln(sprintf('%s %s', $bulletChar, $item));
+            $this->writeln(sprintf(' %s %s', $bulletChar, $item));
         }
     }
 
@@ -112,19 +112,19 @@ final class OutputPrinter
     public function success(string $text): void
     {
         $this->newline();
-        $this->writeln($this->outputColorizer->color('[OK] ' . $text, Color::GREEN));
+        $this->writeln($this->outputColorizer->color(' [OK] ' . $text, Color::GREEN));
     }
 
     public function warning(string $text): void
     {
         $this->newline();
-        $this->writeln($this->outputColorizer->color('[WARNING] ' . $text, Color::YELLOW));
+        $this->writeln($this->outputColorizer->color(' [WARNING] ' . $text, Color::YELLOW));
     }
 
     public function error(string $text): void
     {
         $this->newline();
-        $this->writeln($this->outputColorizer->color('[ERROR] ' . $text, Color::RED));
+        $this->writeln($this->outputColorizer->color(' [ERROR] ' . $text, Color::RED));
     }
 
     /**
