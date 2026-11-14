@@ -44,4 +44,16 @@ final class ConsoleApplicationTest extends TestCase
         $exitCode = $consoleApplication->run(['entropy', 'test-me', 'some-path', '--unknown']);
         $this->assertSame(ExitCode::ERROR, $exitCode);
     }
+
+    public function testVersion(): void
+    {
+        $container = new Container();
+        $container->autodiscover(__DIR__ . '/Fixture/');
+
+        $consoleApplication = $container->make(ConsoleApplication::class);
+        $consoleApplication->setVersion('Entropy 1.0');
+
+        $this->assertSame(ExitCode::SUCCESS, $consoleApplication->run(['entropy', '--version']));
+        $this->assertSame(ExitCode::SUCCESS, $consoleApplication->run(['entropy', '-V']));
+    }
 }

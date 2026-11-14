@@ -154,4 +154,43 @@ final class InputParserTest extends TestCase
             'config' => ['ecs.php'],
         ], $cliRequest->getOptions());
     }
+
+    public function testShortAliasWithSeparatedValue(): void
+    {
+        $cliRequest = $this->inputParser->parse(['bin/rector', 'process', '-c', 'rector.php', 'src']);
+
+        $this->assertSame(['src'], $cliRequest->getArguments());
+        $this->assertSame([
+            'config' => ['rector.php'],
+        ], $cliRequest->getOptions());
+    }
+
+    public function testShortAliasWithInlineValue(): void
+    {
+        $cliRequest = $this->inputParser->parse(['bin/rector', '-c=rector.php', 'src']);
+
+        $this->assertNull($cliRequest->getCommandName());
+        $this->assertSame(['src'], $cliRequest->getArguments());
+        $this->assertSame([
+            'config' => ['rector.php'],
+        ], $cliRequest->getOptions());
+    }
+
+    public function testShortAliasFlagDoesNotSwallowPath(): void
+    {
+        $cliRequest = $this->inputParser->parse(['bin/rector', 'process', '-n', 'src']);
+
+        $this->assertSame(['src'], $cliRequest->getArguments());
+        $this->assertSame([
+            'clear-cache' => true,
+        ], $cliRequest->getOptions());
+    }
+
+    public function testShortAliasAfterDoubleDashIsArgument(): void
+    {
+        $cliRequest = $this->inputParser->parse(['bin/rector', 'process', '--', '-c']);
+
+        $this->assertSame(['-c'], $cliRequest->getArguments());
+        $this->assertSame([], $cliRequest->getOptions());
+    }
 }

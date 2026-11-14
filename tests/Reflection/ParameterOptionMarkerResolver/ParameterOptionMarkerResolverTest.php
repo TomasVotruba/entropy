@@ -21,4 +21,14 @@ final class ParameterOptionMarkerResolverTest extends TestCase
             'source' => true,
         ], $markers);
     }
+
+    public function testShortAliases(): void
+    {
+        $reflectionMethod = new ReflectionMethod(SomeClassWithOptionMarker::class, 'someMethodWithShortAliases');
+
+        $this->assertSame([
+            'c' => 'config',
+            'n' => 'dryRun',
+        ], ParameterOptionMarkerResolver::resolveShortAliases($reflectionMethod));
+    }
 }
