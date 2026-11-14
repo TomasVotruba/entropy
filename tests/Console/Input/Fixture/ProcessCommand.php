@@ -22,6 +22,9 @@ final class ProcessCommand implements CommandInterface, DefaultCommandInterface
     /**
      * @param string[] $paths
      * @param string[] $skip
+     *
+     * @option $config -c
+     * @option $clearCache -n
      */
     public function run(
         array $paths = [],

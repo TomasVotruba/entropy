@@ -7,6 +7,7 @@ namespace Entropy\Tests\Console\Output\CommandHelpFactory;
 use Entropy\Console\Output\CommandHelpFactory;
 use Entropy\Container\Container;
 use Entropy\Tests\Console\Mapper\Fixture\AnotherCommand;
+use Entropy\Tests\Console\Mapper\Fixture\ShortAliasCommand;
 use Entropy\Tests\Console\Mapper\Fixture\SomeCommand;
 use PHPUnit\Framework\TestCase;
 
@@ -56,5 +57,12 @@ HELP
 
 HELP
             , $helpDescription);
+    }
+
+    public function testShortAlias(): void
+    {
+        $helpDescription = $this->commandHelpFactory->build(new ShortAliasCommand());
+
+        $this->assertStringContainsString('--config, -c', $helpDescription);
     }
 }

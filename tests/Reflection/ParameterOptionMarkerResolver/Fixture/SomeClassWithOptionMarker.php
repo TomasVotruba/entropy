@@ -12,4 +12,13 @@ final class SomeClassWithOptionMarker
     public function someMethod(string $source, bool $verbose = false): void
     {
     }
+
+    /**
+     * @option $config -c
+     * @option $dryRun -n
+     * @option $source
+     */
+    public function someMethodWithShortAliases(string $source, string $config = '', bool $dryRun = false): void
+    {
+    }
 }
